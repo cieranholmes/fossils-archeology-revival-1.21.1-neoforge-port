@@ -1,0 +1,10 @@
+{
+  "parent": "fossils:block/orientable_with_back",
+  "textures": {
+    "top": "fossils:block/bubble_blower/bubble_blower_top",
+    "front": "fossils:block/bubble_blower/bubble_blower_front",
+    "side": "fossils:block/bubble_blower/bubble_blower_side",
+    "back": "fossils:block/bubble_blower/bubble_blower_back",
+    "bottom": "fossils:block/bubble_blower/bubble_blower_bottom"
+  }
+}

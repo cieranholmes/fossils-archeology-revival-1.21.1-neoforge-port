@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "fossils:block/sifter"
+    },
+    "active=true": {
+      "model": "fossils:block/sifter_on"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "fossils:block/tempskya_leaf",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "fossils:block/tempskya_leaf"
+    },
+    "facing=south": {
+      "model": "fossils:block/tempskya_leaf",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "fossils:block/tempskya_leaf",
+      "y": 270
+    }
+  }
+}
