@@ -86,6 +86,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
+import net.neoforged.neoforge.entity.PartEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -163,6 +164,26 @@ public abstract class Prehistoric extends TamableAnimal implements GeckoLibMulti
     @Override
     public boolean partHurt(MultiPart<Prehistoric> multiPart, @NotNull DamageSource damageSource, float v) {
         return hurt(damageSource, v);
+    }
+
+    // more-hitboxes' own NeoForgeMobMixin (@Mixin(Mob.class), overriding these same two methods off
+    // getEntityHitboxData()) never applies here - the Mixin transformer in this environment only supports
+    // up to Java 17 bytecode while morehitboxes.mixins.json declares JAVA_21, so every part hitbox silently
+    // fails to register with ServerLevel/ClientLevel and player attacks on them are dropped before ever
+    // reaching partHurt(). Overriding directly bypasses the broken mixin.
+    @Override
+    public PartEntity<?>[] getParts() {
+        List<? extends MultiPart<?>> parts = getEntityHitboxData().getCustomParts();
+        PartEntity<?>[] result = new PartEntity[parts.size()];
+        for (int i = 0; i < parts.size(); i++) {
+            result[i] = (PartEntity<?>) parts.get(i).getEntity();
+        }
+        return result;
+    }
+
+    @Override
+    public boolean isMultipartEntity() {
+        return getEntityHitboxData().hasCustomParts();
     }
 
     @Override
@@ -650,12 +671,12 @@ public abstract class Prehistoric extends TamableAnimal implements GeckoLibMulti
 
         //Player-ridden step-up-to-1.0 is now handled automatically by LivingEntity.maxUpStep() via Attributes.STEP_HEIGHT
 
-        //more-hitboxes' own EntityMixin#updateBounds (hooked on Entity.setBoundingBox) is meant to keep
-        //getEntityHitboxData().getAttackBounds() following the entity as it moves, but that mixin never
-        //fires in this environment (confirmed: attackBounds stays frozen at its construction-time value,
-        //permanently anchored near world origin, causing DelayedAttackGoal's isInRange() to always fail
-        //once the entity has moved away from spawn). Refreshing it manually here works around that.
-        hitboxData.makeAttackBounds();
+        //more-hitboxes' EntityMixin#updateBounds/MobMixin#tickCustomParts/TransientEntitySectionManagerMixin
+        //now apply for real (see build.gradle's patchedMoreHitboxesJar task - the published jar's own
+        //neoforge.mods.toml never declared its [[mixins]] block at all, so none of its mixins loaded before;
+        //this was misdiagnosed in an earlier session as a Java 21/Mixin-compatibility-level problem). They
+        //handle attack-bounds refresh and part positioning/registration natively now - no manual workaround
+        //needed here. See .claude/memory/fossils_combat_and_scaling_bugs_fixed.md.
 
         if (!level().isClientSide) {
             setSprinting(getDeltaMovement().horizontalDistance() > 0.1 && getMoveControl().getSpeedModifier() >= attributes().sprintMod());

@@ -7,6 +7,7 @@ import com.github.fossils.entity.ModEntities;
 import com.github.fossils.inventory.ModMenus;
 import com.github.fossils.item.ModItems;
 import com.github.fossils.item.ModTabs;
+import com.github.fossils.material.ModArmorMaterials;
 import com.github.fossils.material.ModFluidTypes;
 import com.github.fossils.material.ModFluids;
 import com.github.fossils.sounds.ModSounds;
@@ -34,6 +35,7 @@ public class FossilsAndArcheologyRevival {
 
         ModFluidTypes.register(modEventBus);
         ModFluids.register(modEventBus);
+        ModArmorMaterials.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModItems.register(modEventBus);
         ModBlockEntities.register(modEventBus);

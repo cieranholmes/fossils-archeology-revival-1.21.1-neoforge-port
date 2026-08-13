@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 5e9ab82f-8e0e-4d97-bf5f-7ef8d9856b39
-  modified: 2026-08-12T18:49:16.910Z
+  modified: 2026-08-13T08:54:42.351Z
 ---
 
 [[fossils-migration-plan]]'s phase numbering is no longer the literal execution order. On 2026-08-09, Phase 2 (Items) was started and immediately paused after discovering the item system is far more entity-coupled than the plan assumed:
@@ -19,3 +19,5 @@ metadata:
 **How to apply:** treat Phase 4 (Entities & AI, ~199 source files, the largest single chunk in [[fossils-migration-inventory]]) as the next active phase, NOT Phase 2. Phase 2's items work (this session touched only exploration, no files were written/committed for items yet — `ModItems.java` in the target repo is still just the `TAR_BUCKET` stub from Phase 0/1) resumes only after Phase 4 lands real entity classes to hook into. Phase 2's entity-independent pieces (materials/armor/tools minus the tooth-dagger repair ingredient, food/loot/villager/tags/advancements, block items, decorative items, records) were NOT started under this decision — they were left for after Phase 4 too, since the user chose the full reorder option rather than the "do the independent parts now" option. Don't assume any Phase 2 subsystem is in-progress until you check the target repo's actual file state.
 
 **Update 2026-08-12: Phase 4 is now COMPLETE** (see [[fossils-phase4-entities-progress]]'s final session log) — every entity class (species, monster, Anu boss, toys, projectiles) is real, registered, rendered, and verified live in-game. The condition this memory was tracking has been satisfied: **Phase 2 (Items) is now the recommended next phase.** `ModItems.java` has grown a handful of small placeholder fields added opportunistically during Phase 4 (`MAGIC_CONCH`, `ELASMOTHERIUM_FUR`, `MAMMOTH_FUR`, `ANCIENT_SWORD`/`ANCIENT_HELMET`/`ANCIENT_KEY` — the sword/helmet are plain vanilla-backed placeholders, not the real bespoke item classes) but is still fundamentally unstarted as a phase — check the target repo's actual `ModItems.java` state before assuming any real Items-phase subsystem exists.
+
+**Update 2026-08-13: Phase 2 is now actively IN PROGRESS**, not just "recommended next" — see [[fossils-phase2-items-progress]] for the live per-task breakdown (materials/tags/base item classes/per-species registration driver done; entity-coupled special items mostly done; `ModItems.java`'s full list, heavy NBT items, loot function, advancements, enchantments, villager trades, and `FossilFoodMappings` not yet started) and its large 1.21.1 item/enchantment/projectile API-drift catalog. Don't re-scope Phase 2 from scratch — check that memory and the live TaskList first.

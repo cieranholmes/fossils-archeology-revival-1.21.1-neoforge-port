@@ -1,14 +1,22 @@
 package com.github.fossils.entity.prehistoric.base;
 
 import com.github.fossils.food.Diet;
+import com.github.fossils.item.BirdEggItem;
+import com.github.fossils.item.DNAItem;
+import com.github.fossils.item.FishEggItem;
+import com.github.fossils.item.MammalEmbryoItem;
+import com.github.fossils.item.ModItems;
+import com.github.fossils.item.ModTabs;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
+import net.neoforged.neoforge.registries.DeferredItem;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public enum VanillaEntityInfo implements EntityInfo {
@@ -62,6 +70,39 @@ public enum VanillaEntityInfo implements EntityInfo {
         this.diet = diet;
         this.resourceName = this.name().toLowerCase(Locale.ROOT);
         this.displayName = () -> Component.translatable("entity.minecraft." + resourceName);
+    }
+
+    /**
+     * Populates dnaItem always, plus eggItem/embryoItem/cultivatedBirdEggItem depending on mobType - a subset of
+     * PrehistoricEntityInfo.register()'s logic since vanilla mobs reuse their own vanilla item/spawn egg, no
+     * bones/food/bucket registration needed here. Must run before ModItems.ITEMS.register(...) fires.
+     */
+    public static void register() {
+        for (VanillaEntityInfo info : values()) {
+            DeferredItem<Item> dnaHolder = ModItems.ITEMS.register(info.resourceName + "_dna", () -> {
+                DNAItem item = new DNAItem(info);
+                info.dnaItem = item;
+                return item;
+            });
+            ModTabs.addToMobItemTab(dnaHolder);
+
+            if (info.mobType == PrehistoricMobType.FISH) {
+                registerItem("egg_item", info, () -> new FishEggItem(info), item -> info.eggItem = item);
+            } else if (info.mobType == PrehistoricMobType.MAMMAL) {
+                registerItem("syringe", info, () -> new MammalEmbryoItem(info), item -> info.embryoItem = item);
+            } else if (info.mobType == PrehistoricMobType.VANILLA_BIRD) {
+                registerItem("egg_item", info, () -> new BirdEggItem(info, true), item -> info.cultivatedBirdEggItem = item);
+            }
+        }
+    }
+
+    private static void registerItem(String name, VanillaEntityInfo info, Supplier<Item> itemFactory, Consumer<Item> listener) {
+        DeferredItem<Item> holder = ModItems.ITEMS.register(name + "_" + info.resourceName, () -> {
+            Item item = itemFactory.get();
+            listener.accept(item);
+            return item;
+        });
+        ModTabs.addToMobItemTab(holder);
     }
 
     @Override

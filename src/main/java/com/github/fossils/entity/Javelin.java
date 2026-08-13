@@ -36,8 +36,12 @@ public class Javelin extends AbstractArrow {
         super(type, level);
     }
 
-    public Javelin(Level level, LivingEntity shooter, Tier tier, boolean ancient, int itemDamage) {
-        super(ModEntities.JAVELIN.get(), shooter, level, ItemStack.EMPTY, null);
+    public Javelin(Level level, LivingEntity shooter, Tier tier, boolean ancient, int itemDamage, ItemStack thrownStack) {
+        //Passing the actual javelin stack as firedFromWeapon (not null) makes AbstractArrow's own generic
+        //enchantment-effect system apply Power (AbstractArrow.dealDamage -> EnchantmentHelper.modifyDamage) and
+        //Punch (AbstractArrow.doKnockback -> EnchantmentHelper.modifyKnockback) automatically, matching how a
+        //modern (1.21.1) vanilla bow/arrow behaves - no manual per-enchantment reads needed for those two.
+        super(ModEntities.JAVELIN.get(), shooter, level, ItemStack.EMPTY, thrownStack);
         this.itemDamage = itemDamage;
         if (tier instanceof Tiers tiers) {
             setTier(tiers);

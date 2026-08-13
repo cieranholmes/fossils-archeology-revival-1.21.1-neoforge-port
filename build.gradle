@@ -116,11 +116,54 @@ neoForge {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 
+// more-hitboxes-neoforge's own neoforge.mods.toml never declares a [[mixins]] block for its bundled
+// morehitboxes.mixins.json, so none of its mixins are ever loaded by NeoForge's mod loader (confirmed by
+// inspecting the published jar directly - GeckoLib's and TerraBlender's jars both declare theirs correctly
+// the same way). These tasks resolve the original jar, add the single missing TOML entry, and repack it;
+// the patched jar is what's actually depended on below, in place of the Maven coordinate.
+def moreHitboxesOriginal = configurations.detachedConfiguration(
+        dependencies.create("com.github.darkpred.morehitboxes:morehitboxes-neoforge-${minecraft_version}:${more_hitboxes_version}")
+)
+
+def moreHitboxesExtractedDir = layout.buildDirectory.dir("morehitboxes-extracted")
+
+def extractMoreHitboxes = tasks.register("extractMoreHitboxes", Copy) {
+    from { zipTree(moreHitboxesOriginal.singleFile) }
+    into moreHitboxesExtractedDir
+}
+
+def patchMoreHitboxesToml = tasks.register("patchMoreHitboxesToml") {
+    dependsOn extractMoreHitboxes
+    def tomlFileProvider = moreHitboxesExtractedDir.map { it.file("META-INF/neoforge.mods.toml") }
+    inputs.file(tomlFileProvider)
+    outputs.file(tomlFileProvider)
+    doLast {
+        def tomlFile = tomlFileProvider.get().asFile
+        def text = tomlFile.text
+        if (!text.contains('[[mixins]]')) {
+            tomlFile.text = text + '\n[[mixins]]\nconfig="morehitboxes.mixins.json"\n'
+        }
+    }
+}
+
+def patchedMoreHitboxesJar = tasks.register("patchedMoreHitboxesJar", Zip) {
+    dependsOn patchMoreHitboxesToml
+    from moreHitboxesExtractedDir
+    archiveFileName = "morehitboxes-neoforge-${minecraft_version}-${more_hitboxes_version}-patched.jar"
+    destinationDirectory = layout.buildDirectory.dir("patchedLibs")
+}
+
 dependencies {
     // Hard dependencies: the mod does not load/function without these (see the migration plan's dependency policy)
     implementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${gecko_lib_version}"
     implementation "com.github.glitchfiend:TerraBlender-neoforge:${minecraft_version}-${terra_blender_version}"
-    implementation "com.github.darkpred.morehitboxes:morehitboxes-neoforge-${minecraft_version}:${more_hitboxes_version}"
+    // more-hitboxes is NOT depended on directly here - its neoforge.mods.toml is missing the [[mixins]]
+    // declaration for morehitboxes.mixins.json entirely (confirmed by unzipping the published jar and
+    // comparing against GeckoLib's/TerraBlender's, which both declare theirs correctly), so NeoForge's mod
+    // loader never discovers or loads any of its 9 server-side + 7 client-side mixins - not a Java 21/Mixin
+    // compatibility issue, just a missing TOML entry in this "-alpha" release. patchedMoreHitboxesJar below
+    // repacks the resolved jar with that one line added; see .claude/memory/fossils_combat_and_scaling_bugs_fixed.md.
+    implementation files(patchedMoreHitboxesJar)
 
     // Example mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime

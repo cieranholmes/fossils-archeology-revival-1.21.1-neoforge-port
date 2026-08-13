@@ -3,15 +3,30 @@ package com.github.fossils.entity.prehistoric.base;
 import com.github.fossils.FossilsAndArcheologyRevival;
 import com.github.fossils.entity.ModEntities;
 import com.github.fossils.entity.data.EntityDataLoader;
+import com.github.fossils.item.BirdEggItem;
+import com.github.fossils.item.CustomSpawnEggItem;
+import com.github.fossils.item.DNAItem;
+import com.github.fossils.item.DinoBoneItem;
+import com.github.fossils.item.DinoEggItem;
+import com.github.fossils.item.FishEggItem;
+import com.github.fossils.item.MammalEmbryoItem;
+import com.github.fossils.item.MeatItem;
+import com.github.fossils.item.ModItems;
+import com.github.fossils.item.ModTabs;
+import com.github.fossils.item.NautilusMeatItem;
 import com.github.fossils.tags.ModEntityTypeTags;
 import com.github.fossils.util.TimePeriod;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.MobBucketItem;
+import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredItem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,6 +34,7 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static com.github.fossils.entity.prehistoric.base.InfoFlag.BUCKETABLE;
@@ -136,6 +152,71 @@ public enum PrehistoricEntityInfo implements EntityInfo {
         this.backgroundEggColor = backgroundEggColor;
         this.highlightEggColor = highlightEggColor;
         this.bucketable = flags.contains(BUCKETABLE);
+    }
+
+    /**
+     * Populates every species' dnaItem/eggItem/embryoItem/birdEggItem/cultivatedBirdEggItem/8 bone-slot
+     * items/foodItem/cookedFoodItem/spawnEggItem/bucketItem fields. Must run before ModItems.ITEMS.register(...)
+     * fires (i.e. before ModItems.register(modEventBus) - see ModItems.java's own register() ordering).
+     */
+    public static void register() {
+        for (PrehistoricEntityInfo info : values()) {
+            DeferredItem<Item> dnaHolder = ModItems.ITEMS.register(info.resourceName + "_dna", () -> {
+                DNAItem item = new DNAItem(info);
+                info.dnaItem = item;
+                return item;
+            });
+            ModTabs.addToMobItemTab(dnaHolder);
+
+            if (info.hasBones()) {
+                DinoBoneItem.registerItem("bone_arm", info, item -> info.armBoneItem = item);
+                DinoBoneItem.registerItem("bone_foot", info, item -> info.footBoneItem = item);
+                DinoBoneItem.registerItem("bone_leg", info, item -> info.legBoneItem = item);
+                DinoBoneItem.registerItem("bone_ribcage", info, item -> info.ribcageBoneItem = item);
+                DinoBoneItem.registerItem("bone_skull", info, item -> info.skullBoneItem = item);
+                DinoBoneItem.registerItem("bone_tail", info, item -> info.tailBoneItem = item);
+                DinoBoneItem.registerItem("bone_unique", info, item -> info.uniqueBoneItem = item);
+                DinoBoneItem.registerItem("bone_vertebrae", info, item -> info.vertebraeBoneItem = item);
+            } else if (info == MEGALODON) {
+                DinoBoneItem.registerItem("bone_unique", info, item -> info.uniqueBoneItem = item);
+            }
+
+            if (info.mobType == FISH || info.mobType == DINOSAUR_FISH) {
+                registerItem("egg_item", info, () -> new FishEggItem(info), item -> info.eggItem = item);
+            } else if (info.mobType == DINOSAUR || info.mobType == DINOSAUR_AQUATIC || info.mobType == ARTHROPOD) {
+                registerItem("egg_item", info, () -> new DinoEggItem(info), item -> info.eggItem = item);
+            } else if (info.mobType == MAMMAL) {
+                registerItem("syringe", info, () -> new MammalEmbryoItem(info), item -> info.embryoItem = item);
+            } else if (info.mobType == BIRD) {
+                registerItem("egg", info, () -> new BirdEggItem(info, false), item -> info.birdEggItem = item);
+                registerItem("egg_item", info, () -> new BirdEggItem(info, true), item -> info.cultivatedBirdEggItem = item);
+            }
+
+            if (info == NAUTILUS) {
+                registerItem("meat", info, () -> new NautilusMeatItem(info), item -> info.foodItem = item);
+                registerItem("cooked", info, () -> new NautilusMeatItem(info, 2), item -> info.cookedFoodItem = item);
+            } else {
+                registerItem("meat", info, () -> new MeatItem(info, false), item -> info.foodItem = item);
+                registerItem("cooked", info, () -> new MeatItem(info, true), item -> info.cookedFoodItem = item);
+            }
+
+            registerItem("spawn_egg", info, () -> new CustomSpawnEggItem(info), item -> info.spawnEggItem = item);
+
+            if (info.bucketable) {
+                registerItem("bucket_item", info,
+                        () -> new MobBucketItem(info.entitySupplier.get(), Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1)),
+                        item -> info.bucketItem = item);
+            }
+        }
+    }
+
+    private static void registerItem(String name, PrehistoricEntityInfo info, Supplier<Item> itemFactory, Consumer<Item> listener) {
+        DeferredItem<Item> holder = ModItems.ITEMS.register(name + "_" + info.resourceName, () -> {
+            Item item = itemFactory.get();
+            listener.accept(item);
+            return item;
+        });
+        ModTabs.addToMobItemTab(holder);
     }
 
     public static List<PrehistoricEntityInfo> getTimePeriodList(TimePeriod... periods) {
