@@ -1,6 +1,6 @@
 # FossilsAndArcheologyRevival
 
-NeoForge 1.21.1 port of the Architectury/1.20.1 mod `FossilsArcheologyRevival` (mod id `fossils`, single-module, no Forge/Fabric split by firm decision).
+NeoForge 1.21.1 port of the Architectury/1.20.1 mod `FossilsArcheologyRevival` (mod id `fossil`, single-module, no Forge/Fabric split by firm decision).
 
 ## Project memory
 

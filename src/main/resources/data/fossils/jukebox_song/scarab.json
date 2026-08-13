@@ -1,8 +1,0 @@
-{
-  "sound_event": "fossils:music_scarab",
-  "description": {
-    "translate": "item.fossils.music_disc_scarab.desc"
-  },
-  "length_in_seconds": 153,
-  "comparator_output": 2
-}

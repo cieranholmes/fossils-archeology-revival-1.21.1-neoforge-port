@@ -1,8 +1,0 @@
-{
-  "sound_event": "fossils:music_discovery",
-  "description": {
-    "translate": "item.fossils.music_disc_discovery.desc"
-  },
-  "length_in_seconds": 250,
-  "comparator_output": 3
-}

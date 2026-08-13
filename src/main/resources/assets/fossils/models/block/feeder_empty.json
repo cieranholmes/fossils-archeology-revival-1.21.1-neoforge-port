@@ -1,9 +1,0 @@
-{
-  "parent": "minecraft:block/orientable_with_bottom",
-  "textures": {
-    "top": "fossils:block/feeder_top1",
-    "front": "fossils:block/feeder_front1",
-    "side": "fossils:block/feeder_sides",
-    "bottom": "fossils:block/feeder_bottom"
-  }
-}

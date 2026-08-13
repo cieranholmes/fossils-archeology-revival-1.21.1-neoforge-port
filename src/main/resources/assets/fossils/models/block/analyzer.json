@@ -1,9 +1,0 @@
-{
-  "parent": "minecraft:block/orientable",
-  "textures": {
-    "top": "fossils:block/analyzer_top",
-    "front": "fossils:block/analyzer_front",
-    "side": "fossils:block/analyzer_sides",
-    "bottom": "fossils:block/analyzer_bottom"
-  }
-}
