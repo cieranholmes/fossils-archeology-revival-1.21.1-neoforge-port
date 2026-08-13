@@ -3,6 +3,7 @@ package com.github.fossils;
 import com.github.fossils.block.ModBlocks;
 import com.github.fossils.block.custom_blocks.FlammableRotatedPillarBlock;
 import com.github.fossils.block.entity.ModBlockEntities;
+import com.github.fossils.entity.ModEntities;
 import com.github.fossils.inventory.ModMenus;
 import com.github.fossils.item.ModItems;
 import com.github.fossils.item.ModTabs;
@@ -36,6 +37,7 @@ public class FossilsAndArcheologyRevival {
         ModBlocks.register(modEventBus);
         ModItems.register(modEventBus);
         ModBlockEntities.register(modEventBus);
+        ModEntities.register(modEventBus);
         ModTabs.register(modEventBus);
         ModSounds.register(modEventBus);
         ModMenus.register(modEventBus);

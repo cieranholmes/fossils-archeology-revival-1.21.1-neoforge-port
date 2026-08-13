@@ -195,4 +195,39 @@ public class Config {
             helmetOverlays = HELMET_OVERLAYS.get();
         }
     }
+
+    /**
+     * Looks up a boolean config toggle by its config key (as used in {@code data/.../variants/} config-condition JSON)
+     */
+    public static boolean isEnabled(String key) {
+        return switch (key) {
+            case "generateHellShips" -> generateHellShips;
+            case "generateMoai" -> generateMoai;
+            case "generateFossils" -> generateFossils;
+            case "generatePermafrost" -> generatePermafrost;
+            case "generateVolcanicRock" -> generateVolcanicRock;
+            case "generateVolcanoBiome" -> generateVolcanoBiome;
+            case "fishArePersistent" -> fishArePersistent;
+            case "spawnTarSlimes" -> spawnTarSlimes;
+            case "featheredDilo" -> featheredDilo;
+            case "featheredCerato" -> featheredCerato;
+            case "featheredDryo" -> featheredDryo;
+            case "healingDinos" -> healingDinos;
+            case "enableHunger" -> enableHunger;
+            case "enableStarvation" -> enableStarvation;
+            case "breedingDinos" -> breedingDinos;
+            case "eggsLikeChickens" -> eggsLikeChickens;
+            case "whipToTameDino" -> whipToTameDino;
+            case "dinosEatBlocks" -> dinosEatBlocks;
+            case "dinosBreakBlocks" -> dinosBreakBlocks;
+            case "dinosEatModdedMobs" -> dinosEatModdedMobs;
+            case "animalsFearDinos" -> animalsFearDinos;
+            case "anuBlockPlacing" -> anuBlockPlacing;
+            case "anubiteHasCooldown" -> anubiteHasCooldown;
+            case "machinesRequireEnergy" -> machinesRequireEnergy;
+            case "customMainMenu" -> customMainMenu;
+            case "helmetOverlays" -> helmetOverlays;
+            default -> false;
+        };
+    }
 }
