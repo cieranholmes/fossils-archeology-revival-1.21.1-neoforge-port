@@ -4,6 +4,8 @@ package com.github.fossils.entity.prehistoric.base;
 import com.github.fossils.FossilsAndArcheologyRevival;
 import com.github.fossils.advancements.ModTriggers;
 import com.github.fossils.capabilities.ModCapabilities;
+import com.github.fossils.network.S2CMusicMessage;
+import com.github.fossils.sounds.ModSounds;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
@@ -32,6 +34,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -63,10 +66,11 @@ public class DinosaurEgg extends LivingEntity implements IEntityWithComplexSpawn
         Entity entity = info.entityType().create(level);
         if (entity instanceof Prehistoric prehistoric) {
             if (player != null) {
-                ModTriggers.INCUBATE_EGG_TRIGGER.trigger(player, entity);
+                ModTriggers.INCUBATE_EGG_TRIGGER.get().trigger(player, entity);
                 if (prehistoric.aiTameType() == PrehistoricEntityInfoAI.Taming.IMPRINTING) {
                     prehistoric.tame(player);
                     if (!ModCapabilities.hasHatchedDinosaur(player)) {
+                        PacketDistributor.sendToPlayer(player, new S2CMusicMessage(ModSounds.MUSIC_FIRST_DINOSAUR.get()));
                         ModCapabilities.setHatchedDinosaur(player, true);
                     }
                     if (hatchMessage) {

@@ -17,8 +17,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.DyeColor;
+import com.github.fossils.item.ModItems;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -26,10 +26,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-/**
- * Ported without {@code ModItems.TOY_BALLS} (a per-DyeColor item map that belongs to the Items phase);
- * {@link #getPickResult()} falls back to a plain slime ball until that phase adds the real toy ball items.
- */
 public class ToyBall extends ToyBase {
     protected int lerpSteps;
     protected double lerpX;
@@ -241,7 +237,7 @@ public class ToyBall extends ToyBase {
     @Nullable
     @Override
     public ItemStack getPickResult() {
-        return new ItemStack(Items.SLIME_BALL);
+        return new ItemStack(ModItems.TOY_BALLS.get(getColor()).get());
     }
 
     public DyeColor getColor() {

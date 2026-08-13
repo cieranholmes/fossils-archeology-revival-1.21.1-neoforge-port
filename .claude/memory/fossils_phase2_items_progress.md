@@ -1,11 +1,11 @@
 ---
 name: fossils-phase2-items-progress
-description: "Phase 2 (Items) IN PROGRESS as of 2026-08-13 - materials/tags/base item classes/master per-species registration driver done; entity-coupled special items mostly done; ModItems.java full list, heavy NBT items, loot/advancements/enchantments/villager/food-mappings not yet started. Includes a large 1.21.1 item/enchantment/projectile API-drift catalog."
+description: "Phase 2 (Items) COMPLETE as of 2026-08-13 - all 13 tasks done (items, special items, enchantments, loot function, advancement triggers, villager trades, food mappings), full compile+build+runServer/RCON verified including live villager trade offers with a real enchanted book. Includes a large 1.21.1 item/enchantment/projectile/loot-function/criterion-trigger/villager-trade/NBT-component API-drift catalog."
 metadata:
   node_type: memory
   type: project
   originSessionId: 78d0a1c6-3588-48a6-800c-16a36b318da9
-  modified: 2026-08-13T08:53:51.871Z
+  modified: 2026-08-13T12:10:00.000Z
 ---
 
 Continuation of [[fossils-migration-plan]] Phase 2, entered per [[fossils-phase-sequencing]]'s reorder decision (Phase 4 completed first). This supersedes that memory's "Phase 2 is now the recommended next phase" framing - Phase 2 is now actively underway with a live TaskList (13 tasks, dependency-ordered).
@@ -32,34 +32,184 @@ Live TaskList, 13 tasks, dependency-ordered:
    `MeatItem`, `NautilusMeatItem`, `EggItem`, `FishEggItem`, `DinoEggItem`, `BirdEggItem`, `CustomSpawnEggItem`.
 4. **DONE** - `PrehistoricEntityInfo.register()`/`VanillaEntityInfo.register()` - the master per-species item driver
    (~60 species: DNA/bone/egg/meat/spawn-egg/bucket items, dependency-ordering into `ModItems.java`).
-5. **IN PROGRESS** - `ModItems.java` full item list (still just the Phase 4-era 13 placeholders; needs the full
-   fossils/relic-gear/javelins/scarab-tools/bone-armor/toys/spawn-eggs list, and must call
-   `VanillaEntityInfo.register()`/`PrehistoricEntityInfo.register()` before `ITEMS.register(modEventBus)` fires).
-6. **IN PROGRESS** - Entity-coupled special items: `AncientSwordItem`, `ToyBallItem`, `ToyTetheredLogItem`,
-   `ToyScratchingPostItem`, `ArtificialHoneycombItem`, `FossilItem`, `JavelinItem` all done. **Still needed**: the 6
-   collapsed forge/fabric-paired classes (`AncientHelmetItem`, `CustomRecordItem`, `AncientChestBlockItem`,
-   `AnuStatueBlockItem`, `AnubiteStatueBlockItem`, `SarcophagusBlockItem`) - each currently an `@ExpectPlatform` shell
-   in source with real logic split across `item/forge/*Impl.java`/`item/fabric/*Impl.java`; collapse each pair into
-   one concrete NeoForge class (the Forge side is almost always the closer seed, per [[project-neoforge-port]]'s
-   established convention) - **except `CustomRecordItemImpl`, where Forge/Fabric actually disagree** (Forge skips
-   `.get()` on the sound supplier and multiplies seconds×20; Fabric calls `.get()` and passes seconds unmodified) -
-   verify against the actual `RecordItem` constructor in this MC version before picking one, don't copy either blindly.
-7. **NOT STARTED** - `LaserPointerItem` (heaviest raw-NBT/UUID/tick-lifecycle item in the mod) + `StoneTabletItem`
-   (`EntityType.updateCustomEntityTag` NBT plumbing).
-8. **NOT STARTED** - `CustomizeToDinoFunction`/`ModLootItemFunctionTypes` (needs `MapCodec` rewrite, old GSON
-   `Serializer` pattern is gone in 1.21.1).
-9. **NOT STARTED** - 4 real advancement triggers (`OpenSarcophagusTrigger`, `ScarabTameTrigger`,
-   `ImplantEmbryoTrigger`, `IncubateEggTrigger`) replacing the current no-op `ModTriggers` stub - needs
-   `SimpleCriterionTrigger`'s Codec-based `SimpleInstance` rework, not the old manual `JsonObject`/`GsonHelper`
-   (de)serialization. `ModTriggers.INCUBATE_EGG_TRIGGER.trigger(player, entity)`'s call-site API (already used by
-   `FishEggItem`, written in task 3) must stay stable when this lands for real.
-10. **NOT STARTED** - `ArcheologyEnchantment`/`PaleontologyEnchantment` as 1.21.1 data-driven enchantments (datapack
-    JSON + exclusive-set tag), not Java `Enchantment` subclasses with `checkCompatibility` overrides (that override
-    point no longer exists - enchantments are registry entries now, see drift catalog below).
-11. **NOT STARTED** - `ModVillagers`/`ModTrades` (trivial once referenced items exist - do last among "easy" pieces).
-12. **NOT STARTED** - `FossilFoodMappings` (simplified per the decision above - depends on task 4's fields already
-    being populated, which they are).
-13. **NOT STARTED** - Full compile + boot/RCON verification pass + memory update with final Phase 2 completion state.
+5. **DONE** (2026-08-13 continuation session) - `ModItems.java` full item list rewritten from scratch, replacing all
+   13 Phase-4-era placeholders: fossils/relic-gear/javelins/scarab-tools/bone-armor/toys/spawn-eggs/music-discs/
+   fossil-saplings all registered, matching source's tab assignments exactly (including source's own quirks -
+   `ANCIENT_SWORD`, all 6 javelins, and `THERIZINOSAURUS_DOWN` get **no** creative tab at all in source, faithfully
+   replicated rather than "fixed"). **Found and fixed a real bug**: `VanillaEntityInfo.register()`/
+   `PrehistoricEntityInfo.register()` (the ~60-species item driver from tasks 3-4, described as "DONE" in the prior
+   session) were never actually being called from anywhere - `ModItems.register(IEventBus)` only called
+   `ITEMS.register(modEventBus)`. This meant every species' DNA/bone/egg/meat/spawn-egg item silently never
+   registered. Fixed by calling both `.register()` methods at the top of `ModItems.register(IEventBus)`, matching
+   source's `register()` ordering (population calls before the `DeferredRegister` itself is handed the event bus -
+   safe because `.register(name, supplier)` just populates an internal map; the actual `RegisterEvent` fires later).
+   **One item deliberately not registered**: `FERN_SEED` (`ItemNameBlockItem` wrapping `ModBlocks.FERNS`) - the
+   `FernsBlock`/`ModBlocks.FERNS` plant block was never ported in Phase 1 (confirmed via grep, doesn't exist in
+   target at all). This is Phase 1/Blocks catch-up scope, not a Phase 2 oversight; flagged with a comment at the
+   `FERN_SEED_FOSSIL` registration site in `ModItems.java` rather than silently skipped or worked around.
+6. **DONE** - Entity-coupled special items: `AncientSwordItem`, `ToyBallItem`, `ToyTetheredLogItem`,
+   `ToyScratchingPostItem`, `ArtificialHoneycombItem`, `FossilItem`, `JavelinItem` (from the prior session) plus, new
+   this session:
+   - `AncientChestBlockItem`/`AnuStatueBlockItem`/`AnubiteStatueBlockItem`/`SarcophagusBlockItem`: turned out to
+     **already be effectively done from Phase 1**, just not under these class names - `ModBlocks.java`'s
+     `blockWithCustomBlockItem(...)` helper already registers all 4 blocks with a generic `CustomBlockItem`
+     (plain `BlockItem` + a `getName()` override), which is exactly the "plain BlockItem, no renderer" simplification
+     this task already planned to do. No new code needed; just noting these 4 are covered.
+   - `AncientHelmetItem`: written as a concrete (non-abstract) `ArmorItem implements GeoItem` with
+     `AnimatableInstanceCache`/no-op `registerControllers` (import from `software.bernie.geckolib.animation.
+     AnimatableManager` and `software.bernie.geckolib.animatable.instance.AnimatableInstanceCache` - NOT the
+     `software.bernie.geckolib.core.*` paths source used; those packages don't exist in this GeckoLib version,
+     confirmed by matching the import paths already working in `Prehistoric.java`). Registered in `ModItems.java`
+     with `ModArmorMaterials.ANCIENT` + `ArmorItem.Type.HELMET.getDurability(ModArmorMaterials.ANCIENT_DURABILITY_MULTIPLIER)`.
+     Renderer wiring (GeoArmorRenderer/AncientHelmetRenderer) still deferred to Phase 5 as planned.
+   - `CustomRecordItem`: **confirmed and resolved** the suspected `JukeboxSong` rework (see drift catalog below) -
+     `RecordItem` is gone entirely; music discs are now plain `Item`s with `.jukeboxPlayable(ResourceKey<JukeboxSong>)`,
+     and the song data (sound/description/length/comparator-output) lives in a datapack JSON registry entry, not
+     Java. Implemented as 4 JSON files under `data/fossils/jukebox_song/{bones,anu,scarab,discovery}.json`
+     referencing the existing `ModSounds` sound events and reusing the existing `item.fossils.music_disc_*.desc`
+     lang keys for the tooltip (via a `{"translate": "..."}` text component in the JSON, instead of the new default
+     `jukebox_song.<namespace>.<name>` key vanilla's own `JukeboxSongs.bootstrap()` uses) - `CustomRecordItem.java`
+     itself was never created in target; no per-loader class was needed at all, a genuine simplification.
+7. **DONE** - `LaserPointerItem` and `StoneTabletItem`, both boot-verified via a live `runServer` (clean
+   `Done (1.447s)!`, no exceptions, "Loaded data for 59 entities"). Notable drift handled:
+   - `ItemStack.getTag()`/`getOrCreateTag()` are **gone entirely** - arbitrary NBT on a stack now goes through the
+     `DataComponents.CUSTOM_DATA` component: read via `stack.get(DataComponents.CUSTOM_DATA)` (nullable) +
+     `.copyTag()` (returns a **copy** - mutating it does NOT write back to the stack), write/mutate via the static
+     `CustomData.update(DataComponentType<CustomData>, ItemStack, Consumer<CompoundTag>)` helper (get+mutate+put-back
+     in one call). Established pattern already existed in `PrehistoricSwimmingBucketable.saveToBucketTag` from
+     Phase 4 - `LaserPointerItem`/`StoneTabletItem` are the first *item* (non-entity-bucket) uses of it.
+   - `EntityType.updateCustomEntityTag(Level, Player, Entity, CompoundTag)`'s 4th param is now `CustomData`, not
+     `CompoundTag` - pass the `CustomData` object straight from `stack.get(DataComponents.CUSTOM_DATA)`, no
+     `.copyTag()` needed (same "drop/retype the trailing NBT param" family as the `finalizeSpawn` 5th-arg drift
+     already documented, but this one *changed type* rather than being dropped).
+   - `LivingEntity.broadcastBreakEvent(InteractionHand)` **no longer exists** - `ItemStack.hurtAndBreak(int amount,
+     LivingEntity entity, EquipmentSlot slot)` now does the shrink-on-break AND the broadcast internally (calls
+     `entity.onEquippedItemBroken(item, slot)`), so manual `stack.shrink(1)` + `broadcastBreakEvent(...)` call pairs
+     collapse into a single `hurtAndBreak(amount, entity, slot)` call - a genuine simplification already established
+     via `Mammoth`/`Therizinosaurus`/`Elasmotherium`/`WhipItem` in Phase 4, now also applied to `LaserPointerItem`.
+   - `StoneTablet.dropItem` was ported in Phase 4 with a flagged fallback (`Items.STONE` instead of the real item,
+     since `ModItems` didn't exist yet) - updated it now to `ModItems.STONE_TABLET.get()` per that flag's own note.
+   - Similarly, `ToyBall`/`ToyTetheredLog`/`ToyScratchingPost`'s `getPickResult()` fallbacks (`Items.SLIME_BALL`/
+     `Items.OAK_LOG`, flagged in Phase 4 pending this exact phase) were swapped to the real
+     `ModItems.TOY_BALLS.get(getColor()).get()` / `ModItems.TOY_TETHERED_LOGS.get(getWoodTypeName()).get()` /
+     `ModItems.TOY_SCRATCHING_POSTS.get(getWoodTypeName()).get()` now that those maps exist.
+   - `LaserPointerItem`'s particle-spawning call (`ModParticles.LASER_PARTICLE`) needed `ModParticles.java` itself,
+     which didn't exist in target at all (source's whole `client/particle/ModParticles` class was unported). Ported
+     it now (registration only, 5 particle types) since it's small and has no rendering-code dependency - the actual
+     `RegisterParticleProvidersEvent` client factory wiring is still Phase 5 scope; referencing an unregistered-
+     provider particle type from server code is safe (vanilla just fails to render it client-side, doesn't crash).
+8. **DONE** (2026-08-13, third continuation session) - `CustomizeToDinoFunction`/`ModLootItemFunctionTypes` ported
+   to the `MapCodec` model (`com.github.fossils.loot` package, new). `CustomizeToDinoFunction.CODEC` built via
+   `RecordCodecBuilder.mapCodec(commonFields(...).and(LootContext.EntityTarget.CODEC.fieldOf("entity")...))`
+   (`LootItemFunctionType<T>` is now `record LootItemFunctionType<T extends LootItemFunction>(MapCodec<T> codec)`,
+   confirmed against decompiled vanilla `SetNameFunction`/`SmeltItemFunction`). `ModLootItemFunctionTypes` uses a
+   plain `DeferredRegister<LootItemFunctionType<?>>` against `Registries.LOOT_FUNCTION_TYPE`, same shape as every
+   other registry in this codebase. **Scope note**: only the Java mechanism was ported, not the ~60 entity loot
+   table JSONs that would reference `"function": "fossils:customize_to_dinosaur"` - authoring those is Phase
+   7/datagen-adjacent territory (same category as the fossil-block loot tables flagged in task 10 below), not
+   Items-phase scope; no entity loot tables exist in target yet at all.
+9. **DONE** (2026-08-13, third continuation session) - 4 real advancement triggers (`OpenSarcophagusTrigger`,
+   `ScarabTameTrigger`, `ImplantEmbryoTrigger`, `IncubateEggTrigger`) replacing the no-op `ModTriggers` stub, using
+   1.21.1's Codec-based `SimpleCriterionTrigger.SimpleInstance` (a `record` implementing that interface, not the
+   old `AbstractCriterionTriggerInstance` subclass) - see the new drift catalog entry below for the full shape.
+   `ModTriggers` is now a `DeferredRegister<CriterionTrigger<?>>` against `Registries.TRIGGER_TYPE`, with each
+   constant a `DeferredHolder<CriterionTrigger<?>, ConcreteTriggerType>`. The 4 existing call sites
+   (`ThrownBirdEgg`/`DinosaurEgg`/`FishEggItem`'s `INCUBATE_EGG_TRIGGER.trigger(player, entity)`,
+   `Prehistoric`'s `SCARAB_TAME_TRIGGER.trigger((ServerPlayer) player)`) were updated to add `.get()` before
+   `.trigger(...)` - the only call-site change, method name/args stayed identical as intended.
+   **Found two real call sites that don't fire the new triggers yet, deliberately left as-is (out of this task's
+   scope, flagged for whoever does the underlying feature)**:
+   - `OPEN_SARCOPHAGUS_TRIGGER`'s natural call site is `SarcophagusBlock`, but target's `SarcophagusBlock` only
+     overrides `useWithoutItem` (empty-hand open/close) - it's **missing the entire scarab-gem-unlock branch**
+     source had in its single old `use(...)` method (checking `ItemStack.is(ModItems.SCARAB_GEM)`, setting
+     `STATE_UNLOCKED`, lighting the 3 pillars, consuming the gem). This is a real Phase-1/Blocks gap (the branch
+     was dropped during Phase 1 porting, plausibly because `ModItems.SCARAB_GEM` didn't exist yet at that time),
+     not an advancement-triggers problem - 1.21+ also splits `Block.use` into `useItemOn(ItemStack, ...)` +
+     `useWithoutItem(...)`, so re-adding this branch means a new `useItemOn` override, not just calling the
+     trigger. `ModItems.SCARAB_GEM` exists now (Phase 2 done), so this is unblocked whenever someone picks it up.
+   - `IMPLANT_EMBRYO_TRIGGER`'s natural call site is source's `ModEvents.java` `InteractionEvent.INTERACT_ENTITY`
+     listener (embryo-item-on-animal interaction triggering mammal pregnancy via Architectury's `ModCapabilities`).
+     Target has the NeoForge-attachment successor (`com.github.fossils.capabilities.ModCapabilities`) and
+     `MammalEmbryoItem` already, but **no interaction listener/override wires them together at all** - the whole
+     "use embryo item on an adult mammal to start pregnancy" mechanic is unported. This is Entities/gameplay-event
+     scope (arguably a Phase 4 gap, since Phase 4 is marked complete), not Items/advancements scope.
+10. **DONE** (2026-08-13, second continuation session) - `ArcheologyEnchantment`/`PaleontologyEnchantment` ported as
+    pure datapack JSON, same treatment as `JukeboxSong` - no `Enchantment` subclass exists in target at all (matches
+    the task's own framing: the `checkCompatibility(Enchantment other)` override point is simply gone in 1.21.1).
+    - `data/fossils/enchantment/{archeology,paleontology}.json`: `description` reuses the existing
+      `enchantment.fossils.{archeology,paleontology}` lang keys (already present from an earlier phase) via
+      `{"translate": "..."}`; `supported_items` is the tag `#minecraft:enchantable/mining_loot` (the same
+      applicability tag vanilla's own Fortune/Silk Touch use - a solid match since source's exclusion list already
+      named Silk Touch specifically); `slots: ["mainhand"]` (`EquipmentSlotGroup`'s `StringRepresentable` id,
+      confirmed via `EquipmentSlotGroup.java`); `min_cost`/`max_cost` reproduce source's exact formula
+      (`minCost=1+10*(level-1)` → `{"base": 1, "per_level_above_first": 10}`, `maxCost=minCost+50` →
+      `{"base": 51, "per_level_above_first": 10}`); `max_level: 3` (unchanged from source); `exclusive_set` is a
+      plain JSON array of two enchantment IDs (`minecraft:silk_touch` + the other one) rather than a custom tag -
+      `RegistryCodecs.homogeneousList` accepts either a `"#tag"` string or a direct id list, and `Enchantment
+      .areCompatible` checks both holders' exclusive sets, so listing the exclusion from just one side would even
+      have sufficed, but both sides declare it for clarity/symmetry with source's two mirrored `checkCompatibility`
+      overrides.
+    - `weight: 1` and `anvil_cost: 8` for both: 1.20.1's `Enchantment.Rarity.VERY_RARE` (what source's constructor
+      passed) no longer exists, but its `getWeight()` value (1) carries over directly to the new `weight` field: 1.21
+      split what was one `Rarity` enum into two explicit numeric fields, `weight` (table-roll weight, same numbers
+      as the old rarity tiers: COMMON=10/UNCOMMON=5/RARE=2/VERY_RARE=1) and the new `anvil_cost` (COMMON=1/
+      UNCOMMON=2/RARE=4/VERY_RARE=8, doubling per tier) - cross-checked against real vanilla values (Silk Touch,
+      itself VERY_RARE and in the same exclusion group as these two, has anvil_cost 8; Fortune/Mending, RARE, have
+      anvil_cost 4; Unbreaking, UNCOMMON, has anvil_cost 2) so `8` for a VERY_RARE-equivalent custom enchantment is
+      a faithful carry-over, not a guess made up from nothing.
+    - `ModEnchantments.java` still exists in target, but as a `ResourceKey<Enchantment>`-holding `interface` (mirrors
+      vanilla's own `Enchantments.java`/the `JukeboxSongs`-style pattern already used for the music discs above) -
+      **not** a `DeferredRegister<Enchantment>`, since Enchantment is a dynamic/datapack registry with no compile-
+      time Java registration path at all (same category as `JukeboxSong`, confirmed via `VanillaRegistries.java`).
+    - Verified via a live `runServer` boot (`Done (1.740s)!`, clean, no datapack/registry errors) - a broken
+      enchantment JSON (bad tag reference, malformed cost object, etc.) would have surfaced as a datapack loading
+      failure during world/registry setup, not a silent no-op.
+    - **Found while investigating (out of this task's scope, noted for whoever ports Blocks-phase loot tables)**:
+      source's fossil-bearing stone block loot tables (`common/src/generated/resources/data/fossil/loot_tables/
+      blocks/fossil_*.json`) gate which "how many fossils" sub-loot-table gets picked via `minecraft:match_tool`
+      conditions checking `fossil:archeology`/`fossil:paleontology` enchantment levels 1-3 on the mining tool - this
+      is the actual gameplay payoff of these two enchantments (better fossil yields from stone), not anything read
+      from Java. Not touched this session - it's Phase 1/Blocks loot-table-porting territory, not Phase 2/Items.
+11. **DONE** (2026-08-13, third continuation session) - `ModVillagers`/`ModTrades` ported to the `ItemCost`-based
+    `MerchantOffer` model - see the new drift catalog entry below for the full API shape. `ModVillagers` is now two
+    `DeferredRegister`s (`Registries.POINT_OF_INTEREST_TYPE`/`Registries.VILLAGER_PROFESSION`) instead of
+    Architectury's; **the old `LifecycleEvent.SETUP`/`registerBlockStates` step is gone entirely, not just
+    reworked** - NeoForge's `NeoForgeRegistryCallbacks.PoiTypeCallbacks` auto-registers every `PoiType`'s
+    `matchingStates()` into the blockstate→PoiType map via a registry `AddCallback`, for modded PoiTypes exactly
+    like vanilla ones, so the manual step source needed is now redundant (confirmed by reading
+    `NeoForgeRegistryCallbacks.java` - trying to call it manually would likely double-register and throw). The
+    actual trade-list injection (`VillagerTradesEvent`) is a new `VillagerTradeEvents` class
+    (`@EventBusSubscriber(modid=...)`, game-bus `@SubscribeEvent`) - NeoForge's own event (not Forge's, but same
+    shape: `event.getTrades()`/`event.getType()`) replacing source's Forge-side-only `ForgeModEvents.addCustomTrades`
+    (Architectury doesn't have a common-code version of this event at all, so source only had it in the `forge`
+    subproject - one of the few places the single-module port had no direct "common" source to copy from).
+    `EnchantBookForEmeralds` resolves `ModEnchantments.ARCHEOLOGY`/`PALEONTOLOGY`'s `ResourceKey<Enchantment>` to a
+    `Holder<Enchantment>` via `trader.level().registryAccess().registryOrThrow(Registries.ENCHANTMENT)
+    .getHolderOrThrow(key)` inside `getOffer(...)` (the `Entity trader` param is the villager itself, `.level()`
+    already exposes a `Level` with registry access - no extra plumbing needed). **`Enchantment.isTreasureOnly()` is
+    gone entirely in 1.21.1** (see drift catalog) with no direct replacement API; dropped the "double cost for
+    treasure enchantments" branch outright since it's genuinely dead code for this trade's only two actual callers
+    (`ARCHEOLOGY`/`PALEONTOLOGY`, neither treasure-only) - not a partial port, a clean removal of unreachable logic.
+    **Runtime-verified, not just compiled**: booted a live server, summoned a level-5 Archeologist villager via
+    RCON, and read its `Offers` NBT back - it had the real level-5 trades, including a genuine
+    `minecraft:enchanted_book` with `stored_enchantments: {"fossils:archeology": 2}` costing `18` emeralds, proving
+    the whole chain (profession → POI → trade injection → `ItemCost` → enchantment-holder resolution →
+    `EnchantedBookItem.createForEnchantment`) works end-to-end, not just that it compiles.
+12. **DONE** (2026-08-13, third continuation session) - `FossilFoodMappings` ported as planned: a plain static
+    `register()` method (`com.github.fossils.food` package) iterating `PrehistoricEntityInfo.values()`/
+    `VanillaEntityInfo.values()` and calling the target's existing `FoodMappings.addFish`/`addMeat`/`addEgg`
+    directly - no new abstraction, matches source 1:1 minus the JSON/networking layer per the standing decision.
+    **Timing matters**: this can't run at mod-construction time (when `ModItems.register(modEventBus)` etc. are
+    called) because `PrehistoricEntityInfo`/`VanillaEntityInfo`'s `foodItem`/`cookedFoodItem`/`eggItem`/
+    `cultivatedBirdEggItem`/`birdEggItem` fields are populated as a side effect *inside* each item's `DeferredRegister`
+    factory `Supplier` (see the "NeoForge has no `DeferredRegister#listen` equivalent" pattern below) - those
+    Suppliers only run when the `Item` `RegisterEvent` actually fires, which is *after* mod construction returns.
+    Wired via a second `modEventBus.addListener((FMLCommonSetupEvent event) -> FossilFoodMappings.register())` in
+    `FossilsAndArcheologyRevival`'s constructor (common setup fires after all registry events, guaranteeing the
+    fields are populated) - reuses the same event already used for `FlammableRotatedPillarBlock.registerAllStripped()`.
+13. **DONE** (2026-08-13, third continuation session) - Full `./gradlew build` (compile + tests, if any) passes
+    clean, plus a live `runServer` boot (`Done (1.897s)!`, RCON up, zero exceptions/errors in the full log) with the
+    villager-trade RCON verification described in task 11 above. **Phase 2 (Items) is now COMPLETE.**
 
 ## Reusable pattern: NeoForge has no `DeferredRegister#listen` equivalent
 
@@ -205,3 +355,41 @@ sources, not guessed)
 spawnType, groupData, someNbtOrNull)`, just drop the trailing arg; there is still no replacement hook for the
 NBT-based use case (bee-spawn-from-honeycomb's own use of it was dropped with a flag comment, matching the
 established "no replacement found, drop and flag" resolution pattern).
+
+**New drift discovered in the 2026-08-13 continuation session (ModItems.java full rewrite + LaserPointer/StoneTablet):**
+
+- **`RecordItem` was deleted entirely; music discs are now a datapack-JSON-driven registry (`JukeboxSong`), same
+  category as `Enchantment`.** Confirmed via `VanillaRegistries.java`: both `Registries.ENCHANTMENT` and
+  `Registries.JUKEBOX_SONG` are registered with `.add(key, SomeClass::bootstrap)` - i.e. dynamic/datapack registries,
+  not code registries like Item/Block. A disc item is now just `new Item(new Item.Properties().stacksTo(1)
+  .rarity(Rarity.RARE).jukeboxPlayable(ResourceKey<JukeboxSong>))`; `JukeboxSong` itself (`record(Holder<SoundEvent>
+  soundEvent, Component description, float lengthInSeconds, int comparatorOutput)`) is defined as a JSON file at
+  `data/<modid>/jukebox_song/<name>.json` with fields `sound_event` (a sound event ID string), `description` (a text
+  component, e.g. `{"translate": "..."}` to reuse an existing lang key), `length_in_seconds`, `comparator_output`
+  (int 0-15). No Java class/registration needed for the song data itself - only the JSON + the `jukeboxPlayable(...)`
+  call on the item. `Item.Properties.jukeboxPlayable(ResourceKey<JukeboxSong>)` is the new builder method (replaces
+  the old constructor args entirely).
+- **`DiggerItem` subclasses (`PickaxeItem`/`AxeItem`/`ShovelItem`/`HoeItem`) dropped their `(float attackDamage,
+  float attackSpeed)` constructor params**, same rework as `SwordItem` (already documented above) - now just
+  `(Tier, Properties)`, with each subclass exposing its own static `createAttributes(Tier, float damage, float
+  speed)` (all four delegate to `DiggerItem.createAttributes` under the hood, callable via the subclass name per
+  vanilla's own `Items.java` convention: `PickaxeItem.createAttributes(Tiers.IRON, 1.0F, -2.8F)`, etc.) - build via
+  `new Item.Properties().attributes(PickaxeItem.createAttributes(tier, damage, speed))`, mirroring the `SwordItem`/
+  `TOOTH_DAGGER` pattern already established.
+- **A `DeferredRegister.Items`/`DeferredRegister<T>` field typed to a specific item subclass (e.g. `DeferredItem<
+  JavelinItem>`, `DeferredItem<ToyBallItem>`) must be assigned from `ITEMS.register(name, supplier)` called
+  directly** (its generic signature is `<I extends Item> DeferredItem<I> register(String, Supplier<? extends I>)`,
+  which infers `I` from the lambda's return type) - NOT from a local wrapper helper whose parameter is declared as
+  the bland `Supplier<Item>` (like this file's own `register(String, Supplier<Item>, Consumer<DeferredItem<Item>>)`
+  convenience overload), because passing a `Supplier<SpecificType>` where `Supplier<Item>` is expected fails
+  generics invariance even though a **lambda literal** would compile fine there (lambdas are target-typed per call
+  site, so `() -> new JavelinItem(...)` type-checks against a `Supplier<Item>` parameter - the mismatch is the
+  wrapper's `DeferredItem<Item>` *return* type failing to satisfy a `DeferredItem<JavelinItem>` field, not the
+  argument itself). Affected this session: the 6 `JavelinItem` fields and the three toy-item registration helpers
+  (`registerBall`/`registerTetheredLog`/`registerScratchingPost`) all call `ITEMS.register(...)` directly instead of
+  going through the generic-losing wrapper.
+- **Source deliberately omits a creative-tab call for some items** (`ANCIENT_SWORD`, all 6 javelins,
+  `THERIZINOSAURUS_DOWN`, the 4 `FossilItem`s) - confirmed by reading source's `ModItems.java` line-by-line rather
+  than assuming every item needs `ModTabs::addToXItemTab`. Faithfully replicated (these items are registered but not
+  creative-tab-discoverable), not "fixed" - matches the project's general faithful-port-over-silent-improvement
+  policy (see [[fossils-known-upstream-bugs]]).

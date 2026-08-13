@@ -2,12 +2,16 @@ package com.github.fossils.entity.animation;
 
 import com.github.fossils.entity.prehistoric.base.*;
 import com.github.fossils.entity.util.Util;
+import com.github.fossils.network.S2CSyncActiveAnimationMessage;
+import com.github.fossils.network.debug.S2CCancelAnimationMessage;
+import com.github.fossils.util.Version;
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.network.PacketDistributor;
 import software.bernie.geckolib.animation.Animation;
 import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.AnimationState;
@@ -59,9 +63,6 @@ public class AnimationLogic<T extends Mob & PrehistoricAnimatable<T>> {
     /**
      * Server side method that will trigger the animation on the client side of all players in range.
      * The end tick of the animation will be determined by the client
-     * <p>
-     * NOTE: cross-client sync (the network broadcast the source mod does here) is not yet wired up -
-     * networking hasn't been ported (Phase 3). The animation still plays locally wherever this is called.
      *
      * @param controller    the name of the controller the animation will play on
      * @param animationInfo the animation to play
@@ -71,14 +72,12 @@ public class AnimationLogic<T extends Mob & PrehistoricAnimatable<T>> {
         if (animationInfo != null && !entity.level().isClientSide) {
             ActiveAnimationInfo activeAnimationInfo = new Builder(animationInfo.animation, entity.level().getGameTime(), category).forced().transitionLength(5).loop(false).build();
             putActiveAnimation(controller, activeAnimationInfo);
+            PacketDistributor.sendToPlayersTrackingEntity(entity, new S2CSyncActiveAnimationMessage(entity, controller, activeAnimationInfo));
         }
     }
 
     /**
      * This method can be used to debug force an animation
-     * <p>
-     * NOTE: cross-client sync (the network broadcast the source mod does here) is not yet wired up -
-     * networking hasn't been ported (Phase 3). The animation still plays locally wherever this is called.
      *
      * @param controller       the name of the controller the animation will play on
      * @param animationInfo    the animation to play
@@ -90,6 +89,9 @@ public class AnimationLogic<T extends Mob & PrehistoricAnimatable<T>> {
         if (animationInfo != null) {
             ActiveAnimationInfo activeAnimationInfo = new Builder(animationInfo.animation, entity.level().getGameTime(), category).forced().transitionLength(transitionLength).speed(speed).loop(loop).build();
             addNextAnimation(controller, activeAnimationInfo);
+            if (!entity.level().isClientSide) {
+                PacketDistributor.sendToPlayersTrackingEntity(entity, new S2CSyncActiveAnimationMessage(entity, controller, activeAnimationInfo));
+            }
             return activeAnimationInfo;
         }
         return null;
@@ -159,13 +161,26 @@ public class AnimationLogic<T extends Mob & PrehistoricAnimatable<T>> {
     }
 
     /**
-     * NOTE: cross-client sync (the network broadcast the source mod does here) is not yet wired up -
-     * networking hasn't been ported (Phase 3).
+     * The server branch is only ever reached via debug tooling - its one real caller is
+     * {@link com.github.fossils.entity.prehistoric.system.InstructionSystem}'s {@code PlayAnim} handling, and that
+     * caller itself already refuses to run at all unless {@link Version#debugEnabled()} (see
+     * {@code InstructionSystem#serverTick()}). The {@link Version#debugEnabled()} guard here is kept anyway (not
+     * relaxed/removed now that the caller exists) because it is doing a second, structurally distinct job: unlike
+     * source's Architectury channel (which is simply {@code null} outside debug builds, so
+     * {@code MessageHandler.DEBUG_CHANNEL.sendToPlayers(...)} would NPE without an equivalent guard), NeoForge
+     * requires every {@code CustomPacketPayload} type to be registered before it can be sent -
+     * {@code S2CCancelAnimationMessage} is only registered by {@code DebugPackets} when
+     * {@link Version#debugEnabled()} is true, so sending it unconditionally would throw in non-debug builds instead
+     * of merely no-oping. Removing this guard would only be safe if every possible caller were as disciplined as
+     * InstructionSystem about checking debugEnabled() first; keeping it here is a cheap, local guarantee that holds
+     * regardless of what future callers do.
      */
     public void cancelAnimation(String controller) {
         if (entity.level().isClientSide) {
             getActiveAnimation(controller).ifPresent(additionalLogic::remove);
             activeAnimations.remove(controller);
+        } else if (Version.debugEnabled()) {
+            PacketDistributor.sendToPlayersTrackingEntity(entity, new S2CCancelAnimationMessage(entity.getId(), controller));
         }
     }
 

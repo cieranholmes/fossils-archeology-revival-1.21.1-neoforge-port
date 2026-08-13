@@ -20,7 +20,7 @@ public class FishEggItem extends EggItem {
     protected boolean spawnMob(ServerPlayer player, ServerLevel level, double x, double y, double z, boolean aquatic) {
         Entity entity = info.entityType().create(level);
         if (entity instanceof Mob mob) {
-            ModTriggers.INCUBATE_EGG_TRIGGER.trigger(player, entity);
+            ModTriggers.INCUBATE_EGG_TRIGGER.get().trigger(player, entity);
             entity.moveTo(x, y + 0.5, z, level.random.nextFloat() * 360, 0);
             if (mob instanceof Prehistoric) {
                 mob.finalizeSpawn(level, level.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.BREEDING, new Prehistoric.PrehistoricGroupData(-1));

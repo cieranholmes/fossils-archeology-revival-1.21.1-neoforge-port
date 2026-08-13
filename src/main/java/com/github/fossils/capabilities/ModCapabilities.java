@@ -6,52 +6,56 @@ import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Simplified NeoForge-native replacement for the source mod's Architectury @ExpectPlatform capability system.
- * Mammal embryo/pregnancy tracking is not wired up yet (no current caller); hatched-dinosaur tracking uses the
- * player's persistent NBT data, which is all DinosaurEgg currently needs.
+ * NeoForge Data Attachment-backed replacement for the source mod's Architectury @ExpectPlatform capability system.
+ * Client sync for mammal pregnancy is handled automatically by ModAttachments.MAMMAL_DATA's sync handler - no
+ * manual sync packet is needed (source's S2CMammalCapMessage/onPlayerStartTracking resync have no equivalent here).
  */
 public class ModCapabilities {
-    private static final String HAS_HATCHED_DINOSAUR = "fossils_hatched_dinosaur";
 
     public static boolean hasEmbryo(Animal animal) {
-        return false;
+        return getEmbryo(animal) != null;
     }
 
     public static int getEmbryoProgress(Animal animal) {
-        return 0;
+        return animal.getData(ModAttachments.MAMMAL_DATA).getEmbryoProgress();
     }
 
     @Nullable
     public static EntityInfo getEmbryo(Animal animal) {
-        return null;
+        return animal.getData(ModAttachments.MAMMAL_DATA).getEmbryo();
     }
 
+    /**
+     * Deliberately does not sync - matches source, where the per-tick progress increment runs independently (and
+     * silently) on both logical sides in lockstep, rather than the server pushing a packet every single tick.
+     */
     public static void setEmbryoProgress(Animal animal, int embryoProgress) {
+        animal.getData(ModAttachments.MAMMAL_DATA).setEmbryoProgress(embryoProgress);
     }
 
     public static void setEmbryo(Animal animal, @Nullable EntityInfo embryo) {
-    }
-
-    public static void syncMammalWithClient(Animal animal, int embryoProgress, EntityInfo embryo) {
+        animal.getData(ModAttachments.MAMMAL_DATA).setEmbryo(embryo);
     }
 
     public static void startPregnancy(Animal animal, EntityInfo embryo) {
-        setEmbryo(animal, embryo);
-        setEmbryoProgress(animal, 1);
-        syncMammalWithClient(animal, 1, embryo);
+        MammalData data = animal.getData(ModAttachments.MAMMAL_DATA);
+        data.setEmbryo(embryo);
+        data.setEmbryoProgress(1);
+        animal.syncData(ModAttachments.MAMMAL_DATA);
     }
 
     public static void stopPregnancy(Animal animal) {
-        setEmbryo(animal, null);
-        setEmbryoProgress(animal, 0);
-        syncMammalWithClient(animal, 0, null);
+        MammalData data = animal.getData(ModAttachments.MAMMAL_DATA);
+        data.setEmbryo(null);
+        data.setEmbryoProgress(0);
+        animal.syncData(ModAttachments.MAMMAL_DATA);
     }
 
     public static boolean hasHatchedDinosaur(Player player) {
-        return player.getPersistentData().getBoolean(HAS_HATCHED_DINOSAUR);
+        return player.getData(ModAttachments.HAS_HATCHED_DINOSAUR);
     }
 
     public static void setHatchedDinosaur(Player player, boolean hatched) {
-        player.getPersistentData().putBoolean(HAS_HATCHED_DINOSAUR, hatched);
+        player.setData(ModAttachments.HAS_HATCHED_DINOSAUR, hatched);
     }
 }

@@ -1,5 +1,7 @@
 package com.github.fossils.entity;
 
+import com.github.fossils.item.ModItems;
+import com.github.fossils.network.S2CSyncToyAnimationMessage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -7,21 +9,14 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.WoodType;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * Ported without {@code ModItems.TOY_TETHERED_LOGS} (a per-wood-type item map that belongs to the Items phase);
- * {@link #getPickResult()} falls back to a plain oak log until that phase adds the real toy log items.
- * <p>
- * NOTE: cross-client sync of the hit-animation (the network broadcast the source mod did in {@link #hurt}) is
- * not yet wired up - networking hasn't been ported (Phase 3). The local animation-state bookkeeping in
- * {@link #startAnimation} and {@link #tick} is kept as-is.
- */
 public class ToyTetheredLog extends ToyBase {
     private static final EntityDataAccessor<String> WOOD_TYPE = SynchedEntityData.defineId(ToyTetheredLog.class, EntityDataSerializers.STRING);
     public int animationTick;
@@ -47,7 +42,13 @@ public class ToyTetheredLog extends ToyBase {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        return super.hurt(source, amount);
+        boolean hurt = super.hurt(source, amount);
+        if (!hurt && source.getDirectEntity() != null && !level().isClientSide) {
+            Vec3 direction = source.getDirectEntity().position().vectorTo(position());
+            double dist = direction.horizontalDistance();
+            PacketDistributor.sendToPlayersTrackingEntity(this, new S2CSyncToyAnimationMessage(getId(), (float) (direction.z / dist), (float) (direction.x / dist)));
+        }
+        return hurt;
     }
 
     @Override
@@ -79,7 +80,7 @@ public class ToyTetheredLog extends ToyBase {
     @Nullable
     @Override
     public ItemStack getPickResult() {
-        return new ItemStack(Items.OAK_LOG);
+        return new ItemStack(ModItems.TOY_TETHERED_LOGS.get(getWoodTypeName()).get());
     }
 
     public void setWoodType(String woodType) {

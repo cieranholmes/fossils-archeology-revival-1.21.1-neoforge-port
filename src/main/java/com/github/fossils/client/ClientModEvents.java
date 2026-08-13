@@ -6,6 +6,27 @@ import com.github.fossils.client.gui.CultureVatScreen;
 import com.github.fossils.client.gui.FeederScreen;
 import com.github.fossils.client.gui.SifterScreen;
 import com.github.fossils.client.gui.WorktableScreen;
+import com.github.fossils.client.gui.debug.DebugScreen;
+import com.github.fossils.client.gui.debug.PathingScreen;
+import com.github.fossils.client.gui.debug.navigation.DebugCenteredPathNavigation;
+import com.github.fossils.client.gui.debug.navigation.PathingDebug;
+import com.github.fossils.client.gui.debug.navigation.PathingRenderer;
+import com.github.fossils.client.gui.debug.navigation.PlayerPathNavigation;
+import com.github.fossils.client.gui.debug.navigation.SweepPathNavigation;
+import com.github.fossils.client.gui.debug.navigation.WaterPathNavigation;
+import com.github.fossils.client.particle.BubbleParticle;
+import com.github.fossils.client.particle.LaserParticle;
+import com.github.fossils.client.particle.ModParticles;
+import com.github.fossils.client.particle.TarBubbleParticle;
+import com.github.fossils.client.particle.VolcanoVentAshEmitterParticle;
+import com.github.fossils.client.particle.VolcanoVentAshParticle;
+import com.github.fossils.block.entity.ModBlockEntities;
+import com.github.fossils.client.renderer.blockentity.AncientChestRenderer;
+import com.github.fossils.client.renderer.blockentity.AnuBarrierRenderer;
+import com.github.fossils.client.renderer.blockentity.AnuStatueRenderer;
+import com.github.fossils.client.renderer.blockentity.AnubiteStatueRenderer;
+import com.github.fossils.client.renderer.blockentity.CultureVatRenderer;
+import com.github.fossils.client.renderer.blockentity.SarcophagusRenderer;
 import com.github.fossils.client.renderer.entity.AnuBossRenderer;
 import com.github.fossils.client.renderer.entity.AnuDeadRenderer;
 import com.github.fossils.client.renderer.entity.AnuTotemRenderer;
@@ -31,16 +52,25 @@ import com.github.fossils.entity.animation.ClientAnimationInfoLoader;
 import com.github.fossils.entity.prehistoric.base.Prehistoric;
 import com.github.fossils.entity.prehistoric.base.PrehistoricFish;
 import com.github.fossils.inventory.ModMenus;
+import com.github.fossils.util.Version;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LightningBoltRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.minecraft.world.entity.EntityType;
 
@@ -48,6 +78,78 @@ import java.util.function.Function;
 
 @EventBusSubscriber(modid = FossilsAndArcheologyRevival.MODID, value = Dist.CLIENT)
 public class ClientModEvents {
+    public static KeyMapping debugScreenKey;
+    public static KeyMapping pathingScreenKey;
+    public static KeyMapping debugRepathKey;
+    public static KeyMapping debugAdvanceKey;
+    public static KeyMapping debugReverseKey;
+    public static KeyMapping debugHelpKey;
+
+    @SubscribeEvent
+    static void registerKeyMappings(RegisterKeyMappingsEvent event) {
+        if (!Version.debugEnabled()) {
+            return;
+        }
+        debugScreenKey = new KeyMapping("key.fossils.debug_screen", InputConstants.Type.KEYSYM, InputConstants.KEY_Y, "category.fossils.debug");
+        pathingScreenKey = new KeyMapping("key.fossils.pathing_screen", InputConstants.Type.KEYSYM, InputConstants.KEY_R, "category.fossils.debug");
+        debugRepathKey = new KeyMapping("key.fossils.debug_repath", InputConstants.Type.KEYSYM, InputConstants.KEY_V, "category.fossils.debug");
+        debugAdvanceKey = new KeyMapping("key.fossils.debug_advance", InputConstants.Type.KEYSYM, InputConstants.KEY_X, "category.fossils.debug");
+        debugReverseKey = new KeyMapping("key.fossils.debug_reverse", InputConstants.Type.KEYSYM, InputConstants.KEY_C, "category.fossils.debug");
+        debugHelpKey = new KeyMapping("key.fossils.debug_help", InputConstants.Type.KEYSYM, InputConstants.KEY_B, "category.fossils.debug");
+        event.register(debugScreenKey);
+        event.register(pathingScreenKey);
+        event.register(debugRepathKey);
+        event.register(debugAdvanceKey);
+        event.register(debugReverseKey);
+        event.register(debugHelpKey);
+    }
+
+    @SubscribeEvent
+    static void onClientTick(ClientTickEvent.Post event) {
+        if (!Version.debugEnabled() || Minecraft.getInstance().isPaused()) {
+            return;
+        }
+        Minecraft minecraft = Minecraft.getInstance();
+        while (debugHelpKey.consumeClick()) {
+            PathingDebug.showHelpMenu = !PathingDebug.showHelpMenu;
+        }
+        while (pathingScreenKey.consumeClick()) {
+            if (PathingDebug.showHelpMenu) {
+                minecraft.setScreen(new PathingScreen());
+            }
+        }
+        while (debugRepathKey.consumeClick()) {
+            if (PathingDebug.showHelpMenu) {
+                PathingDebug.rePath();
+            }
+        }
+        while (debugAdvanceKey.consumeClick()) {
+            if (PathingDebug.showHelpMenu) {
+                PathingRenderer.advanceIndex();
+            }
+        }
+        while (debugReverseKey.consumeClick()) {
+            if (PathingDebug.showHelpMenu) {
+                PathingRenderer.reverseIndex();
+            }
+        }
+        PathingDebug.tick();
+        while (debugScreenKey.consumeClick()) {
+            Entity entity = DebugScreen.getHitResult(minecraft);
+            minecraft.setScreen(new DebugScreen(entity == null ? DebugScreen.entity : entity));
+        }
+    }
+
+    @SubscribeEvent
+    static void onClientPlayerLoggingIn(ClientPlayerNetworkEvent.LoggingIn event) {
+        if (!Version.debugEnabled()) {
+            return;
+        }
+        PathingDebug.pathNavigation1 = new PlayerPathNavigation(event.getPlayer(), Minecraft.getInstance().level, "Base");
+        PathingDebug.pathNavigation3 = new DebugCenteredPathNavigation(event.getPlayer(), Minecraft.getInstance().level);
+        PathingDebug.pathNavigation4 = new SweepPathNavigation(event.getPlayer(), Minecraft.getInstance().level);
+        PathingDebug.pathNavigation5 = new WaterPathNavigation(event.getPlayer(), Minecraft.getInstance().level);
+    }
 
     @SubscribeEvent
     static void registerScreens(RegisterMenuScreensEvent event) {
@@ -63,6 +165,16 @@ public class ClientModEvents {
         event.registerReloadListener(ClientAnimationInfoLoader.INSTANCE);
         event.registerReloadListener(OptionalTextureLoader.INSTANCE);
         event.registerReloadListener(SkeletonGeoModelLoader.INSTANCE);
+        event.registerReloadListener(DinopediaBioLoader.INSTANCE);
+    }
+
+    @SubscribeEvent
+    static void registerParticleProviders(RegisterParticleProvidersEvent event) {
+        event.registerSpriteSet(ModParticles.VOLCANO_VENT_ASH.get(), VolcanoVentAshParticle.Provider::new);
+        event.registerSpecial(ModParticles.VOLCANO_VENT_ASH_EMITTER.get(), new VolcanoVentAshEmitterParticle.Provider());
+        event.registerSpriteSet(ModParticles.BUBBLE.get(), BubbleParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.TAR_BUBBLE.get(), TarBubbleParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.LASER_PARTICLE.get(), LaserParticle.Provider::new);
     }
 
     @SubscribeEvent
@@ -149,6 +261,13 @@ public class ClientModEvents {
         event.registerEntityRenderer(ModEntities.ANCIENT_LIGHTNING_BOLT.get(), LightningBoltRenderer::new);
         event.registerEntityRenderer(ModEntities.FRIENDLY_PIGLIN.get(), FriendlyPiglinRenderer::new);
         event.registerEntityRenderer(ModEntities.SKELETON.get(), SkeletonRenderer::new);
+
+        event.registerBlockEntityRenderer(ModBlockEntities.ANU_STATUE.get(), AnuStatueRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.ANUBITE_STATUE.get(), AnubiteStatueRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.SARCOPHAGUS.get(), SarcophagusRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.CULTURE_VAT.get(), CultureVatRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.ANCIENT_CHEST.get(), AncientChestRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.ANU_BARRIER.get(), AnuBarrierRenderer::new);
     }
 
     private static <T extends Prehistoric> void registerTrilobite(EntityRenderersEvent.RegisterRenderers event, DeferredHolder<EntityType<?>, EntityType<T>> type) {

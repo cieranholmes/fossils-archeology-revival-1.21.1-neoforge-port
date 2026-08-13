@@ -1,5 +1,6 @@
 package com.github.fossils.entity;
 
+import com.github.fossils.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -7,7 +8,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -15,10 +15,6 @@ import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * Ported without {@code ModItems.TOY_SCRATCHING_POSTS} (a per-wood-type item map that belongs to the Items
- * phase); {@link #getPickResult()} falls back to a plain oak log until that phase adds the real toy items.
- */
 public class ToyScratchingPost extends ToyBase {
     private static final EntityDataAccessor<String> WOOD_TYPE = SynchedEntityData.defineId(ToyScratchingPost.class, EntityDataSerializers.STRING);
 
@@ -51,7 +47,7 @@ public class ToyScratchingPost extends ToyBase {
     @Nullable
     @Override
     public ItemStack getPickResult() {
-        return new ItemStack(Items.OAK_LOG);
+        return new ItemStack(ModItems.TOY_SCRATCHING_POSTS.get(getWoodTypeName()).get());
     }
 
     public void setWoodType(String woodType) {

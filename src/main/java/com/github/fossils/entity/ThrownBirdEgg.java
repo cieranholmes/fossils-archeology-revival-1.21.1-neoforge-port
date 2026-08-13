@@ -93,7 +93,7 @@ public class ThrownBirdEgg extends ThrowableItemProjectile {
                 entity.moveTo(getX(), getY(), getZ(), getYRot(), 0);
                 level().addFreshEntity(entity);
                 if (getOwner() instanceof ServerPlayer player) {
-                    ModTriggers.INCUBATE_EGG_TRIGGER.trigger(player, entity);
+                    ModTriggers.INCUBATE_EGG_TRIGGER.get().trigger(player, entity);
                 }
                 Player nearestPlayer = level().getNearestPlayer(entity, 5);
                 if (nearestPlayer != null) {

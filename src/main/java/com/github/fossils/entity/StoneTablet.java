@@ -1,5 +1,6 @@
 package com.github.fossils.entity;
 
+import com.github.fossils.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -10,7 +11,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.HangingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -23,9 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Ported without {@code ModItems.STONE_TABLET} (belongs to the Items phase, unstarted); {@link #dropItem}
- * falls back to a plain stone item until that phase adds the real stone tablet item.
- * <p>
  * {@code HangingEntity} no longer has the {@code getWidth()}/{@code getHeight()} sizing hooks used in 1.20.1;
  * it now requires {@link #calculateBoundingBox(BlockPos, Direction)} directly (mirrors vanilla
  * {@code Painting}'s implementation, adapted for our pixel-based {@link Variant} sizes).
@@ -130,7 +127,7 @@ public class StoneTablet extends HangingEntity implements IEntityWithComplexSpaw
             return;
         }
 
-        spawnAtLocation(Items.STONE);
+        spawnAtLocation(ModItems.STONE_TABLET.get());
     }
 
     @Override

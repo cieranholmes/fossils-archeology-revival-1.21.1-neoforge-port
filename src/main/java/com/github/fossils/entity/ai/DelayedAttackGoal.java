@@ -4,6 +4,7 @@ import com.github.fossils.entity.animation.ServerAnimationInfo;
 import com.github.fossils.entity.prehistoric.base.OrderType;
 import com.github.fossils.entity.prehistoric.base.Prehistoric;
 import com.github.fossils.entity.util.Util;
+import com.github.fossils.network.S2CActivateAttackBoxesMessage;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
@@ -11,6 +12,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.pathfinder.Path;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.EnumSet;
 import java.util.function.Predicate;
@@ -157,10 +159,10 @@ public class DelayedAttackGoal<T extends Prehistoric> extends Goal {
         if (inRange) {
             if (currentTime > attackEndTick + 20) {
                 ServerAnimationInfo animationInfo = mob.startAttack();
-                if (animationInfo.usesAttackBox && enemy instanceof ServerPlayer) {
-                    //Attack box activation is normally synced to the client here; deferred to Phase 3 networking.
-                    //Only players use the client-reported attack-box collision path - everything else always
-                    //falls through to the plain actionDelay timer below.
+                if (animationInfo.usesAttackBox && enemy instanceof ServerPlayer player) {
+                    //Only players use the client-reported attack-box collision path (see C2SHitPlayerMessage) -
+                    //everything else always falls through to the plain actionDelay timer below.
+                    PacketDistributor.sendToPlayer(player, new S2CActivateAttackBoxesMessage(mob, animationInfo.animation.length()));
                     doingHeavyAttack = true;
                 } else {
                     attackDamageTick = (long) (currentTime + animationInfo.actionDelay + 5);

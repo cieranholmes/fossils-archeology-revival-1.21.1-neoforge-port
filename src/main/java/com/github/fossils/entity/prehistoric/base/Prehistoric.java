@@ -20,6 +20,7 @@ import com.github.fossils.entity.data.AI;
 import com.github.fossils.entity.data.Attribute;
 import com.github.fossils.entity.data.EntityDataLoader;
 import com.github.fossils.entity.prehistoric.system.AISystem;
+import com.github.fossils.entity.prehistoric.system.InstructionSystem;
 import com.github.fossils.entity.prehistoric.system.MoodSystem;
 import com.github.fossils.entity.prehistoric.system.SitSystem;
 import com.github.fossils.entity.prehistoric.system.SleepSystem;
@@ -28,6 +29,8 @@ import com.github.fossils.entity.variant.*;
 import com.github.fossils.food.Diet;
 import com.github.fossils.food.FoodMappings;
 import com.github.fossils.item.ModItems;
+import com.github.fossils.network.debug.C2SDisableAIMessage;
+import com.github.fossils.network.debug.SyncDebugInfoMessage;
 import com.github.fossils.sounds.ModSounds;
 import com.github.fossils.util.Gender;
 import com.github.fossils.util.Version;
@@ -87,6 +90,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import net.neoforged.neoforge.entity.PartEntity;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -124,6 +128,7 @@ public abstract class Prehistoric extends TamableAnimal implements GeckoLibMulti
     public final MoodSystem moodSystem = registerSystem(new MoodSystem(this));
     public final SleepSystem sleepSystem = registerSystem(createSleepSystem());
     public final SitSystem sitSystem = registerSystem(new SitSystem(this));
+    private final InstructionSystem instructionSystem = registerSystem(new InstructionSystem(this));
     protected final WhipSteering steering = new WhipSteering(this);
     private final AnimationLogic<Prehistoric> animationLogic = new AnimationLogic<>(this);
     public final ResourceLocation animationLocation;
@@ -316,6 +321,7 @@ public abstract class Prehistoric extends TamableAnimal implements GeckoLibMulti
         buf.writeInt(getAge());
         buf.writeFloat(getXRot());
         buf.writeUtf(getVariantId());
+        instructionSystem.saveAdditionalSpawnData(buf);
     }
 
     @Override
@@ -329,6 +335,7 @@ public abstract class Prehistoric extends TamableAnimal implements GeckoLibMulti
         setXRot(buf.readFloat());
         setVariantId(buf.readUtf());
         refreshTexturePath();
+        instructionSystem.loadAdditionalSpawnData(buf);
     }
 
     @Override
@@ -688,6 +695,10 @@ public abstract class Prehistoric extends TamableAnimal implements GeckoLibMulti
             }
             if (Config.healingDinos && random.nextInt(500) == 0 && deathTime == 0) {
                 heal(1);
+            }
+            if (Version.debugEnabled()) {
+                PacketDistributor.sendToPlayersNear((ServerLevel) level(), null, getX(), getY(), getZ(), 16,
+                        new SyncDebugInfoMessage(getId(), getGender().name(), getAge(), matingCooldown, moodSystem.getPlayingCooldown(), climbingCooldown, getHunger(), moodSystem.getMood()));
             }
             aiSystems.forEach(AISystem::serverTick);
             if (horizontalCollision && data().breaksBlocks() && moodSystem.getMood() < 0) {
@@ -1168,7 +1179,7 @@ public abstract class Prehistoric extends TamableAnimal implements GeckoLibMulti
         if (isWeak() && (aiTameType() == Taming.GEM && stack.is(ModItems.SCARAB_GEM.get()) || aiTameType() == Taming.AQUATIC_GEM && stack.is(ModItems.AQUATIC_SCARAB_GEM.get()))) {
             //Tame with gem
             if (!level().isClientSide) {
-                ModTriggers.SCARAB_TAME_TRIGGER.trigger((ServerPlayer) player);
+                ModTriggers.SCARAB_TAME_TRIGGER.get().trigger((ServerPlayer) player);
                 heal(200);
                 moodSystem.setMood(100);
                 feed(500);
@@ -1601,6 +1612,10 @@ public abstract class Prehistoric extends TamableAnimal implements GeckoLibMulti
         return animationLogic;
     }
 
+    public InstructionSystem getInstructionSystem() {
+        return instructionSystem;
+    }
+
     @Override
     public CompoundTag getDebugTag() {
         return entityData.get(DEBUG);
@@ -1617,6 +1632,10 @@ public abstract class Prehistoric extends TamableAnimal implements GeckoLibMulti
             case 3 -> tag.putBoolean("disableLookAI", disableAI);
         }
         entityData.set(DEBUG, tag);
+        if (level() instanceof ServerLevel serverLevel && tickCount > 5) {
+            PacketDistributor.sendToPlayersNear(serverLevel, null, getX(), getY(), getZ(), 32,
+                    new C2SDisableAIMessage(getId(), disableAI, type));
+        }
     }
 
     public record PrehistoricGroupData(int ageInDays) implements SpawnGroupData {

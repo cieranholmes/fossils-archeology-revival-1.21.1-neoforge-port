@@ -1,5 +1,6 @@
 package com.github.fossils.food;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -12,8 +13,11 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeSet;
 
 /**
  * Simplified in-memory replacement for the source mod's JSON+tag-driven food value system.
@@ -76,6 +80,23 @@ public abstract class FoodMappings {
 
     private static Map<EntityType<?>, Integer> entityValues(FoodType type) {
         return ENTITY_VALUES.computeIfAbsent(type, t -> new HashMap<>());
+    }
+
+    /**
+     * Returns every item/block the given diet can eat, for the Dinopedia screen's food display.
+     * Ported replacement for source's {@code FoodMappingsManager#getItemCache()} - this simplified
+     * in-memory system keeps no per-diet cache, so the set is recomputed from {@code ITEM_VALUES}/
+     * {@code BLOCK_VALUES} on each call, sorted by registry id like the original {@code TreeSet}.
+     */
+    public static Collection<ItemLike> getFoodItems(Diet diet) {
+        Comparator<ItemLike> byId = Comparator.comparingInt(item -> item instanceof Block block
+                ? BuiltInRegistries.BLOCK.getId(block) : Item.getId(item.asItem()));
+        TreeSet<ItemLike> items = new TreeSet<>(byId);
+        for (FoodType type : diet.flags()) {
+            items.addAll(itemValues(type).keySet());
+            items.addAll(blockValues(type).keySet());
+        }
+        return items;
     }
 
     public static int getFoodAmount(Item item, Diet diet) {

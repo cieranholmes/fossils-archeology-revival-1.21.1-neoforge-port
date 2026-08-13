@@ -2,9 +2,14 @@ package com.github.fossils.entity.ai.control;
 
 import com.github.fossils.entity.prehistoric.base.PrehistoricFlying;
 import com.github.fossils.entity.util.Util;
+import com.github.fossils.network.debug.S2CMarkMessage;
+import com.github.fossils.util.Version;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class CustomFlightMoveControl extends SmoothTurningMoveControl {
     private final PrehistoricFlying mob;
@@ -23,6 +28,11 @@ public class CustomFlightMoveControl extends SmoothTurningMoveControl {
         flyingWanted = new Vec3(x, y, z);
         this.shouldLandAtTarget = shouldLandAtTarget;
         this.speedModifier = 1;
+        if (Version.debugEnabled()) {
+            int[] targets = new int[]{Mth.floor(x), Mth.floor(y), Mth.floor(z)};
+            BlockState[] blocks = new BlockState[]{(shouldLandAtTarget ? Blocks.EMERALD_BLOCK : Blocks.GOLD_BLOCK).defaultBlockState()};
+            PacketDistributor.sendToAllPlayers(new S2CMarkMessage(targets, blocks, false));
+        }
     }
 
     @Override

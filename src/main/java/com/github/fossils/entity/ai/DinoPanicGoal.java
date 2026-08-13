@@ -4,11 +4,17 @@ import com.github.fossils.entity.prehistoric.base.Prehistoric;
 import com.github.fossils.entity.prehistoric.base.PrehistoricEntityInfoAI;
 import com.github.fossils.entity.prehistoric.base.PrehistoricFlocking;
 import com.github.fossils.entity.prehistoric.base.PrehistoricSwimming;
+import com.github.fossils.network.debug.S2CMarkMessage;
+import com.github.fossils.util.Version;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class DinoPanicGoal extends PanicGoal {
     private LivingEntity panicReason;
@@ -66,6 +72,11 @@ public class DinoPanicGoal extends PanicGoal {
             posX = targetPos.x;
             posY = targetPos.y;
             posZ = targetPos.z;
+            if (Version.debugEnabled()) {
+                int[] targets = new int[]{Mth.floor(posX), Mth.floor(posY), Mth.floor(posZ)};
+                BlockState[] blocks = new BlockState[]{Blocks.GOLD_BLOCK.defaultBlockState()};
+                PacketDistributor.sendToAllPlayers(new S2CMarkMessage(targets, blocks, false));
+            }
             return true;
         }
     }
