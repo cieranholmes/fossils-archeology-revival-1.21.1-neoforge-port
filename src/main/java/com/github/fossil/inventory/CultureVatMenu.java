@@ -1,5 +1,7 @@
 package com.github.fossil.inventory;
 
+import com.github.fossil.recipe.CultureVatRecipe;
+import com.github.fossil.recipe.ModRecipes;
 import com.github.fossil.util.Version;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -10,6 +12,7 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 public class CultureVatMenu extends AbstractContainerMenu {
@@ -21,6 +24,7 @@ public class CultureVatMenu extends AbstractContainerMenu {
 
     private final Container container;
     private final ContainerData containerData;
+    private final Level level;
 
     public CultureVatMenu(int id, Inventory playerInventory) {
         this(id, playerInventory, new SimpleContainer(3), new SimpleContainerData(4));
@@ -30,7 +34,13 @@ public class CultureVatMenu extends AbstractContainerMenu {
         super(ModMenus.CULTURE_VAT.get(), id);
         this.container = container;
         this.containerData = containerData;
-        addSlot(new Slot(container, INPUT_SLOT_ID, 45, 21));
+        this.level = playerInventory.player.level();
+        addSlot(new Slot(container, INPUT_SLOT_ID, 45, 21) {
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return super.mayPlace(stack) && canPutStackInInput(stack);
+            }
+        });
         addSlot(new Slot(container, FUEL_SLOT_ID, 80, 54) {
             @Override
             public boolean mayPlace(ItemStack stack) {
@@ -58,6 +68,14 @@ public class CultureVatMenu extends AbstractContainerMenu {
         return 40;
     }
 
+    public boolean canPutStackInInput(ItemStack stack) {
+        if (stack != null && !stack.isEmpty()) {
+            CultureVatRecipe recipe = ModRecipes.getCultureVatRecipeForItem(stack, level);
+            return recipe != null;
+        }
+        return false;
+    }
+
     @Override
     public @NotNull ItemStack quickMoveStack(Player player, int index) {
         ItemStack itemStack = ItemStack.EMPTY;
@@ -78,15 +96,20 @@ public class CultureVatMenu extends AbstractContainerMenu {
                     return ItemStack.EMPTY;
                 }
             } else {
-                if (!moveItemStackTo(current, INPUT_SLOT_ID, INPUT_SLOT_ID + 1, false)
-                        && !moveItemStackTo(current, FUEL_SLOT_ID, FUEL_SLOT_ID + 1, false)) {
-                    if (index < bottomRowStart) {
-                        if (!moveItemStackTo(current, bottomRowStart, bottomRowEnd, false)) {
-                            return ItemStack.EMPTY;
-                        }
-                    } else if (index < bottomRowEnd && !moveItemStackTo(current, worktableSlots, bottomRowStart, false)) {
+                if (ModRecipes.getCultureVatRecipeForItem(itemStack, player.level()) != null) {
+                    if (!moveItemStackTo(current, INPUT_SLOT_ID, INPUT_SLOT_ID + 1, false)) {
                         return ItemStack.EMPTY;
                     }
+                } else if (ModRecipes.isCultureVatFuel(current.getItem())) {
+                    if (!moveItemStackTo(current, FUEL_SLOT_ID, FUEL_SLOT_ID + 1, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (index < bottomRowStart) {
+                    if (!moveItemStackTo(current, bottomRowStart, bottomRowEnd, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (index < bottomRowEnd && !moveItemStackTo(current, worktableSlots, bottomRowStart, false)) {
+                    return ItemStack.EMPTY;
                 }
             }
             if (current.isEmpty()) {

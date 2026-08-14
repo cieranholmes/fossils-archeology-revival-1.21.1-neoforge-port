@@ -1,5 +1,6 @@
 package com.github.fossil.inventory;
 
+import com.github.fossil.recipe.ModRecipes;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -55,6 +56,10 @@ public class AnalyzerMenu extends AbstractContainerMenu {
             final int bottomRowStart = bottomRowEnd - 9;
             if (index < analyzerSlots) {
                 if (!moveItemStackTo(current, analyzerSlots, bottomRowEnd, false)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (ModRecipes.getAnalyzerRecipeForItem(current, player.level()) != null) {
+                if (!moveItemStackTo(current, 0, 9, false)) {
                     return ItemStack.EMPTY;
                 }
             } else if (index < bottomRowStart) {

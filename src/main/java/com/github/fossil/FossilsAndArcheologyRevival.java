@@ -6,12 +6,14 @@ import com.github.fossil.block.custom_blocks.FlammableRotatedPillarBlock;
 import com.github.fossil.block.entity.ModBlockEntities;
 import com.github.fossil.capabilities.ModAttachments;
 import com.github.fossil.client.particle.ModParticles;
+import com.github.fossil.data.DataGenerators;
 import com.github.fossil.entity.ModEntities;
 import com.github.fossil.food.FossilFoodMappings;
 import com.github.fossil.inventory.ModMenus;
 import com.github.fossil.item.ModItems;
 import com.github.fossil.item.ModTabs;
 import com.github.fossil.loot.ModLootItemFunctionTypes;
+import com.github.fossil.recipe.ModRecipes;
 import com.github.fossil.material.ModArmorMaterials;
 import com.github.fossil.material.ModFluidTypes;
 import com.github.fossil.material.ModFluids;
@@ -63,11 +65,13 @@ public class FossilsAndArcheologyRevival {
         ModParticles.register(modEventBus);
         ModMenus.register(modEventBus);
         ModLootItemFunctionTypes.register(modEventBus);
+        ModRecipes.register(modEventBus);
         ModTriggers.register(modEventBus);
         ModVillagers.register(modEventBus);
         ModAttachments.register(modEventBus);
         ModFeatures.register(modEventBus);
         ModBiomeModifiers.register(modEventBus);
+        DataGenerators.register(modEventBus);
 
         // StructureType/ChunkGenerator are "simple" code registries (net.minecraft.core.registries.BuiltInRegistries),
         // not data-driven ones - NeoForge only unfreezes them for the duration of RegisterEvent's dispatch for
@@ -88,6 +92,7 @@ public class FossilsAndArcheologyRevival {
 
         modEventBus.addListener((FMLCommonSetupEvent event) -> FlammableRotatedPillarBlock.registerAllStripped());
         modEventBus.addListener((FMLCommonSetupEvent event) -> FossilFoodMappings.register());
+        modEventBus.addListener((FMLCommonSetupEvent event) -> ModRecipes.initRecipes());
         modEventBus.addListener((FMLCommonSetupEvent event) -> event.enqueueWork(() -> {
             Regions.register(new FossilRegion("overworld", RegionType.OVERWORLD, 4));
             SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MODID, ModSurfaceRules.VOLCANIC_SURFACE_RULE);

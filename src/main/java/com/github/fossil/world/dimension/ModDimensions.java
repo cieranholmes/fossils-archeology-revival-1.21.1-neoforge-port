@@ -3,21 +3,48 @@ package com.github.fossil.world.dimension;
 import com.github.fossil.FossilsAndArcheologyRevival;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.OptionalLong;
 
 public class ModDimensions {
     public static final ResourceKey<Level> TREASURE_ROOM = ResourceKey.create(Registries.DIMENSION, FossilsAndArcheologyRevival.location("treasure_room"));
     public static final ResourceKey<Level> ANU_LAIR = ResourceKey.create(Registries.DIMENSION, FossilsAndArcheologyRevival.location("anu_lair"));
     public static final ResourceKey<DimensionType> TREASURE_ROOM_TYPE = ResourceKey.create(Registries.DIMENSION_TYPE, TREASURE_ROOM.location());
     public static final ResourceKey<DimensionType> ANU_LAIR_TYPE = ResourceKey.create(Registries.DIMENSION_TYPE, ANU_LAIR.location());
+    private static final DimensionType CUSTOM = new DimensionType(
+            OptionalLong.of(6000),
+            false,
+            false,
+            true,
+            false,
+            1,
+            false,
+            false,
+            0,
+            256,
+            256,
+            BlockTags.INFINIBURN_OVERWORLD,
+            BuiltinDimensionTypes.END_EFFECTS,
+            0,
+            new DimensionType.MonsterSettings(true, false, ConstantInt.of(0), 0));
+
+    public static void bootstrap(BootstrapContext<DimensionType> context) {
+        context.register(ANU_LAIR_TYPE, CUSTOM);
+        context.register(TREASURE_ROOM_TYPE, CUSTOM);
+    }
 
     /**
      * Teleports the entity to the anu dimension at a fixed point and places an obsidian platform below the entity.

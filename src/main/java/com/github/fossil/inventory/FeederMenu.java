@@ -1,5 +1,7 @@
 package com.github.fossil.inventory;
 
+import com.github.fossil.food.Diet;
+import com.github.fossil.food.FoodMappings;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -26,9 +28,24 @@ public class FeederMenu extends AbstractContainerMenu {
         super(ModMenus.FEEDER.get(), id);
         this.container = container;
         this.containerData = containerData;
-        addSlot(new Slot(container, MEAT_SLOT_ID, 68, 61));
-        addSlot(new Slot(container, PLANT_SLOT_ID, 110, 61));
-        addSlot(new Slot(container, FISH_SLOT_ID, 152, 61));
+        addSlot(new Slot(container, MEAT_SLOT_ID, 68, 61) {
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return isMeat(stack);
+            }
+        });
+        addSlot(new Slot(container, PLANT_SLOT_ID, 110, 61) {
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return isPlant(stack);
+            }
+        });
+        addSlot(new Slot(container, FISH_SLOT_ID, 152, 61) {
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return isFish(stack);
+            }
+        });
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 9; x++) {
                 addSlot(new Slot(playerInventory, x + y * 9 + 9, 8 + x * 18, 84 + y * 18));
@@ -38,6 +55,18 @@ public class FeederMenu extends AbstractContainerMenu {
             addSlot(new Slot(playerInventory, x, 8 + x * 18, 142));
         }
         addDataSlots(containerData);
+    }
+
+    private boolean isMeat(ItemStack stack) {
+        return FoodMappings.getFoodAmount(stack.getItem(), Diet.CARNIVORE) > 0;
+    }
+
+    private boolean isPlant(ItemStack stack) {
+        return FoodMappings.getFoodAmount(stack.getItem(), Diet.HERBIVORE) > 0;
+    }
+
+    private boolean isFish(ItemStack stack) {
+        return FoodMappings.getFoodAmount(stack.getItem(), Diet.PISCIVORE) > 0;
     }
 
     public int getMeat() {
@@ -67,14 +96,24 @@ public class FeederMenu extends AbstractContainerMenu {
                 if (!moveItemStackTo(current, feederSlots, bottomRowEnd, true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!moveItemStackTo(current, MEAT_SLOT_ID, FISH_SLOT_ID + 1, false)) {
-                if (index < bottomRowStart) {
-                    if (!moveItemStackTo(current, bottomRowStart, bottomRowEnd, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (index <= bottomRowEnd && !moveItemStackTo(current, feederSlots, bottomRowStart, false)) {
+            } else if (isMeat(current)) {
+                if (!moveItemStackTo(current, MEAT_SLOT_ID, MEAT_SLOT_ID + 1, false)) {
                     return ItemStack.EMPTY;
                 }
+            } else if (isPlant(current)) {
+                if (!moveItemStackTo(current, PLANT_SLOT_ID, PLANT_SLOT_ID + 1, false)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (isFish(current)) {
+                if (!moveItemStackTo(current, FISH_SLOT_ID, FISH_SLOT_ID + 1, false)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (index < bottomRowStart) {
+                if (!moveItemStackTo(current, bottomRowStart, bottomRowEnd, false)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (index <= bottomRowEnd && !moveItemStackTo(current, feederSlots, bottomRowStart, false)) {
+                return ItemStack.EMPTY;
             }
             if (current.isEmpty()) {
                 slot.set(ItemStack.EMPTY);

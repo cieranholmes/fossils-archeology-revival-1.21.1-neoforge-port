@@ -1,5 +1,6 @@
 package com.github.fossil.inventory;
 
+import com.github.fossil.recipe.ModRecipes;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -54,6 +55,10 @@ public class SifterMenu extends AbstractContainerMenu {
             final int bottomRowStart = bottomRowEnd - 9;
             if (index < sifterSlots) {
                 if (!moveItemStackTo(current, sifterSlots, bottomRowEnd, true)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (ModRecipes.getSifterRecipeForItem(current, player.level()) != null) {
+                if (!moveItemStackTo(current, 0, sifterSlots, false)) {
                     return ItemStack.EMPTY;
                 }
             } else if (index < bottomRowStart) {

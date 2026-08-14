@@ -2,6 +2,7 @@ package com.github.fossil.tags;
 
 import com.github.fossil.FossilsAndArcheologyRevival;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 
@@ -18,4 +19,7 @@ public class ModBlockTags {
     public static final TagKey<Block> MOOD_BONUS = TagKey.create(Registries.BLOCK, FossilsAndArcheologyRevival.location("mood_bonus"));
     public static final TagKey<Block> PLANTS = TagKey.create(Registries.BLOCK, FossilsAndArcheologyRevival.location("plants"));
     public static final TagKey<Block> PLANTABLE_ON_SAND = TagKey.create(Registries.BLOCK, FossilsAndArcheologyRevival.location("plantable_on_sand"));
+
+    //Common conventions tag (source's Fabric-only "c:" tag - NeoForge unified onto the same "c" namespace)
+    public static final TagKey<Block> C_GLASS_BLOCKS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "glass_blocks"));
 }

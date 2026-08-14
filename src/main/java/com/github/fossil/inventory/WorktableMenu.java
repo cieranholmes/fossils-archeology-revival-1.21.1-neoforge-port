@@ -1,5 +1,6 @@
 package com.github.fossil.inventory;
 
+import com.github.fossil.recipe.ModRecipes;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -82,15 +83,20 @@ public class WorktableMenu extends AbstractContainerMenu {
                     return ItemStack.EMPTY;
                 }
             } else {
-                if (!moveItemStackTo(current, INPUT_SLOT_ID, INPUT_SLOT_ID + 1, false)
-                        && !moveItemStackTo(current, FUEL_SLOT_ID, FUEL_SLOT_ID + 1, false)) {
-                    if (index < bottomRowStart) {
-                        if (!moveItemStackTo(current, bottomRowStart, bottomRowEnd, false)) {
-                            return ItemStack.EMPTY;
-                        }
-                    } else if (index < bottomRowEnd && !moveItemStackTo(current, worktableSlots, bottomRowStart, false)) {
+                if (ModRecipes.getWorktableRecipeForItem(itemStack, player.level()) != null) {
+                    if (!moveItemStackTo(current, INPUT_SLOT_ID, INPUT_SLOT_ID + 1, false)) {
                         return ItemStack.EMPTY;
                     }
+                } else if (ModRecipes.isWorktableFuel(current.getItem())) {
+                    if (!moveItemStackTo(current, FUEL_SLOT_ID, FUEL_SLOT_ID + 1, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (index < bottomRowStart) {
+                    if (!moveItemStackTo(current, bottomRowStart, bottomRowEnd, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (index < bottomRowEnd && !moveItemStackTo(current, worktableSlots, bottomRowStart, false)) {
+                    return ItemStack.EMPTY;
                 }
             }
             if (current.isEmpty()) {
