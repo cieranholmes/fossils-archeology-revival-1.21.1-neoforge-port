@@ -1,6 +1,6 @@
 ---
 name: fossils-phase8-mixins-progress
-description: "Phase 8 (mixin cleanup/port) IN PROGRESS as of 2026-08-14: tasks 1-5 of 8 complete and live-verified, tasks 6-8 remaining; corrects the migration plan's framing of Phase 8 as a mere 'cleanup pass' - the target had ZERO mixins ported before this session"
+description: "Phase 8 (mixin cleanup/port) COMPLETE as of 2026-08-14: all 8 tasks done and live-verified, see [[fossils-phase8-tasks6to8-progress]] for tasks 6-8; corrects the migration plan's framing of Phase 8 as a mere 'cleanup pass' - the target had ZERO mixins ported before this session"
 metadata: 
   node_type: memory
   type: project

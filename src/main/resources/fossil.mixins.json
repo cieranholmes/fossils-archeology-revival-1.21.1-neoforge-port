@@ -10,7 +10,9 @@
     "MobMixin",
     "CatMixin",
     "OcelotMixin",
-    "NaturalSpawnerMixin"
+    "NaturalSpawnerMixin",
+    "ChunkStatusMixin",
+    "JigsawPlacementMixin"
   ],
   "client": [
     "ParticleAccessor",
@@ -20,7 +22,13 @@
     "DebugLevelRendererMixin",
     "DebugMinecraftMixin",
     "DebugMouseHandlerMixin",
-    "CameraMixin"
+    "CameraMixin",
+    "AnimatableManagerAccessor",
+    "AnimationControllerAccessor",
+    "AnimationProcessorAccessor",
+    "AnimationControllerMixin",
+    "AnimationProcessorMixin",
+    "GeoEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

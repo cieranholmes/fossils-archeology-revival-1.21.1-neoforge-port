@@ -204,7 +204,7 @@ public class LeapSystem extends AISystem {
 
     public void setLeapTarget(LivingEntity target) {
         this.target = target;
-        entityData.set(LEAP_TARGET_ID, target == null ? -1 : target.getId());
+        entityData.set(LEAP_TARGET_ID, target == null ? -1 : target.getId(), true);
     }
 
     public boolean isLanding() {
