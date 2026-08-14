@@ -3,8 +3,25 @@
   "minVersion": "0.8",
   "package": "com.github.fossil.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [],
-  "client": [],
+  "mixins": [
+    "AbstractFishMixin",
+    "ServerEntityMixin",
+    "WalkNodeEvaluatorMixin",
+    "MobMixin",
+    "CatMixin",
+    "OcelotMixin",
+    "NaturalSpawnerMixin"
+  ],
+  "client": [
+    "ParticleAccessor",
+    "TerrainParticleMixin",
+    "TitleScreenMixin",
+    "PlayerInfoMixin",
+    "DebugLevelRendererMixin",
+    "DebugMinecraftMixin",
+    "DebugMouseHandlerMixin",
+    "CameraMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }
