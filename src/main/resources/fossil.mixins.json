@@ -12,7 +12,8 @@
     "OcelotMixin",
     "NaturalSpawnerMixin",
     "ChunkStatusMixin",
-    "JigsawPlacementMixin"
+    "JigsawPlacementMixin",
+    "PickupHandlerMixin"
   ],
   "client": [
     "ParticleAccessor",

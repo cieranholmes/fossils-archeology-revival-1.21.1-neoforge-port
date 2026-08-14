@@ -31,6 +31,67 @@ repositories {
             includeGroup('com.github.glitchfiend')
         }
     }
+
+    // Phase 9 compat-tier repositories (all optional; the mod runs fine without any of these present)
+    maven {
+        name = 'BlameJared (JEI)'
+        url = 'https://maven.blamejared.com/'
+        content {
+            includeGroup('mezz.jei')
+        }
+    }
+    maven {
+        name = 'Sleeping Town (EMI)'
+        url = 'https://repo.sleeping.town/'
+        content {
+            includeGroup('dev.emi')
+        }
+    }
+    maven {
+        name = 'Shedaniel (REI, Cloth Config)'
+        url = 'https://maven.shedaniel.me/'
+        content {
+            includeGroup('me.shedaniel')
+            includeGroup('me.shedaniel.cloth')
+        }
+    }
+    maven {
+        name = 'Architectury (REI transitive dep)'
+        url = 'https://maven.architectury.dev/'
+        content {
+            includeGroup('dev.architectury')
+        }
+    }
+    maven {
+        name = 'CreateMod (Create/Flywheel/Ponder)'
+        url = 'https://maven.createmod.net/'
+        content {
+            includeGroup('com.simibubi.create')
+            includeGroup('dev.engine-room.flywheel')
+            includeGroup('net.createmod.ponder')
+        }
+    }
+    maven {
+        name = 'ithundxr snapshots (Registrate)'
+        url = 'https://maven.ithundxr.dev/snapshots/'
+        content {
+            includeGroup('com.tterrag.registrate')
+        }
+    }
+    maven {
+        name = 'Modrinth'
+        url = 'https://api.modrinth.com/maven'
+        content {
+            includeGroup('maven.modrinth')
+        }
+    }
+    maven {
+        name = 'CurseMaven'
+        url = 'https://www.cursemaven.com'
+        content {
+            includeGroup('curse.maven')
+        }
+    }
 }
 
 base {
@@ -165,11 +226,106 @@ dependencies {
     // repacks the resolved jar with that one line added; see .claude/memory/fossils_combat_and_scaling_bugs_fixed.md.
     implementation files(patchedMoreHitboxesJar)
 
-    // Example mod dependency with JEI
-    // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
-    // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
-    // compileOnly "mezz.jei:jei-${mc_version}-forge-api:${jei_version}"
-    // runtimeOnly "mezz.jei:jei-${mc_version}-forge:${jei_version}"
+    // Phase 9 compat-tier dependencies: all optional (compileOnly, plus runtimeOnly only so the
+    // integration can actually be exercised in runClient/runServer during development - none of these
+    // are bundled into the shipped mod jar). See .claude/memory/fossils_phase9_compat_research.md.
+    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
+    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
+    runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+
+    compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
+    runtimeOnly "dev.emi:emi-neoforge:${emi_version}"
+
+    compileOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
+    runtimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
+
+    compileOnly "maven.modrinth:jade:${jade_version}"
+    runtimeOnly "maven.modrinth:jade:${jade_version}"
+
+    compileOnly "maven.modrinth:farmers-delight:${farmers_delight_version}"
+    runtimeOnly "maven.modrinth:farmers-delight:${farmers_delight_version}"
+
+    // Carry On's own published "neoforge" 1.21.1 jar (both Modrinth and CurseForge) is actually a
+    // Forge-format jar (legacy META-INF/mods.toml, Forge-style MixinConfigs manifest attribute, no
+    // neoforge.mods.toml) - NeoForge's own loader hard-rejects it at boot ("is for Minecraft Forge
+    // or an older version of NeoForge, and cannot be loaded"), which crashes the whole dev
+    // environment if present on the runtime mod-loading classpath. This looks like an upstream
+    // mislabeling bug (see .claude/memory/fossils_phase9_task11_wrapup.md), not something fixable
+    // here. Kept as compileOnly only, so PickupHandlerMixin.java (require=0, safe no-op if Carry
+    // On isn't actually loaded) still compiles - deliberately NOT runtimeOnly until a genuine
+    // NeoForge 1.21.1 build appears upstream.
+    compileOnly "maven.modrinth:carry-on:${carry_on_version}"
+
+    compileOnly("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
+    compileOnly "dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}"
+    // ModCreateRecipeProvider references Create's datagen classes unconditionally (not gated behind
+    // a runtime isModLoaded check, since datagen has no "runtime" in the gameplay sense) - runData
+    // needs the real Create+Flywheel mod jars present or it NoClassDefFoundErrors at boot.
+    runtimeOnly("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
+    runtimeOnly "dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}"
+    // Create's own hard dependencies (discovered at runData boot time)
+    runtimeOnly "net.createmod.ponder:ponder-neoforge:${ponder_version}+mc${minecraft_version}"
+    runtimeOnly "com.tterrag.registrate:Registrate:${registrate_version}"
+
+    // Alex's Mobs has no official NeoForge build; user-approved unofficial community port + its
+    // unofficial Citadel dependency (see fossils_phase9_compat_research.md).
+    compileOnly "maven.modrinth:alexs-mobs(1.21.1):${alex_mobs_version}"
+    runtimeOnly "maven.modrinth:alexs-mobs(1.21.1):${alex_mobs_version}"
+    runtimeOnly "maven.modrinth:citadel-(1.21.1-port):${citadel_version}"
+
+    // Farmer's Delight addon compat (Phase 9 task 10) - each is optional, gated at runtime by
+    // ModList.isLoaded(...) in FarmersDelightAddonCompat/AddonConstants. See
+    // .claude/memory/fossils_phase9_task10_addon_compat.md for the full port-vs-drop audit.
+    compileOnly "maven.modrinth:brewin-and-chewin:${brewin_and_chewin_version}"
+    runtimeOnly "maven.modrinth:brewin-and-chewin:${brewin_and_chewin_version}"
+    compileOnly "maven.modrinth:coffee-delight:${coffee_delight_version}"
+    runtimeOnly "maven.modrinth:coffee-delight:${coffee_delight_version}"
+    compileOnly "maven.modrinth:corn-delight:${corn_delight_version}"
+    runtimeOnly "maven.modrinth:corn-delight:${corn_delight_version}"
+    // Corn Delight's own hard dependency - needed on our classpath too since CornDelightCompat's
+    // FoodMappings calls resolve DeferredItem<ItemFoodBase>/<ItemFoodSeeds> generic types from this lib.
+    compileOnly "maven.modrinth:mmlib:${mmlib_version}"
+    runtimeOnly "maven.modrinth:mmlib:${mmlib_version}"
+    compileOnly "maven.modrinth:crabbers-delight:${crabbers_delight_version}"
+    runtimeOnly "maven.modrinth:crabbers-delight:${crabbers_delight_version}"
+    compileOnly "maven.modrinth:cultural-delights:${cultural_delights_version}"
+    runtimeOnly "maven.modrinth:cultural-delights:${cultural_delights_version}"
+    compileOnly "maven.modrinth:ends-delight:${ends_delight_version}"
+    runtimeOnly "maven.modrinth:ends-delight:${ends_delight_version}"
+    compileOnly "maven.modrinth:enders-delight:${enders_delight_version}"
+    runtimeOnly "maven.modrinth:enders-delight:${enders_delight_version}"
+    compileOnly "maven.modrinth:expanded-delight:${expanded_delight_version}"
+    runtimeOnly "maven.modrinth:expanded-delight:${expanded_delight_version}"
+    // Farmer's Respite (Unofficial Port) v3.0.0 - the only NeoForge 1.21.1 build that exists -
+    // crashes at boot with "Adding duplicate key 'ResourceKey[minecraft:menu / farmersrespite:kettle]'
+    // to registry" (a genuine upstream double-registration bug in the port itself, unrelated to our
+    // compat code, confirmed via runData - see .claude/memory/fossils_phase9_task11_wrapup.md). Kept
+    // as compileOnly only so FarmerRespiteCompat.java still compiles; deliberately NOT runtimeOnly
+    // until upstream fixes this or a different build appears.
+    compileOnly "maven.modrinth:farmers-respite-unofficial-port:${farmers_respite_version}"
+    compileOnly "maven.modrinth:festive-delight:${festive_delight_version}"
+    runtimeOnly "maven.modrinth:festive-delight:${festive_delight_version}"
+    compileOnly "maven.modrinth:miners-delight:${miners_delight_version}"
+    runtimeOnly "maven.modrinth:miners-delight:${miners_delight_version}"
+    // Miner's Delight's own hard dependency (discovered at runData boot time: "requires lodestone 1.7.0+")
+    runtimeOnly "maven.modrinth:lodestonelib:${lodestonelib_version}"
+    compileOnly "maven.modrinth:oceans-delight:${oceans_delight_version}"
+    runtimeOnly "maven.modrinth:oceans-delight:${oceans_delight_version}"
+    compileOnly "maven.modrinth:seed-delight:${seed_delight_version}"
+    runtimeOnly "maven.modrinth:seed-delight:${seed_delight_version}"
+
+    // CurseForge-only addons (no Modrinth build exists), resolved via CurseMaven (curse.maven:<name>-<projectId>:<fileId>)
+    compileOnly "curse.maven:alexs-delight-556448:${alexs_delight_file}"
+    runtimeOnly "curse.maven:alexs-delight-556448:${alexs_delight_file}"
+    compileOnly "curse.maven:casualness-delight-909519:${casualness_delight_file}"
+    runtimeOnly "curse.maven:casualness-delight-909519:${casualness_delight_file}"
+    compileOnly "curse.maven:argentinasdelightreborn-831127:${argentinas_delight_reborn_file}"
+    runtimeOnly "curse.maven:argentinasdelightreborn-831127:${argentinas_delight_reborn_file}"
+    // Argentina's Delight Reborn's own hard dependency (discovered at runData boot time:
+    // NoClassDefFoundError on dev.kosmx.playerAnim.api.layered.IAnimation)
+    runtimeOnly "maven.modrinth:playeranimator:${playeranimator_version}"
+    compileOnly "curse.maven:butchers-delight-1572022:${butchers_delight_file}"
+    runtimeOnly "curse.maven:butchers-delight-1572022:${butchers_delight_file}"
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar

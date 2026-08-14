@@ -4,6 +4,7 @@ import com.github.fossil.data.providers.FossilAdvancements;
 import com.github.fossil.data.providers.ModBlockStateProvider;
 import com.github.fossil.data.providers.ModBlockTagsProvider;
 import com.github.fossil.data.providers.ModEntityTypeTagsProvider;
+import com.github.fossil.data.providers.ModCreateRecipeProvider;
 import com.github.fossil.data.providers.ModItemProvider;
 import com.github.fossil.data.providers.ModFoodValueProvider;
 import com.github.fossil.data.providers.ModItemTagsProvider;
@@ -62,6 +63,7 @@ public class DataGenerators {
         generator.addProvider(event.includeServer(), (DataProvider.Factory<DataProvider>) output -> new ModEntityTypeTagsProvider(output, lookup, efh));
         generator.addProvider(event.includeServer(), new ModLootProvider(generator.getPackOutput(), lookup));
         generator.addProvider(event.includeServer(), (DataProvider.Factory<DataProvider>) output -> new ModRecipeProvider(output, lookup));
+        generator.addProvider(event.includeServer(), (DataProvider.Factory<DataProvider>) output -> new ModCreateRecipeProvider(output, lookup));
         generator.addProvider(event.includeServer(), new AdvancementProvider(generator.getPackOutput(), lookup, efh, List.of(new FossilAdvancements())));
         generator.addProvider(event.includeServer(), (DataProvider.Factory<DataProvider>) ModFoodValueProvider::new);
     }

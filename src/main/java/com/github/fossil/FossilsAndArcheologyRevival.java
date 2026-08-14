@@ -6,6 +6,9 @@ import com.github.fossil.block.custom_blocks.FlammableRotatedPillarBlock;
 import com.github.fossil.block.entity.ModBlockEntities;
 import com.github.fossil.capabilities.ModAttachments;
 import com.github.fossil.client.particle.ModParticles;
+import com.github.fossil.compat.alexsmobs.AlexsMobsCompat;
+import com.github.fossil.compat.farmers.FarmersDelightAddonCompat;
+import com.github.fossil.compat.farmers.FarmersDelightCompat;
 import com.github.fossil.data.DataGenerators;
 import com.github.fossil.entity.ModEntities;
 import com.github.fossil.food.FossilFoodMappings;
@@ -31,9 +34,12 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import org.slf4j.Logger;
 import terrablender.api.RegionType;
@@ -97,5 +103,17 @@ public class FossilsAndArcheologyRevival {
             Regions.register(new FossilRegion("overworld", RegionType.OVERWORLD, 4));
             SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MODID, ModSurfaceRules.VOLCANIC_SURFACE_RULE);
         }));
+
+        // Phase 9 compat-tier integrations: all optional, gated on the other mod actually being present.
+        modEventBus.addListener((FMLCommonSetupEvent event) -> {
+            if (ModList.get().isLoaded("alexsmobs")) {
+                AlexsMobsCompat.register();
+            }
+            if (ModList.get().isLoaded("farmersdelight")) {
+                FarmersDelightCompat.registerFoodMappings();
+            }
+            FarmersDelightAddonCompat.register();
+        });
+        NeoForge.EVENT_BUS.addListener((ServerStartingEvent event) -> FarmersDelightCompat.removeConflictingRecipes(event.getServer()));
     }
 }

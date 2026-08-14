@@ -34,3 +34,4 @@ run/
 
 # macOS
 .DS_Store
+src/generated/
