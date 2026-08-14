@@ -1,0 +1,41 @@
+---
+name: fossils-phase7-task9-worldgen-needs-java-rewrite
+description: "Phase 7 task 9 (worldgen datagen provider) DECISION as of 2026-08-14: user wants a full Java-first rewrite of worldgen registry content (biomes/features/structures/etc.), replacing Phase 6's hand-authored JSON, to match the source mod's architecture — NOT STARTED, this is the plan for next session"
+metadata: 
+  node_type: memory
+  type: project
+  originSessionId: 8a58d673-a358-4758-89a0-5239f58d76f8
+  modified: 2026-08-14T10:33:16.232Z
+---
+
+Continuation of [[fossils-phase7-task8-food-value-provider]] - this is a **decision + investigation** checkpoint for task 9 of [[fossils-migration-plan]] Phase 7 (per the 10-task order in [[fossils-phase7-recipes-datagen-research]]), made 2026-08-14. **Zero code written for task 9 yet** - this file exists so the next session can pick up the plan after a context clear.
+
+## The problem discovered
+
+Task 9 was originally scoped (in [[fossils-phase7-recipes-datagen-research]]) as "port `ModWorldGenProvider`" - mechanically, like tasks 1-8. But investigating the target repo revealed [[fossils-phase6-worldgen-progress]] (Phase 6, already COMPLETE and verified in-game) took a fundamentally different architecture than the source mod for this content: **it hand-authored the JSON directly** instead of porting the source's Java `bootstrap()`-method + datagen-provider pattern.
+
+**Confirmed by direct inspection of both repos:**
+- Source mod (`~/Personal/FossilsArcheologyRevival`): 100% Java-first. `ModConfiguredFeatures`, `ModPlacedFeatures`, `ModStructures`, `ModStructureSets`, `ModBiomes`, `ModTemplatePools`, `ModDamageTypes` (all in `common/.../world/...` or `entity/damagesource/`) each have a static `bootstrap(BootstapContext<T>)` method building the actual registry objects in Java. `forge/.../forge/data/providers/ModWorldGenProvider.java` wires all of them (plus `ForgeFossilBiomeModifiers::bootstrap`) into one `RegistrySetBuilder`, extends Forge's `DatapackBuiltinEntriesProvider`, and `runData` generates 100% of the JSON. **Zero hand-authored worldgen-registry JSON exists in the source repo** - the only hand-written worldgen-adjacent JSON there is 2 tag files (`data/fossil/tags/worldgen/biome/has_structure/*.json`), which is a separate mechanism (tags) that's hand-authored either way.
+- Target repo (this port): the equivalent Java classes (`com.github.fossil.world.biome.ModBiomes`, `.world.feature.configuration.ModConfiguredFeatures`, `.world.feature.structures.ModStructures`, `.entity.damagesource.ModDamageTypes`) exist but are **thin `ResourceKey`-only holders with no bootstrap data** - just enough for runtime code (chunk generators, dimensions, TerraBlender region) to look entries up by key. `ModBiomes.java`'s own javadoc says why: *"authored as datapack JSON... rather than a BootstapContext bootstrap method, since this project's datagen pipeline isn't stood up yet (Phase 7 scope)"* - i.e. a sequencing artifact from when Phase 6 ran, not a deliberate permanent architecture choice. All the actual content lives as hand-written JSON under `src/main/resources/data/fossil/worldgen/{biome,configured_feature,placed_feature,structure,structure_set,template_pool}/`, plus `data/fossil/damage_type/aquatic_suffocate.json`, `data/fossil/dimension_type/`, `data/fossil/dimension/`, `data/fossil/neoforge/biome_modifier/`.
+- Target repo does NOT currently have Java classes named `ModPlacedFeatures`/`ModStructureSets`/`ModTemplatePools` at all (searched, not found) - those registries are 100% JSON with no Java-side lookup needed in this port so far.
+- Target repo's biome-modifier equivalent is at a different location/name than source: `com.github.fossil.world.feature.placement.ModBiomeModifiers` (source's Forge-specific one is `forge.world.biome.ForgeFossilBiomeModifiers`, registered against `ForgeRegistries.Keys.BIOME_MODIFIERS` - NeoForge equivalent registry key needs confirming, likely `NeoForgeRegistries.Keys.BIOME_MODIFIERS`).
+
+## Decision made by user (2026-08-14)
+
+User's exact words: *"eish okay we will have to rewrite it to be java-first."* - given the choice between (a) skip task 9 entirely since Phase 6's JSON already works, (b) do a lightweight JSON consistency check only, or (c) fully port `ModWorldGenProvider` + rewrite all the bootstrap sources to match the source mod's architecture, **the user chose (c)**: do the full Java-first rewrite, converting Phase 6's hand-authored JSON into Java `bootstrap()` methods + a `ModWorldGenProvider`-equivalent datagen provider, matching the source mod's architecture exactly.
+
+**Reasoning surfaced during the discussion** (for context on *why*, not just *what*): the "JSON is easier to hand-edit for one-offs" counterargument was raised and partially conceded (true for one-off additions with existing examples to copy), but doesn't outweigh matching the source mod's architecture - the JSON-first approach was never a deliberate design choice, just a Phase-6-era sequencing gap now that Phase 7's datagen pipeline exists.
+
+## What the rewrite actually involves (scoped but not yet started)
+
+1. Port `ModConfiguredFeatures::bootstrap`, `ModPlacedFeatures::bootstrap` (new class), `ModStructures::bootstrap`, `ModStructureSets::bootstrap` (new class), `ModBiomes::bootstrap`, `ModTemplatePools::bootstrap` (new class), `ModDamageTypes::bootstrap` from the source's `common/` module classes - these are shared/architectury-agnostic in the source, should port close to mechanically once 1.21.1 API drift (`BootstapContext` shape, feature/placement builder APIs, etc.) is resolved via source reads, the same research-first approach used for tasks 1-8.
+2. Port `ForgeFossilBiomeModifiers::bootstrap` from `forge/.../forge/world/biome/ForgeFossilBiomeModifiers.java`, adapting `ForgeRegistries.Keys.BIOME_MODIFIERS` → NeoForge's equivalent, likely consolidating with or replacing the existing `com.github.fossil.world.feature.placement.ModBiomeModifiers`.
+3. Port `ModWorldGenProvider` itself: source extends Forge's `net.minecraftforge.common.data.DatapackBuiltinEntriesProvider` - need to confirm the NeoForge equivalent (likely `net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider`, same package-rename pattern as every other Phase 7 provider) and its constructor shape.
+4. Wire into `DataGenerators.java` alongside the other 8 providers.
+5. **Critical verification step**: since Phase 6's hand-authored JSON is already confirmed-correct and live in-game (real castle structures verified via RCON), the new Java bootstrap code must be checked for content-equivalence against that *existing* JSON - not just against the source mod's Java - since the target repo's JSON may already have absorbed target-repo-specific adjustments (mod id `fossil` vs source's own id, any Phase-6-era bug fixes documented in [[fossils-phase6-worldgen-progress]] e.g. the structure/ vs structures/ folder fix, the ComfyBedBlockEntity fix, the tar fluid fix). Diff the generated JSON against the current hand-authored JSON file-by-file before deleting the hand-authored versions, to avoid silently reverting a Phase-6 bug fix.
+6. Once generated JSON is confirmed equivalent (or intentionally improved), delete the hand-authored files under `src/main/resources/data/fossil/{worldgen,damage_type}/` so the Java bootstrap becomes the single source of truth (matching how every other Phase 7 provider relates to its own JSON output) - do NOT leave both a hand-authored and a generated copy coexisting long-term, that's a drift risk.
+7. Verify via `runServer` boot (RCON) that worldgen still functions identically post-rewrite - re-run the same kind of in-game structure-spawn check [[fossils-phase6-worldgen-progress]] used originally, since this touches already-shipped, working content and regressions here are higher-stakes than the purely-datagen-only tasks 1-8.
+
+## What's next
+
+This is a substantially bigger task than tasks 1-8 (rewriting already-working content, not just adding a missing datagen provider) - budget accordingly. **Do not start until the user explicitly says to begin** (context was cleared right after this decision was made, per user request, specifically so this plan would be preserved across the clear). After this, task 10 (`plant_loader`) remains, per [[fossils-phase7-recipes-datagen-research]].
