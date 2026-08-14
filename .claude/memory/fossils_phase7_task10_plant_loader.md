@@ -55,4 +55,4 @@ The user tested the live `runClient` session further and found the plant_loader 
 
 **Committed to git**: this task's plant_loader files, the particle asset fix, the block-render-type registration fix, and the UV-divide fix are all committed in commit `382f345` ("phase 7 task 10: plant_loader geometry loader + 3 rendering bugs fixed"), on top of `d4b6dab` (task 9 + tasks 3-8 backfill).
 
-**Deferred, not started**: the ~987-file item-texture asset-copy backfill (`assets/fossil/textures/item/`) surfaced above — likely affects most custom items' held/inventory appearance mod-wide. Separate scope from Phase 7, probably belongs with whichever earlier phase (Items, likely Phase 2) originally should have copied these.
+**Update 2026-08-14 (later session): the ~987-file item-texture asset-copy backfill has since been fixed** — `assets/fossil/textures/item/` now has 989 files, matching source. No longer an open gap; this section is kept for historical context on how the gap was found.

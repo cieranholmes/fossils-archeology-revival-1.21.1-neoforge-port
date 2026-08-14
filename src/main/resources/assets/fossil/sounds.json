@@ -352,6 +352,12 @@
     ],
     "subtitle": "subtitle.fossil.dodo_hurt"
   },
+  "drum_single": {
+    "sounds": [
+      "fossil:drum_single"
+    ],
+    "subtitle": "subtitle.fossil.drum_single"
+  },
   "dryosaurus_ambient": {
     "category": "neutral",
     "sounds": [
@@ -501,6 +507,24 @@
     ],
     "subtitle": "subtitle.fossil.ichthyosaurus_outside"
   },
+  "liopleurodon_ambient_inside": {
+    "category": "neutral",
+    "sounds": [
+      "fossil:prehistoric/mosasaurus_ambient1",
+      "fossil:prehistoric/mosasaurus_ambient2"
+    ],
+    "subtitle": "subtitle.fossil.liopleurodon_ambient_inside"
+  },
+  "liopleurodon_ambient_outside": {
+    "category": "neutral",
+    "sounds": [
+      "fossil:prehistoric/mosasaurus_outside1",
+      "fossil:prehistoric/mosasaurus_outside2",
+      "fossil:prehistoric/mosasaurus_outside3",
+      "fossil:prehistoric/mosasaurus_outside4"
+    ],
+    "subtitle": "subtitle.fossil.liopleurodon_ambient_outside"
+  },
   "liopleurodon_attack": {
     "category": "neutral",
     "sounds": [
@@ -618,6 +642,14 @@
     ],
     "subtitle": "subtitle.fossil.megalodon_hurt"
   },
+  "megalodon_hurt_outside": {
+    "category": "neutral",
+    "sounds": [
+      "fossil:prehistoric/megalodon_hurt0_outside",
+      "fossil:prehistoric/megalodon_hurt1_outside"
+    ],
+    "subtitle": "subtitle.fossil.megalodon_hurt_outside"
+  },
   "megalograptus_ambient": {
     "category": "neutral",
     "sounds": [
@@ -664,6 +696,24 @@
     ],
     "subtitle": "subtitle.fossil.meganeura_hurt"
   },
+  "mosasaurus_ambient_inside": {
+    "category": "neutral",
+    "sounds": [
+      "fossil:prehistoric/mosasaurus_ambient1",
+      "fossil:prehistoric/mosasaurus_ambient2"
+    ],
+    "subtitle": "subtitle.fossil.mosasaurus_ambient_inside"
+  },
+  "mosasaurus_ambient_outside": {
+    "category": "neutral",
+    "sounds": [
+      "fossil:prehistoric/mosasaurus_outside1",
+      "fossil:prehistoric/mosasaurus_outside2",
+      "fossil:prehistoric/mosasaurus_outside3",
+      "fossil:prehistoric/mosasaurus_outside4"
+    ],
+    "subtitle": "subtitle.fossil.mosasaurus_ambient_outside"
+  },
   "mosasaurus_death": {
     "category": "neutral",
     "sounds": [
@@ -678,6 +728,68 @@
       "fossil:prehistoric/mosasaurus_hurt"
     ],
     "subtitle": "subtitle.fossil.mosasaurus_hurt"
+  },
+  "music_anu": {
+    "category": "record",
+    "sounds": [
+      {
+        "name": "fossil:music_anu",
+        "stream": true
+      }
+    ]
+  },
+  "music_bones": {
+    "category": "record",
+    "sounds": [
+      {
+        "name": "fossil:music_bones",
+        "stream": true
+      }
+    ]
+  },
+  "music_discovery": {
+    "category": "record",
+    "sounds": [
+      {
+        "name": "fossil:music_discovery",
+        "stream": true
+      }
+    ]
+  },
+  "music_first_dinosaur": {
+    "category": "record",
+    "sounds": [
+      {
+        "name": "fossil:music_first_dinosaur",
+        "stream": true
+      }
+    ]
+  },
+  "music_mating": {
+    "category": "record",
+    "sounds": [
+      {
+        "name": "fossil:music_mating_0",
+        "stream": true
+      },
+      {
+        "name": "fossil:music_mating_1",
+        "stream": true
+      },
+      {
+        "name": "fossil:music_mating_2",
+        "stream": true
+      }
+    ]
+  },
+  "music_scarab": {
+    "category": "record",
+    "sounds": [
+      {
+        "name": "fossil:music_scarab",
+        "stream": true
+      }
+    ]
   },
   "ornitholestes_ambient": {
     "category": "neutral",
@@ -787,6 +899,20 @@
     ],
     "subtitle": "subtitle.fossil.platybelodon_hurt"
   },
+  "plesiosaurus_ambient_inside": {
+    "category": "neutral",
+    "sounds": [
+      "fossil:prehistoric/plesiosaurus_ambient"
+    ],
+    "subtitle": "subtitle.fossil.plesiosaurus_ambient_inside"
+  },
+  "plesiosaurus_ambient_outside": {
+    "category": "neutral",
+    "sounds": [
+      "fossil:prehistoric/plesiosaurus_ambient"
+    ],
+    "subtitle": "subtitle.fossil.plesiosaurus_ambient_outside"
+  },
   "plesiosaurus_death": {
     "category": "neutral",
     "sounds": [
@@ -868,6 +994,16 @@
       "fossil:prehistoric/sarcosuchus_ambient4"
     ],
     "subtitle": "subtitle.fossil.sarcosuchus_ambient"
+  },
+  "sarcosuchus_baby_ambient": {
+    "category": "neutral",
+    "sounds": [
+      "fossil:prehistoric/sarcosuchus_baby_ambient1",
+      "fossil:prehistoric/sarcosuchus_baby_ambient2",
+      "fossil:prehistoric/sarcosuchus_baby_ambient3",
+      "fossil:prehistoric/sarcosuchus_baby_ambient4"
+    ],
+    "subtitle": "subtitle.fossil.sarcosuchus_baby_ambient"
   },
   "sarcosuchus_death": {
     "category": "neutral",
@@ -958,6 +1094,33 @@
       "fossil:prehistoric/stegosaurus_hurt"
     ],
     "subtitle": "subtitle.fossil.stegosaurus_hurt"
+  },
+  "tar": {
+    "sounds": [
+      "fossil:tar"
+    ],
+    "subtitle": "subtitle.fossil.tar"
+  },
+  "terror_bird_ambient": {
+    "category": "neutral",
+    "sounds": [
+      "fossil:prehistoric/terror_bird_ambient"
+    ],
+    "subtitle": "subtitle.fossil.terror_bird_ambient"
+  },
+  "terror_bird_death": {
+    "category": "neutral",
+    "sounds": [
+      "fossil:prehistoric/terror_bird_death"
+    ],
+    "subtitle": "subtitle.fossil.terror_bird_death"
+  },
+  "terror_bird_hurt": {
+    "category": "neutral",
+    "sounds": [
+      "fossil:prehistoric/terror_bird_hurt"
+    ],
+    "subtitle": "subtitle.fossil.terror_bird_hurt"
   },
   "therizinosaurus_ambient": {
     "category": "neutral",
@@ -1097,5 +1260,11 @@
       "fossil:prehistoric/velociraptor_hurt2"
     ],
     "subtitle": "subtitle.fossil.velociraptor_hurt"
+  },
+  "whip": {
+    "sounds": [
+      "fossil:whip"
+    ],
+    "subtitle": "subtitle.fossil.whip"
   }
 }
