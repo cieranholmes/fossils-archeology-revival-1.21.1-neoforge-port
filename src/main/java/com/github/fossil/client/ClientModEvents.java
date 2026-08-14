@@ -14,12 +14,16 @@ import com.github.fossil.client.gui.debug.navigation.PathingRenderer;
 import com.github.fossil.client.gui.debug.navigation.PlayerPathNavigation;
 import com.github.fossil.client.gui.debug.navigation.SweepPathNavigation;
 import com.github.fossil.client.gui.debug.navigation.WaterPathNavigation;
+import com.github.fossil.client.model.block.PlantBlockModel;
+import com.github.fossil.client.model.block.PlantModelLoader;
 import com.github.fossil.client.particle.BubbleParticle;
 import com.github.fossil.client.particle.LaserParticle;
 import com.github.fossil.client.particle.ModParticles;
 import com.github.fossil.client.particle.TarBubbleParticle;
 import com.github.fossil.client.particle.VolcanoVentAshEmitterParticle;
 import com.github.fossil.client.particle.VolcanoVentAshParticle;
+import com.github.fossil.block.ModBlocks;
+import com.github.fossil.block.PrehistoricPlantInfo;
 import com.github.fossil.block.entity.ModBlockEntities;
 import com.github.fossil.material.ModFluidTypes;
 import com.github.fossil.client.renderer.blockentity.AncientChestRenderer;
@@ -68,6 +72,9 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
@@ -167,6 +174,79 @@ public class ClientModEvents {
         event.registerReloadListener(OptionalTextureLoader.INSTANCE);
         event.registerReloadListener(SkeletonGeoModelLoader.INSTANCE);
         event.registerReloadListener(DinopediaBioLoader.INSTANCE);
+    }
+
+    @SubscribeEvent
+    static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
+        event.register(PlantBlockModel.LOADER, new PlantModelLoader());
+    }
+
+    @SubscribeEvent
+    static void clientSetup(FMLClientSetupEvent event) {
+        event.enqueueWork(ClientModEvents::registerBlockRenderTypes);
+    }
+
+    private static void registerBlockRenderTypes() {
+        for (PrehistoricPlantInfo info : PrehistoricPlantInfo.values()) {
+            ItemBlockRenderTypes.setRenderLayer(info.getPlantBlock(), RenderType.cutout());
+        }
+        for (var vase : ModBlocks.VASES) {
+            ItemBlockRenderTypes.setRenderLayer(vase.get(), RenderType.cutout());
+        }
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.ANU_FIGURINE_DESTROYED.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.ANU_FIGURINE_RESTORED.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.ANU_FIGURINE_PRISTINE.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.SKELETON_FIGURINE_RESTORED.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.SKELETON_FIGURINE_PRISTINE.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.CALAMITES_DOOR.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.CALAMITES_LEAVES.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.CALAMITES_SAPLING.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.CALAMITES_TRAPDOOR.get(), RenderType.cutout());
+
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.CORDAITES_DOOR.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.CORDAITES_LEAVES.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.CORDAITES_SAPLING.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.CORDAITES_TRAPDOOR.get(), RenderType.cutout());
+
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.MUTANT_TREE_DOOR.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.MUTANT_TREE_LEAVES.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.MUTANT_TREE_SAPLING.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.MUTANT_TREE_TRAPDOOR.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.MUTANT_TREE_TUMOR.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.MUTANT_TREE_VINE.get(), RenderType.cutout());
+
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.PALM_DOOR.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.PALM_LEAVES.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.PALM_SAPLING.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.PALM_TRAPDOOR.get(), RenderType.cutout());
+
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.SIGILLARIA_DOOR.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.SIGILLARIA_LEAVES.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.SIGILLARIA_SAPLING.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.SIGILLARIA_TRAPDOOR.get(), RenderType.cutout());
+
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.TEMPSKYA_DOOR.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.TEMPSKYA_SAPLING.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.TEMPSKYA_TOP.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.TEMPSKYA_LEAF.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.TEMPSKYA_TRAPDOOR.get(), RenderType.cutout());
+
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.SLIME_TRAIL.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.ANCIENT_GLASS.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.REINFORCED_GLASS.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.CULTURE_VAT.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.ANU_PORTAL.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.AMBER_BLOCK.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.AMBER_CHUNK.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.AMBER_CHUNK_DOMINICAN.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.AMBER_CHUNK_MOSQUITO.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.SHELL.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.COMFY_BED.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.LARGE_CHAIN_FENCE.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.SMALL_CHAIN_FENCE.get(), RenderType.cutout());
+        // NOTE: source also registers FERNS (cutout), OBSIDIAN_SPIKES (cutout), and HOME_PORTAL (translucent) here,
+        // but none of those three blocks are registered in this repo's ModBlocks yet - see the pre-existing
+        // "Phase 1/Blocks catch-up" comments in ModItems/ModBlockStateProvider. Revisit once they're added.
     }
 
     @SubscribeEvent

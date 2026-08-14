@@ -69,8 +69,8 @@ public class PlantModelBakery {
         vertexData[i + 1] = Float.floatToRawIntBits(vector.y());
         vertexData[i + 2] = Float.floatToRawIntBits(vector.z());
         vertexData[i + 3] = -1;
-        vertexData[i + 4] = Float.floatToRawIntBits(sprite.getU(blockFaceUV.getU(vertexIndex)));
-        vertexData[i + 4 + 1] = Float.floatToRawIntBits(sprite.getV(blockFaceUV.getV(vertexIndex)));
+        vertexData[i + 4] = Float.floatToRawIntBits(sprite.getU(blockFaceUV.getU(vertexIndex) / 16.0F));
+        vertexData[i + 4 + 1] = Float.floatToRawIntBits(sprite.getV(blockFaceUV.getV(vertexIndex) / 16.0F));
     }
 
 
