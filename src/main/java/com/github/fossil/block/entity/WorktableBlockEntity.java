@@ -1,15 +1,25 @@
 package com.github.fossil.block.entity;
 
 import com.github.fossil.block.custom_blocks.CustomEntityBlock;
+import com.github.fossil.block.custom_blocks.WorktableBlock;
 import com.github.fossil.inventory.WorktableMenu;
+import com.github.fossil.recipe.ModRecipes;
+import com.github.fossil.recipe.WithFuelRecipe;
+import com.github.fossil.recipe.WorktableRecipe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class WorktableBlockEntity extends MachineContainerBlockEntity {
@@ -56,6 +66,7 @@ public class WorktableBlockEntity extends MachineContainerBlockEntity {
         }
     };
     protected NonNullList<ItemStack> items = NonNullList.withSize(3, ItemStack.EMPTY);
+    private ItemStack fuel = ItemStack.EMPTY;
 
     public WorktableBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(ModBlockEntities.WORKTABLE.get(), blockPos, blockState);
@@ -65,21 +76,138 @@ public class WorktableBlockEntity extends MachineContainerBlockEntity {
         return dataAccess;
     }
 
+    @Override
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
+        if (tag.contains("FuelItem")) {
+            fuel = ItemStack.parse(registries, tag.getCompound("FuelItem")).orElse(ItemStack.EMPTY);
+        }
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
+        tag.put("FuelItem", fuel.saveOptional(registries));
+    }
+
+    public static void serverTick(Level level, BlockPos pos, BlockState state, WorktableBlockEntity blockEntity) {
+        blockEntity.serverTick(level, pos, state);
+    }
+
+    public void serverTick(Level level, BlockPos pos, BlockState state) {
+        boolean wasProcessing = cookingProgress > 0;
+        boolean dirty = false;
+        if (litTime > 0) {
+            --litTime;
+        }
+
+        if (canProcess() && (litTime == 0 || (litTime > 0 && !canProcess(fuel)))) {
+            ItemStack fuelStack = items.get(WorktableMenu.FUEL_SLOT_ID);
+            litDuration = litTime = getRecipeFuelTime(items.get(WorktableMenu.INPUT_SLOT_ID), fuelStack);
+            cookingTotalTime = timeToSmelt(items.get(WorktableMenu.INPUT_SLOT_ID), fuelStack);
+            fuel = fuelStack.copy();
+            if (litTime > 0) {
+                dirty = true;
+                fuelStack.shrink(1);
+                if (fuelStack.isEmpty() && fuelStack.getItem().hasCraftingRemainingItem()) {
+                    items.set(WorktableMenu.FUEL_SLOT_ID, new ItemStack(fuelStack.getItem().getCraftingRemainingItem()));
+                }
+            }
+        }
+
+        if (litTime > 0 && canProcess(fuel)) {
+            cookingProgress++;
+            if (cookingProgress >= cookingTotalTime) {
+                cookingProgress = 0;
+                createItem();
+                dirty = true;
+            }
+        }
+        if (litTime == 0 && cookingProgress > 0 || litTime > 0 && cookingProgress > 0 && !canProcess(fuel)) {
+            cookingProgress = Mth.clamp(cookingProgress - 2, 0, cookingTotalTime);
+        }
+
+        if (wasProcessing != cookingProgress > 0) {
+            dirty = true;
+            state = state.setValue(WorktableBlock.ACTIVE, cookingProgress > 0);
+            level.setBlock(pos, state, 3);
+        }
+
+        if (dirty) {
+            setChanged(level, pos, state);
+        }
+    }
+
+    private ItemStack checkSmelt(ItemStack input, ItemStack fuel) {
+        WorktableRecipe recipe = ModRecipes.getWorktableRecipeForItem(WithFuelRecipe.WithFuelInput.of(input, fuel), level);
+        if (recipe != null) {
+            return recipe.getResultItem(level.registryAccess());
+        }
+        return ItemStack.EMPTY;
+    }
+
+    private int getRecipeFuelTime(ItemStack inputStack, ItemStack fuelStack) {
+        WorktableRecipe recipe = ModRecipes.getWorktableRecipeForItem(WithFuelRecipe.WithFuelInput.of(inputStack, fuelStack), level);
+        if (recipe != null) {
+            return recipe.getFuelDuration();
+        }
+        return ModRecipes.getWorktableFuelValue(fuelStack.getItem());
+    }
+
+    protected boolean canProcess(ItemStack fuelStack) {
+        if (items.get(WorktableMenu.INPUT_SLOT_ID).isEmpty()) {
+            return false;
+        } else {
+            ItemStack result = checkSmelt(items.get(WorktableMenu.INPUT_SLOT_ID), fuelStack);
+            ItemStack output = items.get(WorktableMenu.OUTPUT_SLOT_ID);
+            return !result.isEmpty() && (output.isEmpty() || ItemStack.isSameItem(output, result)
+                    && (output.getCount() < 64 && output.getCount() < output.getMaxStackSize() || output.getCount() < result.getMaxStackSize()));
+        }
+    }
+
+    protected boolean canProcess() {
+        return canProcess(items.get(WorktableMenu.FUEL_SLOT_ID));
+    }
+
+    protected void createItem() {
+        if (canProcess(fuel)) {
+            ItemStack result = checkSmelt(items.get(WorktableMenu.INPUT_SLOT_ID), fuel);
+
+            ItemStack input = items.get(WorktableMenu.INPUT_SLOT_ID);
+            if (items.get(WorktableMenu.OUTPUT_SLOT_ID).isEmpty()) {
+                items.set(WorktableMenu.OUTPUT_SLOT_ID, result.copy());
+                ItemEnchantments enchantments = EnchantmentHelper.getEnchantmentsForCrafting(input);
+                EnchantmentHelper.setEnchantments(items.get(WorktableMenu.OUTPUT_SLOT_ID), enchantments);
+            } else if (items.get(WorktableMenu.OUTPUT_SLOT_ID).getItem() == result.getItem()) {
+                items.get(WorktableMenu.OUTPUT_SLOT_ID).grow(result.getCount());
+            }
+
+            if (input.getItem().hasCraftingRemainingItem()) {
+                items.set(WorktableMenu.INPUT_SLOT_ID, new ItemStack(input.getItem().getCraftingRemainingItem()));
+            } else {
+                input.shrink(1);
+            }
+
+            if (input.getCount() <= 0) {
+                items.set(WorktableMenu.INPUT_SLOT_ID, ItemStack.EMPTY);
+            }
+        }
+    }
+
+    public int timeToSmelt(ItemStack input, ItemStack fuel) {
+        WorktableRecipe recipe = ModRecipes.getWorktableRecipeForItem(WithFuelRecipe.WithFuelInput.of(input, fuel), level);
+        if (recipe != null) {
+            return recipe.getDuration();
+        }
+        return WorktableMenu.DEFAULT_DURATION;
+    }
+
     private boolean isWorktableFuel(ItemStack stack) {
-        return false;
+        return ModRecipes.isWorktableFuel(stack.getItem());
     }
 
     private boolean isValidWorktableInput(ItemStack stack) {
-        return false;
-    }
-
-    @Override
-    protected boolean canProcess() {
-        return false;
-    }
-
-    @Override
-    protected void createItem() {
+        return ModRecipes.getWorktableRecipeForItem(stack, level) != null;
     }
 
     @Override

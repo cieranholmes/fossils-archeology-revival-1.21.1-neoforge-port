@@ -1,16 +1,24 @@
 package com.github.fossil.block.entity;
 
+import com.github.fossil.Config;
 import com.github.fossil.block.custom_blocks.CultureVatBlock;
 import com.github.fossil.inventory.CultureVatMenu;
+import com.github.fossil.recipe.CultureVatRecipe;
+import com.github.fossil.recipe.ModRecipes;
+import com.github.fossil.recipe.WithFuelRecipe;
 import com.github.fossil.tags.ModItemTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class CultureVatBlockEntity extends EnergyContainerBlockEntity {
@@ -57,6 +65,7 @@ public class CultureVatBlockEntity extends EnergyContainerBlockEntity {
         }
     };
     protected NonNullList<ItemStack> items = NonNullList.withSize(3, ItemStack.EMPTY);
+    private ItemStack fuel = ItemStack.EMPTY;
 
     public CultureVatBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(ModBlockEntities.CULTURE_VAT.get(), blockPos, blockState);
@@ -64,6 +73,137 @@ public class CultureVatBlockEntity extends EnergyContainerBlockEntity {
 
     public ContainerData getDataAccess() {
         return dataAccess;
+    }
+
+    @Override
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
+        if (tag.contains("FuelItem")) {
+            fuel = ItemStack.parse(registries, tag.getCompound("FuelItem")).orElse(ItemStack.EMPTY);
+        }
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
+        tag.put("FuelItem", fuel.saveOptional(registries));
+    }
+
+    public static void serverTick(Level level, BlockPos pos, BlockState state, CultureVatBlockEntity blockEntity) {
+        blockEntity.serverTick(level, pos, state);
+    }
+
+    public void serverTick(Level level, BlockPos pos, BlockState state) {
+        if (Config.machinesRequireEnergy && energyStorage.getEnergy() <= 0) {
+            if (cookingProgress > 0) {
+                cookingProgress = Mth.clamp(cookingProgress - 2, 0, CultureVatMenu.CULTIVATION_DURATION);
+            }
+            return;
+        }
+        int prevCookingProgress = cookingProgress;
+        boolean wasFueled = litTime > 0;
+        boolean wasProcessing = cookingProgress > 0;
+        boolean dirty = false;
+        if (litTime > 0) {
+            --litTime;
+        }
+
+        if (canProcess() && (litTime == 0 || (litTime > 0 && !canProcess(fuel)))) {
+            ItemStack fuelStack = items.get(FUEL_SLOT_ID);
+            litDuration = litTime = getRecipeFuelTime(items.get(INPUT_SLOT_ID), fuelStack);
+            fuel = fuelStack.copy();
+            if (litTime > 0) {
+                dirty = true;
+                fuelStack.shrink(1);
+                if (fuelStack.isEmpty() && fuelStack.getItem().hasCraftingRemainingItem()) {
+                    items.set(FUEL_SLOT_ID, new ItemStack(fuelStack.getItem().getCraftingRemainingItem()));
+                }
+            }
+        }
+
+        if (litTime > 0 && canProcess(fuel)) {
+            cookingProgress++;
+            if (cookingProgress >= CultureVatMenu.CULTIVATION_DURATION) {
+                cookingProgress = 0;
+                createItem();
+                dirty = true;
+            }
+        }
+        if (prevCookingProgress != cookingProgress && Config.machinesRequireEnergy) {
+            energyStorage.extractEnergy(Config.machineEnergyUsage);
+        }
+        if (litTime == 0 && cookingProgress > 0 || litTime > 0 && cookingProgress > 0 && !canProcess(fuel)) {
+            cookingProgress = Mth.clamp(cookingProgress - 2, 0, CultureVatMenu.CULTIVATION_DURATION);
+        }
+
+        if (wasFueled != litTime > 0) {
+            dirty = true;
+            state = state.setValue(CultureVatBlock.ACTIVE, litTime > 0);
+            level.setBlock(pos, state, 3);
+        }
+
+        if (wasProcessing != cookingProgress > 0) {
+            dirty = true;
+            state = state.setValue(CultureVatBlock.EMBRYO, getDNAType());
+            level.setBlock(pos, state, 3);
+        }
+
+        if (dirty) {
+            setChanged(level, pos, state);
+        }
+
+        if (cookingProgress == 3001 && level.getRandom().nextInt(100) < Config.cultureVatFailChance) {
+            ((CultureVatBlock) state.getBlock()).onFailedCultivation(level, pos);
+        }
+    }
+
+    private ItemStack checkCultivate(ItemStack input, ItemStack fuel) {
+        CultureVatRecipe recipe = ModRecipes.getCultureVatRecipeForItem(WithFuelRecipe.WithFuelInput.of(input, fuel), level);
+        if (recipe != null) {
+            return recipe.getResultItem(level.registryAccess());
+        }
+        return ItemStack.EMPTY;
+    }
+
+    private int getRecipeFuelTime(ItemStack inputStack, ItemStack fuelStack) {
+        CultureVatRecipe recipe = ModRecipes.getCultureVatRecipeForItem(WithFuelRecipe.WithFuelInput.of(inputStack, fuelStack), level);
+        if (recipe != null) {
+            return recipe.getFuelDuration();
+        }
+        return ModRecipes.getCultureVatFuelValue(fuelStack.getItem());
+    }
+
+    protected boolean canProcess(ItemStack fuelStack) {
+        if (Config.machinesRequireEnergy && energyStorage.getEnergy() <= Config.machineEnergyUsage) {
+            return false;
+        }
+        ItemStack inputStack = items.get(INPUT_SLOT_ID);
+        if (inputStack.isEmpty() || fuelStack.isEmpty()) {
+            return false;
+        }
+        ItemStack result = checkCultivate(inputStack, fuelStack);
+        if (result.isEmpty()) {
+            return false;
+        }
+        ItemStack output = items.get(OUTPUT_SLOT_ID);
+        return output.isEmpty() || ItemStack.isSameItem(output, result);
+    }
+
+    protected boolean canProcess() {
+        return canProcess(items.get(FUEL_SLOT_ID));
+    }
+
+    protected void createItem() {
+        if (canProcess(fuel)) {
+            ItemStack result = checkCultivate(items.get(INPUT_SLOT_ID), fuel);
+            ItemStack output = items.get(OUTPUT_SLOT_ID);
+            if (output.isEmpty()) {
+                items.set(OUTPUT_SLOT_ID, result);
+            } else if (ItemStack.isSameItem(output, result)) {
+                output.grow(result.getCount());
+            }
+            items.get(INPUT_SLOT_ID).shrink(1);
+        }
     }
 
     public CultureVatBlock.EmbryoType getDNAType() {
@@ -84,20 +224,11 @@ public class CultureVatBlockEntity extends EnergyContainerBlockEntity {
     }
 
     private boolean isCultureVatFuel(ItemStack stack) {
-        return false;
+        return ModRecipes.isCultureVatFuel(stack.getItem());
     }
 
     private boolean isValidCultureVatInput(ItemStack stack) {
-        return false;
-    }
-
-    @Override
-    protected boolean canProcess() {
-        return false;
-    }
-
-    @Override
-    protected void createItem() {
+        return ModRecipes.getCultureVatRecipeForItem(stack, level) != null;
     }
 
     @Override

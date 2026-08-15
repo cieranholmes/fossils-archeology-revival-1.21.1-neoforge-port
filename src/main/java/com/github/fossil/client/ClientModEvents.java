@@ -14,6 +14,7 @@ import com.github.fossil.client.gui.debug.navigation.PathingRenderer;
 import com.github.fossil.client.gui.debug.navigation.PlayerPathNavigation;
 import com.github.fossil.client.gui.debug.navigation.SweepPathNavigation;
 import com.github.fossil.client.gui.debug.navigation.WaterPathNavigation;
+import com.github.fossil.block.custom_blocks.CultureVatBlock;
 import com.github.fossil.client.model.block.PlantBlockModel;
 import com.github.fossil.client.model.block.PlantModelLoader;
 import com.github.fossil.client.particle.BubbleParticle;
@@ -280,6 +281,18 @@ public class ClientModEvents {
                 ModBlocks.ANUBITE_STATUE.get().asItem(),
                 ModBlocks.ANCIENT_CHEST.get().asItem(),
                 ModBlocks.SARCOPHAGUS.get().asItem());
+    }
+
+    @SubscribeEvent
+    static void registerColorHandlers(net.neoforged.neoforge.client.event.RegisterColorHandlersEvent.Block event) {
+        event.register((state, level, pos, tintIndex) -> net.minecraft.util.FastColor.ARGB32.opaque(state.getValue(CultureVatBlock.COLOR).getTextColor()),
+                ModBlocks.CULTURE_VAT.get());
+    }
+
+    @SubscribeEvent
+    static void registerItemColorHandlers(net.neoforged.neoforge.client.event.RegisterColorHandlersEvent.Item event) {
+        event.register((stack, tintIndex) -> net.minecraft.util.FastColor.ARGB32.opaque(net.minecraft.world.item.DyeColor.LIME.getTextColor()),
+                ModBlocks.CULTURE_VAT.get());
     }
 
     @SubscribeEvent
