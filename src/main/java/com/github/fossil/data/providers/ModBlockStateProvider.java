@@ -222,7 +222,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
         crossBlock(TEMPSKYA_SAPLING.get());
 
 
-        simpleBlock(CULTURE_VAT.get(), models().getExistingFile(blockTexture(CULTURE_VAT.get())));
+        getVariantBuilder(CULTURE_VAT.get())
+                .partialState().with(CultureVatBlock.DYED, false)
+                .addModels(new ConfiguredModel(models().getExistingFile(FossilsAndArcheologyRevival.location("block/culture_vat_undyed"))))
+                .partialState().with(CultureVatBlock.DYED, true)
+                .addModels(new ConfiguredModel(models().getExistingFile(blockTexture(CULTURE_VAT.get()))));
 
         simpleBlock(AMBER_BLOCK.get());
         simpleBlock(AMBER_ORE.get());

@@ -39,6 +39,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.AABB;
@@ -52,10 +53,11 @@ public class CultureVatBlock extends CustomEntityBlock {
     public static final MapCodec<CultureVatBlock> CODEC = simpleCodec(CultureVatBlock::new);
     public static final EnumProperty<EmbryoType> EMBRYO = EnumProperty.create("embryo", EmbryoType.class);
     public static final EnumProperty<DyeColor> COLOR = EnumProperty.create("color", DyeColor.class);
+    public static final BooleanProperty DYED = BooleanProperty.create("dyed");
 
     public CultureVatBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(ACTIVE, false).setValue(EMBRYO, EmbryoType.GENERIC).setValue(COLOR, DyeColor.LIME));
+        this.registerDefaultState(this.stateDefinition.any().setValue(ACTIVE, false).setValue(EMBRYO, EmbryoType.GENERIC).setValue(COLOR, DyeColor.LIME).setValue(DYED, false));
     }
 
     @Override
@@ -68,14 +70,15 @@ public class CultureVatBlock extends CustomEntityBlock {
         super.createBlockStateDefinition(builder);
         builder.add(EMBRYO);
         builder.add(COLOR);
+        builder.add(DYED);
     }
 
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (stack.getItem() instanceof DyeItem dyeItem && state.getValue(COLOR) != dyeItem.getDyeColor()) {
+        if (stack.getItem() instanceof DyeItem dyeItem && (!state.getValue(DYED) || state.getValue(COLOR) != dyeItem.getDyeColor())) {
             level.playSound(null, pos, SoundEvents.DYE_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
             if (!level.isClientSide) {
-                level.setBlock(pos, state.setValue(COLOR, dyeItem.getDyeColor()), 3);
+                level.setBlock(pos, state.setValue(COLOR, dyeItem.getDyeColor()).setValue(DYED, true), 3);
                 stack.shrink(1);
             }
             return level.isClientSide ? ItemInteractionResult.SUCCESS : ItemInteractionResult.CONSUME;

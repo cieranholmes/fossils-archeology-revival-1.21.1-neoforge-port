@@ -290,12 +290,6 @@ public class ClientModEvents {
     }
 
     @SubscribeEvent
-    static void registerItemColorHandlers(net.neoforged.neoforge.client.event.RegisterColorHandlersEvent.Item event) {
-        event.register((stack, tintIndex) -> net.minecraft.util.FastColor.ARGB32.opaque(net.minecraft.world.item.DyeColor.LIME.getTextColor()),
-                ModBlocks.CULTURE_VAT.get());
-    }
-
-    @SubscribeEvent
     static void registerParticleProviders(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(ModParticles.VOLCANO_VENT_ASH.get(), VolcanoVentAshParticle.Provider::new);
         event.registerSpecial(ModParticles.VOLCANO_VENT_ASH_EMITTER.get(), new VolcanoVentAshEmitterParticle.Provider());
