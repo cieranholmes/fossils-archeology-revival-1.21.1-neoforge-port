@@ -38,7 +38,11 @@ public class FlyingSleepSystem extends SleepSystem {
                 }
             }
         } else if (nextTryTick == mob.level().getGameTime()) {
-            trySleepingOrLanding();
+            if (wantsToSleep() && canSleep()) {
+                trySleepingOrLanding();
+            } else {
+                nextTryTick = -1;
+            }
         }
     }
 

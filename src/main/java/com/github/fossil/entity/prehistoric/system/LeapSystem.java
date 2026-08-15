@@ -38,7 +38,9 @@ public class LeapSystem extends AISystem {
         long currentTick = mob.level().getGameTime();
         if (mob.getVehicle() != null) {
             if (mob.getVehicle().getUUID().equals(loadedTarget)) {
-                setLeapTarget((LivingEntity) mob.getVehicle());
+                if (mob.getVehicle() instanceof LivingEntity livingVehicle) {
+                    setLeapTarget(livingVehicle);
+                }
                 loadedTarget = null;
             } else if (target == null && isAttackRiding()) {
                 mob.stopRiding();
@@ -155,6 +157,7 @@ public class LeapSystem extends AISystem {
         setLeapStarted(false);
         setLanding(false);
         setLeapTarget(null);
+        setBlockLeapTarget(null);
     }
 
     /**

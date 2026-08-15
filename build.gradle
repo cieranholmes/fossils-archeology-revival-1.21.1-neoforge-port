@@ -207,8 +207,30 @@ def patchMoreHitboxesToml = tasks.register("patchMoreHitboxesToml") {
     }
 }
 
+// The original jar also has no Automatic-Module-Name, which NeoForge's own Jar-in-Jar embedding
+// (below) requires for any embedded dependency that isn't a resolvable Maven coordinate - without
+// it, the patchedMoreHitboxesJar task fails with "Cannot embed local file dependency ... because it
+// has no explicit Java module name."
+def patchMoreHitboxesManifest = tasks.register("patchMoreHitboxesManifest") {
+    dependsOn extractMoreHitboxes
+    def manifestFileProvider = moreHitboxesExtractedDir.map { it.file("META-INF/MANIFEST.MF") }
+    inputs.file(manifestFileProvider)
+    outputs.file(manifestFileProvider)
+    doLast {
+        def manifestFile = manifestFileProvider.get().asFile
+        def text = manifestFile.text
+        if (!text.contains('Automatic-Module-Name:')) {
+            // The manifest's main-attributes section ends at its first blank line; anything after that
+            // is parsed as a distinct per-entry section requiring its own "Name:" attribute first, so the
+            // new attribute must be inserted before any trailing blank line(s), not blindly appended after.
+            def mainSection = text.replaceAll(/(\r?\n)+$/, '')
+            manifestFile.text = mainSection + '\r\nAutomatic-Module-Name: morehitboxes\r\n'
+        }
+    }
+}
+
 def patchedMoreHitboxesJar = tasks.register("patchedMoreHitboxesJar", Zip) {
-    dependsOn patchMoreHitboxesToml
+    dependsOn patchMoreHitboxesToml, patchMoreHitboxesManifest
     from moreHitboxesExtractedDir
     archiveFileName = "morehitboxes-neoforge-${minecraft_version}-${more_hitboxes_version}-patched.jar"
     destinationDirectory = layout.buildDirectory.dir("patchedLibs")
@@ -224,7 +246,16 @@ dependencies {
     // loader never discovers or loads any of its 9 server-side + 7 client-side mixins - not a Java 21/Mixin
     // compatibility issue, just a missing TOML entry in this "-alpha" release. patchedMoreHitboxesJar below
     // repacks the resolved jar with that one line added; see .claude/memory/fossils_combat_and_scaling_bugs_fixed.md.
+    //
+    // The patched jar previously only satisfied the dev-time (runClient/runServer) classpath, since
+    // "implementation files(...)" never ships inside the built mod jar - only this project's own compiled
+    // classes do. In production, more-hitboxes was declared a separate required mod, so end users installed
+    // whatever unpatched jar they got from Modrinth/CurseForge, and the same missing-mixins bug came right
+    // back outside of Gradle's dev environment. "jarJar" below embeds the patched jar directly inside our
+    // own shipped mod jar (NeoForge's Jar-in-Jar mechanism), so the fix travels with the mod - see
+    // .claude/memory/fossils_morehitboxes_mixin_registration_fix.md.
     implementation files(patchedMoreHitboxesJar)
+    jarJar files(patchedMoreHitboxesJar)
 
     // Phase 9 compat-tier dependencies: all optional (compileOnly, plus runtimeOnly only so the
     // integration can actually be exercised in runClient/runServer during development - none of these

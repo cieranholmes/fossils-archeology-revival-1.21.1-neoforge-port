@@ -94,7 +94,7 @@ public class CustomFlightMoveControl extends SmoothTurningMoveControl {
                 }
 
                 double targetXMove = speedModifier * Mth.cos(newYaw * Mth.DEG_TO_RAD) * Math.abs(offset.x / dist);
-                double targetYMove = speedModifier * Mth.sin(-targetPitch * Mth.DEG_TO_RAD) * Math.abs(offset.y / dist);
+                double targetYMove = speedModifier * Mth.sin(-newPitch * Mth.DEG_TO_RAD) * Math.abs(offset.y / dist);
                 double targetZMove = speedModifier * Mth.sin(newYaw * Mth.DEG_TO_RAD) * Math.abs(offset.z / dist);
                 Vec3 move = mob.getDeltaMovement();
                 double newX = Mth.approach((float) move.x, (float) targetXMove, 0.01f);
@@ -131,9 +131,9 @@ public class CustomFlightMoveControl extends SmoothTurningMoveControl {
             } else if (mob.horizontalCollision || mob.verticalCollision) {
                 doStuckDetection(mob.position());
             }
-        } else {
-            mob.setNoGravity(false);
         }
+        //else: still flying (isFlying()==true) but not actively pursuing a target (e.g. WAIT after
+        //reaching a non-landing air target) - leave no-gravity as-is, don't force a free-fall
     }
 
     private void doStuckDetection(Vec3 pos) {

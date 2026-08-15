@@ -267,6 +267,19 @@ public class ClientModEvents {
                 return FossilsAndArcheologyRevival.location("block/tar_still");
             }
         }, ModFluidTypes.TAR_TYPE.get());
+
+        // These items' models are "builtin/entity" (no baked quads of their own - vanilla's chest/bed/
+        // shulker-box pattern), so without a registered custom renderer they're not a missing-texture
+        // placeholder, they're just invisible.
+        event.registerItem(new net.neoforged.neoforge.client.extensions.common.IClientItemExtensions() {
+            @Override
+            public net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                return com.github.fossil.client.renderer.CustomItemRenderer.INSTANCE;
+            }
+        }, ModBlocks.ANU_STATUE.get().asItem(),
+                ModBlocks.ANUBITE_STATUE.get().asItem(),
+                ModBlocks.ANCIENT_CHEST.get().asItem(),
+                ModBlocks.SARCOPHAGUS.get().asItem());
     }
 
     @SubscribeEvent

@@ -25,7 +25,7 @@ public class ModTabs {
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> FA_BLOCK_TAB = register("fa_block_tab",
             BLOCK_TAB_ITEMS, () -> ModBlocks.WORKTABLE.get().asItem().getDefaultInstance());
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> FA_MOB_ITEM_TAB = register("fa_mob_item_tab",
-            MOB_ITEM_TAB_ITEMS, () -> Items.EGG.getDefaultInstance());
+            MOB_ITEM_TAB_ITEMS, () -> ModItems.BIO_FOSSIL.get().getDefaultInstance());
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> FA_OTHER_ITEM_TAB = register("fa_other_item_tab",
             OTHER_ITEM_TAB_ITEMS, () -> ModItems.TAR_BUCKET.get().getDefaultInstance());
 

@@ -85,7 +85,9 @@ public class PrehistoricSkeleton extends Entity implements GeoEntity, IEntityWit
     @Override
     protected void readAdditionalSaveData(CompoundTag compound) {
         setAge(compound.getInt("Age"));
-        setInfoType(compound.getString("Type"));
+        if (compound.contains("Type")) {
+            setInfoType(compound.getString("Type"));
+        }
     }
 
     @Override

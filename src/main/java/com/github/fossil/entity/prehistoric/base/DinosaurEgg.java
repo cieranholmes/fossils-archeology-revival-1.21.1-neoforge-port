@@ -193,7 +193,13 @@ public class DinosaurEgg extends LivingEntity implements IEntityWithComplexSpawn
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         setHatchingTime(compound.getInt("HatchingTime"));
-        setPrehistoricEntityInfo(PrehistoricEntityInfo.valueOf(compound.getString("PrehistoricEntityInfo")));
+        if (compound.contains("PrehistoricEntityInfo")) {
+            try {
+                setPrehistoricEntityInfo(PrehistoricEntityInfo.valueOf(compound.getString("PrehistoricEntityInfo")));
+            } catch (IllegalArgumentException ignored) {
+                //Missing/malformed NBT (e.g. raw /summon) - keep the existing default rather than crashing
+            }
+        }
     }
 
     public int getHatchingTime() {

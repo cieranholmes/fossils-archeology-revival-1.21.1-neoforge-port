@@ -36,6 +36,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -123,7 +124,11 @@ public class DinopediaScreen extends Screen {
         pose.translate(0.0, -10, 1000.0);
         int scale = 25;
         if (entity instanceof Prehistoric) {
-            scale = (int) (35 / entity.getBbWidth());
+            // Pose.STANDING is passed explicitly (rather than using getBbWidth()/getPose()) because
+            // LivingEntity.getDimensions() special-cases Pose.SLEEPING to vanilla's tiny hardcoded
+            // SLEEPING_DIMENSIONS constant, ignoring the entity's actual scaled size entirely - a
+            // sleeping dinosaur would otherwise report a near-zero width and blow this scale up huge.
+            scale = (int) (35 / entity.getDimensions(Pose.STANDING).width());
         } else if (entity instanceof DinosaurEgg) {
             scale = 110;
         } else if (entity instanceof Quagga) {
@@ -139,10 +144,21 @@ public class DinopediaScreen extends Screen {
         MultiBufferSource.BufferSource bufferSource = guiGraphics.bufferSource();
         RenderSystem.runAsFancy(() -> {
             float yRotO = entity.yBodyRot;
+            float yHeadRotO = entity.yHeadRot;
+            float yHeadRotOO = entity.yHeadRotO;
             //Turn mob to the right
             entity.yBodyRot = 110;
+            // GeckoLib's head-tracking derives the head bone's yaw from (yHeadRot - yBodyRot), clamped
+            // to +-85 deg. Leaving yHeadRot/yHeadRotO at the entity's real, still-changing in-world
+            // values (it keeps ticking/looking around while this screen is open) while yBodyRot is
+            // pinned above made the head snap around unpredictably every frame - matching vanilla's own
+            // InventoryScreen.renderEntityInInventoryFollowsMouse, both are pinned to the same value too.
+            entity.yHeadRot = 110;
+            entity.yHeadRotO = 110;
             entityRenderDispatcher.render(entity, 0.0, 0.0, 0.0, 0, 1, pose, bufferSource, 0xF000F0);
             entity.yBodyRot = yRotO;
+            entity.yHeadRot = yHeadRotO;
+            entity.yHeadRotO = yHeadRotOO;
         });
         guiGraphics.flush();
         entityRenderDispatcher.setRenderShadow(true);
@@ -191,8 +207,13 @@ public class DinopediaScreen extends Screen {
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        renderBackground(guiGraphics, mouseX, mouseY, partialTick);
-        renderBackgroundLayer(guiGraphics, mouseX, mouseY);
+        // super.render() (vanilla Screen.render()) already calls renderBackground() itself before
+        // rendering widgets, so the book texture + live entity are drawn from the renderBackground()
+        // override below rather than a separate call here. Calling renderBackground() a second time
+        // here (as this used to, and as the 1.20.1 source still does) made vanilla's per-frame GUI blur
+        // post-effect (Screen.renderBlurredBackground(), added after 1.20.1) run a second time too,
+        // right after the book texture + entity were drawn - blurring both of them, but nothing drawn
+        // afterwards (buttons, text, food icons), which is exactly the symptom that was reported.
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         renderForegroundLayer(guiGraphics, mouseX, mouseY, partialTick);
         if (!toolTipList.isEmpty()) {
@@ -201,10 +222,9 @@ public class DinopediaScreen extends Screen {
         }
     }
 
-    /**
-     * Renders the background texture and the entity
-     */
-    private void renderBackgroundLayer(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+    @Override
+    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
         guiGraphics.blit(DINOPEDIA_BACKGROUND, leftPos, topPos, 0, 0, xSize, ySize, 390, 390);
         if (currentPage == PAGE_1) {
             renderEntityInDinopedia(guiGraphics, leftPos + 100, topPos + 80, entity);

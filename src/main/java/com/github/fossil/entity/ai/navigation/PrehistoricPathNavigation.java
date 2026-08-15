@@ -73,7 +73,7 @@ public class PrehistoricPathNavigation extends GroundPathNavigation {
             return moveTo(path, d);
         }
         speedModifier = d;
-        return true;
+        return false;
     }
 
     @Override

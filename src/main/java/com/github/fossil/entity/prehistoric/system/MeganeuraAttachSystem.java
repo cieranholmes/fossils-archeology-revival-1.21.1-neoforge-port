@@ -36,7 +36,7 @@ public class MeganeuraAttachSystem extends AISystem {
 
     @Override
     public void serverTick() {
-        if (tryTicks > 0) {
+        if (!isAttached() && targetLocation != null) {
             tryTicks++;
         }
         if (mob.isBaby()) {

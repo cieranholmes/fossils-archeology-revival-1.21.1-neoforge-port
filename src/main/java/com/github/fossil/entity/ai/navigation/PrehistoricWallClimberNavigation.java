@@ -46,7 +46,7 @@ public class PrehistoricWallClimberNavigation extends PrehistoricPathNavigation 
                         mob.getMoveControl().setWantedPosition(pathToPosition.getX(), pathToPosition.getY(), pathToPosition.getZ(), this.speedModifier);
                     }
                 } else {
-                    if (pathToPosition.distToCenterSqr(mob.position()) < width * 2 || (mob.getY() > pathToPosition.getY() && BlockPos.containing(pathToPosition.getX(), mob.getY(), pathToPosition.getZ()).distToCenterSqr(mob.position()) < width * 2)) {
+                    if (pathToPosition.closerToCenterThan(mob.position(), width * 2) || (mob.getY() > pathToPosition.getY() && BlockPos.containing(pathToPosition.getX(), mob.getY(), pathToPosition.getZ()).closerToCenterThan(mob.position(), width * 2))) {
                         pathToPosition = null;
                     } else {
                         mob.getMoveControl().setWantedPosition(pathToPosition.getX(), pathToPosition.getY(), pathToPosition.getZ(), this.speedModifier);
