@@ -298,11 +298,12 @@ dependencies {
     runtimeOnly "net.createmod.ponder:ponder-neoforge:${ponder_version}+mc${minecraft_version}"
     runtimeOnly "com.tterrag.registrate:Registrate:${registrate_version}"
 
-    // Alex's Mobs has no official NeoForge build; user-approved unofficial community port + its
-    // unofficial Citadel dependency (see fossils_phase9_compat_research.md).
-    compileOnly "maven.modrinth:alexs-mobs(1.21.1):${alex_mobs_version}"
-    runtimeOnly "maven.modrinth:alexs-mobs(1.21.1):${alex_mobs_version}"
-    runtimeOnly "maven.modrinth:citadel-(1.21.1-port):${citadel_version}"
+    // Alex's Mobs has no official NeoForge build; user-approved unofficial "Alex's Mobs Continued"
+    // port (see fossils_phase9_compat_research.md). Keeps the original "alexsmobs" modid/package,
+    // but replaces the old Citadel dependency with its own CodxLib requirement.
+    compileOnly "maven.modrinth:alexs-mobs-continued:${alex_mobs_version}"
+    runtimeOnly "maven.modrinth:alexs-mobs-continued:${alex_mobs_version}"
+    runtimeOnly "maven.modrinth:codxlib:${codxlib_version}"
 
     // Farmer's Delight addon compat (Phase 9 task 10) - each is optional, gated at runtime by
     // ModList.isLoaded(...) in FarmersDelightAddonCompat/AddonConstants. See
