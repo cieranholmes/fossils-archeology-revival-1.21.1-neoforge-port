@@ -1,0 +1,8 @@
+{
+  "type": "neoforge:remove_spawns",
+  "biomes": "streamsreflowing:stream",
+  "entity_types": [
+    "fossil:sturgeon",
+    "fossil:alligator_gar"
+  ]
+}
