@@ -78,11 +78,14 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.animal.horse.AbstractChestedHorse;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -251,5 +254,17 @@ public class ModEntities {
         )) {
             event.put(holder.get(), Prehistoric.createAttributes().build());
         }
+    }
+
+    @SubscribeEvent
+    static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+        event.register(ALLIGATOR_GAR.get(), SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                PrehistoricFish::canSpawn, RegisterSpawnPlacementsEvent.Operation.AND);
+        event.register(NAUTILUS.get(), SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                PrehistoricFish::canSpawn, RegisterSpawnPlacementsEvent.Operation.AND);
+        event.register(STURGEON.get(), SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                PrehistoricFish::canSpawn, RegisterSpawnPlacementsEvent.Operation.AND);
+        event.register(COELACANTH.get(), SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Coelacanth::canCoelacanthSpawn, RegisterSpawnPlacementsEvent.Operation.AND);
     }
 }

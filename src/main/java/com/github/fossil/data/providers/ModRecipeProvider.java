@@ -160,6 +160,8 @@ public class ModRecipeProvider extends RecipeProvider {
             var hasScarabGem = has(SCARAB_GEM.get());
             ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, AQUATIC_SCARAB_GEM.get()).requires(SCARAB_GEM.get()).requires(AMBER_CHUNK_DOMINICAN.get())
                     .unlockedBy("has_scarab_gem", hasScarabGem).save(recipeOutput);
+            ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, AMBER_BLOCK.get()).define('A', AMBER_CHUNK.get())
+                    .pattern("AAA").pattern("AAA").pattern("AAA").unlockedBy("has_amber_chunk", has(AMBER_CHUNK.get())).save(recipeOutput);
             smithing(Items.DIAMOND_AXE, SCARAB_GEM.get(), SCARAB_AXE.get(), RecipeCategory.TOOLS, recipeOutput);
             smithing(Items.DIAMOND_HOE, SCARAB_GEM.get(), SCARAB_HOE.get(), RecipeCategory.TOOLS, recipeOutput);
             smithing(Items.DIAMOND_PICKAXE, SCARAB_GEM.get(), SCARAB_PICKAXE.get(), RecipeCategory.TOOLS, recipeOutput);
@@ -356,6 +358,14 @@ public class ModRecipeProvider extends RecipeProvider {
             analyzed(AMBER_CHUNK_DOMINICAN.get()).addOutput(Items.SPIDER_EYE, 9).addOutput(Items.STRING, 10).addOutput(Blocks.DIRT, 25).addOutput(Blocks.GRAVEL, 25)
                     .addOutput(Items.WHEAT_SEEDS, 1).addOutput(Items.BEETROOT_SEEDS, 1).addOutput(Items.PUMPKIN_SEEDS, 1).addOutput(Items.MELON_SEEDS, 1)
                     .addOutput(CALAMITES_FOSSIL_SAPLING.get(), 1).addOutput(CORDAITES_FOSSIL_SAPLING.get(), 1).addOutput(PALM_FOSSIL_SAPLING.get(), 1).addOutput(SIGILLARIA_FOSSIL_SAPLING.get(), 1).addOutput(TEMPSKYA_FOSSIL_SAPLING.get(), 1).save(recipeOutput);
+            MultiOutputAndSlotsRecipeBuilder<AnalyzerRecipeBuilder> amberChunkMosquito = analyzed(AMBER_CHUNK_MOSQUITO.get())
+                    .addOutput(Items.SPIDER_EYE, 10);
+            List<PrehistoricEntityInfo> amberChunkMosquitoEntityList = PrehistoricEntityInfo.getTimePeriodList(TimePeriod.MESOZOIC);
+            double amberChunkMosquitoDNAChance = 90F / (double) amberChunkMosquitoEntityList.size();
+            for (PrehistoricEntityInfo info : amberChunkMosquitoEntityList) {
+                amberChunkMosquito.addOutput(info.dnaItem, amberChunkMosquitoDNAChance);
+            }
+            amberChunkMosquito.save(recipeOutput);
             analyzed(Items.HONEYCOMB).addOutput(BEE.dnaItem, 100).save(recipeOutput);
             analyzed(Items.CHICKEN).addOutput(CHICKEN.dnaItem, 100).save(recipeOutput);
             analyzed(Items.EGG).addOutput(CHICKEN.dnaItem, 25).nothing(75).save(recipeOutput);
