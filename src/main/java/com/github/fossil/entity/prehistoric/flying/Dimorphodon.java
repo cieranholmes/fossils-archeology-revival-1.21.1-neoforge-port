@@ -3,9 +3,12 @@ package com.github.fossil.entity.prehistoric.flying;
 import com.github.fossil.entity.ai.DinoHurtByTargetGoal;
 import com.github.fossil.entity.ai.DinoOwnerHurtByTargetGoal;
 import com.github.fossil.entity.ai.DinoOwnerHurtTargetGoal;
+import com.github.fossil.entity.ai.DisplayGoal;
+import com.github.fossil.entity.ai.DrinkGoal;
 import com.github.fossil.entity.animation.AnimationInfo;
 import com.github.fossil.entity.prehistoric.base.PrehistoricEntityInfo;
 import com.github.fossil.entity.prehistoric.base.PrehistoricFlying;
+import com.github.fossil.entity.util.Util;
 import com.github.fossil.sounds.ModSounds;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -26,6 +29,8 @@ public class Dimorphodon extends PrehistoricFlying {
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        goalSelector.addGoal(Util.WANDER + 10, new DisplayGoal(this, "animation.dimorphodon.call", "animation.dimorphodon.speak"));
+        goalSelector.addGoal(Util.NEEDS + 4, new DrinkGoal(this, "animation.dimorphodon.drink"));
         targetSelector.addGoal(1, new DinoOwnerHurtByTargetGoal(this));
         targetSelector.addGoal(2, new DinoOwnerHurtTargetGoal(this));
         targetSelector.addGoal(3, new DinoHurtByTargetGoal(this));

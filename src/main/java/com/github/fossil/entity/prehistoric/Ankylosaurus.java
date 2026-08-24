@@ -1,5 +1,7 @@
 package com.github.fossil.entity.prehistoric;
 
+import com.github.fossil.entity.ai.DisplayGoal;
+import com.github.fossil.entity.ai.DrinkGoal;
 import com.github.fossil.entity.ai.FleeBattleGoal;
 import com.github.fossil.entity.animation.AnimationCategory;
 import com.github.fossil.entity.animation.AnimationInfo;
@@ -28,6 +30,8 @@ public class Ankylosaurus extends Prehistoric {
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        goalSelector.addGoal(Util.WANDER + 10, new DisplayGoal(this, "animation.ankylosaurus.speak", "animation.ankylosaurus.speak_2"));
+        goalSelector.addGoal(Util.NEEDS + 4, new DrinkGoal(this, "animation.ankylosaurus.drink"));
         goalSelector.addGoal(Util.IMMOBILE + 3, new FleeBattleGoal(this, 1));
     }
 

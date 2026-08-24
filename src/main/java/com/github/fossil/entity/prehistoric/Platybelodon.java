@@ -1,5 +1,6 @@
 package com.github.fossil.entity.prehistoric;
 
+import com.github.fossil.entity.ai.DisplayGoal;
 import com.github.fossil.entity.ai.FleeBattleGoal;
 import com.github.fossil.entity.prehistoric.base.Prehistoric;
 import com.github.fossil.entity.prehistoric.base.PrehistoricEntityInfo;
@@ -23,6 +24,7 @@ public class Platybelodon extends Prehistoric {
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        goalSelector.addGoal(Util.WANDER + 10, new DisplayGoal(this, "animation.platybelodon.speak"));
         goalSelector.addGoal(Util.IMMOBILE + 3, new FleeBattleGoal(this, 1));
     }
 

@@ -1,6 +1,8 @@
 package com.github.fossil.entity.prehistoric;
 
 import com.github.fossil.FossilsAndArcheologyRevival;
+import com.github.fossil.entity.ai.DisplayGoal;
+import com.github.fossil.entity.ai.DrinkGoal;
 import com.github.fossil.entity.ai.FleeBattleGoal;
 import com.github.fossil.entity.prehistoric.base.Prehistoric;
 import com.github.fossil.entity.prehistoric.base.PrehistoricEntityInfo;
@@ -40,6 +42,8 @@ public class Therizinosaurus extends Prehistoric implements PrehistoricShearable
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        goalSelector.addGoal(Util.WANDER + 10, new DisplayGoal(this, "animation.therizinosaurus.call", "animation.therizinosaurus.speak"));
+        goalSelector.addGoal(Util.NEEDS + 4, new DrinkGoal(this, "animation.therizinosaurus.drink"));
         goalSelector.addGoal(Util.IMMOBILE + 3, new FleeBattleGoal(this, 1.0D));
     }
 

@@ -1,5 +1,7 @@
 package com.github.fossil.entity.prehistoric;
 
+import com.github.fossil.entity.ai.DisplayGoal;
+import com.github.fossil.entity.ai.DrinkGoal;
 import com.github.fossil.entity.ai.FleeBattleGoal;
 import com.github.fossil.entity.prehistoric.base.Prehistoric;
 import com.github.fossil.entity.prehistoric.base.PrehistoricEntityInfo;
@@ -22,6 +24,8 @@ public class Dimetrodon extends Prehistoric {
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        goalSelector.addGoal(Util.WANDER + 10, new DisplayGoal(this, "animation.dimetrodon.speak"));
+        goalSelector.addGoal(Util.NEEDS + 4, new DrinkGoal(this, "animation.dimetrodon.drink"));
         goalSelector.addGoal(Util.IMMOBILE + 3, new FleeBattleGoal(this, 1));
     }
 

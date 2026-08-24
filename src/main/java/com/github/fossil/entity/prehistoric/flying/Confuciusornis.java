@@ -1,9 +1,12 @@
 package com.github.fossil.entity.prehistoric.flying;
 
+import com.github.fossil.entity.ai.DisplayGoal;
+import com.github.fossil.entity.ai.DrinkGoal;
 import com.github.fossil.entity.animation.AnimationCategory;
 import com.github.fossil.entity.animation.AnimationInfo;
 import com.github.fossil.entity.prehistoric.base.PrehistoricEntityInfo;
 import com.github.fossil.entity.prehistoric.base.PrehistoricFlying;
+import com.github.fossil.entity.util.Util;
 import com.github.fossil.sounds.ModSounds;
 import com.github.fossil.util.Gender;
 import net.minecraft.sounds.SoundEvent;
@@ -24,6 +27,8 @@ public class Confuciusornis extends PrehistoricFlying {
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        goalSelector.addGoal(Util.WANDER + 10, new DisplayGoal(this, "animation.confuciusornis.call"));
+        goalSelector.addGoal(Util.NEEDS + 4, new DrinkGoal(this, "animation.confuciusornis.drink"));
     }
 
     @Override

@@ -1,7 +1,9 @@
 package com.github.fossil.entity.prehistoric;
 
+import com.github.fossil.entity.ai.DisplayGoal;
 import com.github.fossil.entity.prehistoric.base.Prehistoric;
 import com.github.fossil.entity.prehistoric.base.PrehistoricEntityInfo;
+import com.github.fossil.entity.util.Util;
 import com.github.fossil.sounds.ModSounds;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -20,6 +22,7 @@ public class Citipati extends Prehistoric {
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        goalSelector.addGoal(Util.WANDER + 10, new DisplayGoal(this, "animation.citipati.call", "animation.citipati.speak"));
     }
 
     @Override

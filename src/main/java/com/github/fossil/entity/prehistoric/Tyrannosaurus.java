@@ -1,9 +1,12 @@
 package com.github.fossil.entity.prehistoric;
 
+import com.github.fossil.entity.ai.DisplayGoal;
+import com.github.fossil.entity.ai.DrinkGoal;
 import com.github.fossil.entity.animation.AnimationCategory;
 import com.github.fossil.entity.animation.AnimationInfo;
 import com.github.fossil.entity.prehistoric.base.Prehistoric;
 import com.github.fossil.entity.prehistoric.base.PrehistoricEntityInfo;
+import com.github.fossil.entity.util.Util;
 import com.github.fossil.item.ModItems;
 import com.github.fossil.sounds.ModSounds;
 import net.minecraft.sounds.SoundEvent;
@@ -19,6 +22,13 @@ public class Tyrannosaurus extends Prehistoric {
 
     public Tyrannosaurus(EntityType<Tyrannosaurus> entityType, Level level) {
         super(entityType, level);
+    }
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        goalSelector.addGoal(Util.WANDER + 10, new DisplayGoal(this, ModSounds.TYRANNOSAURUS_ROAR.get(), "animation.tyrannosaurus.call", "animation.tyrannosaurus.speak", "animation.tyrannosaurus.emote_1", "animation.tyrannosaurus.emote_2"));
+        goalSelector.addGoal(Util.NEEDS + 4, new DrinkGoal(this, "animation.tyrannosaurus.drink"));
     }
 
     @Override

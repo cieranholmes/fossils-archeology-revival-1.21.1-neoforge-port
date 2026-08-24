@@ -1,6 +1,8 @@
 package com.github.fossil.entity.prehistoric.swimming;
 
+import com.github.fossil.entity.ai.DelayedAttackGoal;
 import com.github.fossil.entity.ai.DinoHurtByTargetGoal;
+import com.github.fossil.entity.ai.MosasaurusLeapAttackGoal;
 import com.github.fossil.entity.animation.AnimationInfo;
 import com.github.fossil.entity.prehistoric.base.Prehistoric;
 import com.github.fossil.entity.prehistoric.base.PrehistoricEntityInfo;
@@ -19,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class Mosasaurus extends PrehistoricSwimming {
     public static final String GRAB = "animation.mosasaurus.grab";
+    public static final String LEAP = "animation.mosasaurus.leap";
 
     public Mosasaurus(EntityType<Mosasaurus> entityType, Level level) {
         super(entityType, level);
@@ -31,8 +34,12 @@ public class Mosasaurus extends PrehistoricSwimming {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        //goalSelector.addGoal(Util.ATTACK + 1, new BreachAttackGoal(this, 1));
         targetSelector.addGoal(3, new DinoHurtByTargetGoal(this));
+    }
+
+    @Override
+    protected DelayedAttackGoal<? extends PrehistoricSwimming> createGrabAttackGoal() {
+        return new MosasaurusLeapAttackGoal(this, attributes().sprintMod(), LEAP);
     }
 
     @Override

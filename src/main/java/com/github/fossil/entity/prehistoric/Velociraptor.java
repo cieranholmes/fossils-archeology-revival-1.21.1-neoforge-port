@@ -2,6 +2,8 @@ package com.github.fossil.entity.prehistoric;
 
 import com.github.fossil.entity.ModEntities;
 import com.github.fossil.entity.ai.DinoLeapAtTargetGoal;
+import com.github.fossil.entity.ai.DisplayGoal;
+import com.github.fossil.entity.ai.DrinkGoal;
 import com.github.fossil.entity.prehistoric.base.PrehistoricEntityInfo;
 import com.github.fossil.entity.prehistoric.base.PrehistoricLeaping;
 import com.github.fossil.entity.util.Util;
@@ -27,6 +29,9 @@ public class Velociraptor extends PrehistoricLeaping {
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        goalSelector.addGoal(Util.WANDER + 10, new DisplayGoal(this, "animation.velociraptor.call"));
+        goalSelector.addGoal(Util.NEEDS + 5, new DrinkGoal(this, "animation.velociraptor.drink"));
+        goalSelector.addGoal(Util.NEEDS + 6, new DisplayGoal(this, "animation.velociraptor.display"));
         goalSelector.addGoal(Util.ATTACK, new DinoLeapAtTargetGoal(this));
         goalSelector.addGoal(Util.NEEDS + 4, new RestrictSunGoal(this));
     }

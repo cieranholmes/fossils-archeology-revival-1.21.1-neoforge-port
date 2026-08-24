@@ -87,6 +87,7 @@ public class Meganeura extends Prehistoric implements FlyingAnimal, SwimmingAnim
     @Override
     protected void registerGoals() {
         matingGoal = new DinoMatingGoal(this, 1);
+        goalSelector.addGoal(Util.WANDER + 10, new DisplayGoal(this, "animation.meganeura.emote_1", "animation.meganeura.emote_2"));
         goalSelector.addGoal(Util.IMMOBILE, new DinoPanicGoal(this, 1.5));
         goalSelector.addGoal(Util.SLEEP + 2, matingGoal);
         goalSelector.addGoal(Util.NEEDS, new EatFromFeederGoal(this));

@@ -1,9 +1,11 @@
 package com.github.fossil.entity.prehistoric;
 
+import com.github.fossil.entity.ai.DisplayGoal;
 import com.github.fossil.entity.animation.AnimationCategory;
 import com.github.fossil.entity.animation.AnimationInfo;
 import com.github.fossil.entity.prehistoric.base.Prehistoric;
 import com.github.fossil.entity.prehistoric.base.PrehistoricEntityInfo;
+import com.github.fossil.entity.util.Util;
 import com.github.fossil.sounds.ModSounds;
 import com.github.fossil.util.Gender;
 import net.minecraft.sounds.SoundEvent;
@@ -19,6 +21,12 @@ public class Dodo extends Prehistoric {
 
     public Dodo(EntityType<Dodo> entityType, Level level) {
         super(entityType, level);
+    }
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        goalSelector.addGoal(Util.WANDER + 10, new DisplayGoal(this, "animation.dodo.speak_1", "animation.dodo.speak_2"));
     }
 
     @Override

@@ -1,8 +1,11 @@
 package com.github.fossil.entity.prehistoric;
 
+import com.github.fossil.entity.ai.DisplayGoal;
+import com.github.fossil.entity.ai.DrinkGoal;
 import com.github.fossil.entity.prehistoric.base.PrehistoricEntityInfo;
 import com.github.fossil.entity.prehistoric.base.PrehistoricEntityInfoAI;
 import com.github.fossil.entity.prehistoric.base.PrehistoricFlocking;
+import com.github.fossil.entity.util.Util;
 import com.github.fossil.sounds.ModSounds;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -21,6 +24,8 @@ public class Gallimimus extends PrehistoricFlocking {
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        goalSelector.addGoal(Util.WANDER + 10, new DisplayGoal(this, "animation.gallimimus.call", "animation.gallimimus.speak"));
+        goalSelector.addGoal(Util.NEEDS + 4, new DrinkGoal(this, "animation.gallimimus.drink"));
     }
 
     @Override

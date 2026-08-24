@@ -1,5 +1,6 @@
 package com.github.fossil.entity.prehistoric;
 
+import com.github.fossil.entity.ai.DrinkGoal;
 import com.github.fossil.entity.ai.FleeBattleGoal;
 import com.github.fossil.entity.prehistoric.base.OrderType;
 import com.github.fossil.entity.prehistoric.base.Prehistoric;
@@ -31,6 +32,7 @@ public class Megaloceros extends Prehistoric {
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        goalSelector.addGoal(Util.NEEDS + 4, new DrinkGoal(this, "animation.megaloceros.drink"));
         goalSelector.addGoal(Util.IMMOBILE + 3, new FleeBattleGoal(this, 1));
         targetSelector.addGoal(4, new LastMateHurtByTargetGoal(this));
     }

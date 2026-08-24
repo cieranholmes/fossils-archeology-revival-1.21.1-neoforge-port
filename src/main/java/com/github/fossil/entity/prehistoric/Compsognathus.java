@@ -1,6 +1,8 @@
 package com.github.fossil.entity.prehistoric;
 
 import com.github.fossil.entity.ai.DinoLeapAtTargetGoal;
+import com.github.fossil.entity.ai.DisplayGoal;
+import com.github.fossil.entity.ai.DrinkGoal;
 import com.github.fossil.entity.animation.AnimationCategory;
 import com.github.fossil.entity.animation.AnimationInfo;
 import com.github.fossil.entity.prehistoric.base.PrehistoricEntityInfo;
@@ -26,6 +28,8 @@ public class Compsognathus extends PrehistoricLeaping {
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        goalSelector.addGoal(Util.WANDER + 10, new DisplayGoal(this, "animation.compsognathus.call", "animation.compsognathus.speak"));
+        goalSelector.addGoal(Util.NEEDS + 5, new DrinkGoal(this, "animation.compsognathus.drink"));
         goalSelector.addGoal(Util.ATTACK, new DinoLeapAtTargetGoal(this));
         goalSelector.addGoal(Util.NEEDS + 4, new RestrictSunGoal(this));
     }

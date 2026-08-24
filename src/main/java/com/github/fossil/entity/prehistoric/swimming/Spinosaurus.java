@@ -3,6 +3,8 @@ package com.github.fossil.entity.prehistoric.swimming;
 import com.github.fossil.entity.ai.DinoHurtByTargetGoal;
 import com.github.fossil.entity.ai.DinoOwnerHurtByTargetGoal;
 import com.github.fossil.entity.ai.DinoOwnerHurtTargetGoal;
+import com.github.fossil.entity.ai.DisplayGoal;
+import com.github.fossil.entity.ai.DrinkGoal;
 import com.github.fossil.entity.ai.LeaveWaterGoal;
 import com.github.fossil.entity.animation.AnimationCategory;
 import com.github.fossil.entity.animation.AnimationInfo;
@@ -50,6 +52,8 @@ public class Spinosaurus extends PrehistoricSwimming {
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        goalSelector.addGoal(Util.WANDER + 10, new DisplayGoal(this, "animation.spinosaurus.speak"));
+        goalSelector.addGoal(Util.NEEDS + 4, new DrinkGoal(this, "animation.spinosaurus.drink"));
         goalSelector.addGoal(Util.WANDER + 1, new LeaveWaterGoal<>(this, 1));
         targetSelector.addGoal(1, new DinoOwnerHurtByTargetGoal(this));
         targetSelector.addGoal(2, new DinoOwnerHurtTargetGoal(this));

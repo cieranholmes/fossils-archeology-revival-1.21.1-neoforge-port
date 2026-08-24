@@ -222,7 +222,7 @@ public abstract class Prehistoric extends TamableAnimal implements GeckoLibMulti
         goalSelector.addGoal(Util.IMMOBILE + 1, new DinoPanicGoal(this, attributes().sprintMod()));
         goalSelector.addGoal(Util.IMMOBILE + 2, new FloatGoal(this));
         if (aiAttackType() != Attacking.NONE && aiAttackType() != Attacking.JUMP) {
-            goalSelector.addGoal(Util.ATTACK + 1, new DelayedAttackGoal<>(this, attributes().sprintMod(), false));
+            goalSelector.addGoal(Util.ATTACK + 1, createAttackGoal());
         }
         goalSelector.addGoal(Util.SLEEP + 2, matingGoal);
         if (data().diet() != Diet.PASSIVE) {
@@ -244,6 +244,14 @@ public abstract class Prehistoric extends TamableAnimal implements GeckoLibMulti
 
         targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LaserPointEntity.class, true));
 
+    }
+
+    /**
+     * Overridable so a species can swap in a specialized {@link DelayedAttackGoal} (e.g. {@link com.github.fossil.entity.ai.ChargeAttackGoal})
+     * without duplicating the rest of {@link #registerGoals()}.
+     */
+    protected DelayedAttackGoal<? extends Prehistoric> createAttackGoal() {
+        return new DelayedAttackGoal<>(this, attributes().sprintMod(), false);
     }
 
     @Override
@@ -1122,7 +1130,7 @@ public abstract class Prehistoric extends TamableAnimal implements GeckoLibMulti
             moodSystem.increaseMood(5);
             feed(FoodMappings.getFoodAmount(stack.getItem(), data().diet()));
             stack.shrink(1);
-            animationLogic.triggerAnimation(AnimationLogic.IDLE_CTRL, getAnimation(AnimationCategory.EAT), AnimationCategory.EAT);
+            getAnimationLogic().triggerAnimation(AnimationLogic.IDLE_CTRL, getAnimation(AnimationCategory.EAT), AnimationCategory.EAT);
             return true;
         }
         return false;

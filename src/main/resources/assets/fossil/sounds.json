@@ -282,7 +282,8 @@
     "sounds": [
       "fossil:prehistoric/dilophosaurus_call1",
       "fossil:prehistoric/dilophosaurus_call2"
-    ]
+    ],
+    "subtitle": "subtitle.fossil.dilophosaurus_call"
   },
   "dilophosaurus_death": {
     "category": "neutral",

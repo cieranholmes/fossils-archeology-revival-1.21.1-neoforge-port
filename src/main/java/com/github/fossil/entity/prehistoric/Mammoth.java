@@ -1,6 +1,8 @@
 package com.github.fossil.entity.prehistoric;
 
 import com.github.fossil.FossilsAndArcheologyRevival;
+import com.github.fossil.entity.ai.DisplayGoal;
+import com.github.fossil.entity.ai.DrinkGoal;
 import com.github.fossil.entity.ai.FleeBattleGoal;
 import com.github.fossil.entity.prehistoric.base.PrehistoricEntityInfo;
 import com.github.fossil.entity.prehistoric.base.PrehistoricFlocking;
@@ -53,6 +55,8 @@ public class Mammoth extends PrehistoricFlocking implements PrehistoricShearable
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        goalSelector.addGoal(Util.WANDER + 10, new DisplayGoal(this, "animation.mammoth.speak"));
+        goalSelector.addGoal(Util.NEEDS + 4, new DrinkGoal(this, "animation.mammoth.drink"));
         goalSelector.addGoal(Util.IMMOBILE + 3, new FleeBattleGoal(this, 1));
     }
 

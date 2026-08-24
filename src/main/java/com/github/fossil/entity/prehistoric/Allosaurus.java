@@ -1,7 +1,10 @@
 package com.github.fossil.entity.prehistoric;
 
+import com.github.fossil.entity.ai.DisplayGoal;
+import com.github.fossil.entity.ai.DrinkGoal;
 import com.github.fossil.entity.prehistoric.base.Prehistoric;
 import com.github.fossil.entity.prehistoric.base.PrehistoricEntityInfo;
+import com.github.fossil.entity.util.Util;
 import com.github.fossil.item.ModItems;
 import com.github.fossil.sounds.ModSounds;
 import net.minecraft.sounds.SoundEvent;
@@ -15,6 +18,13 @@ public class Allosaurus extends Prehistoric {
 
     public Allosaurus(EntityType<Allosaurus> entityType, Level level) {
         super(entityType, level);
+    }
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        goalSelector.addGoal(Util.WANDER + 10, new DisplayGoal(this, "animation.allosaurus.speak"));
+        goalSelector.addGoal(Util.NEEDS + 4, new DrinkGoal(this, "animation.allosaurus.drink"));
     }
 
     @Override

@@ -72,7 +72,7 @@ public abstract class PrehistoricSwimming extends Prehistoric implements Swimmin
         matingGoal = new DinoMatingGoal(this, 1);
         goalSelector.addGoal(Util.IMMOBILE + 1, new DinoPanicGoal(this, attributes().sprintMod()));
         if (aiAttackType() == PrehistoricEntityInfoAI.Attacking.GRAB) {
-            goalSelector.addGoal(Util.ATTACK, new GrabMeleeAttackGoal(this, attributes().sprintMod(), false));
+            goalSelector.addGoal(Util.ATTACK, createGrabAttackGoal());
         } else if (aiAttackType() != PrehistoricEntityInfoAI.Attacking.NONE) {
             goalSelector.addGoal(Util.ATTACK, new DelayedAttackGoal<>(this, attributes().sprintMod(), false));
         }
@@ -94,6 +94,14 @@ public abstract class PrehistoricSwimming extends Prehistoric implements Swimmin
         targetSelector.addGoal(5, new HuntingTargetGoal(this));
 
         targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LaserPointEntity.class, true));
+    }
+
+    /**
+     * Overridable so a species can swap in a specialized {@link GrabMeleeAttackGoal} variant (e.g. Mosasaurus's
+     * leap-attack goal) without duplicating the rest of {@link #registerGoals()}.
+     */
+    protected DelayedAttackGoal<? extends PrehistoricSwimming> createGrabAttackGoal() {
+        return new GrabMeleeAttackGoal(this, attributes().sprintMod(), false);
     }
 
     public static boolean isOverWater(LivingEntity entity) {
