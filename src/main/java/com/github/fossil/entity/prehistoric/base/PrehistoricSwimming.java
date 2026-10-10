@@ -185,8 +185,22 @@ public abstract class PrehistoricSwimming extends Prehistoric implements Swimmin
     }
 
     @Override
+    public boolean canBreatheOnLand() {
+        // Default only covers amphibians (SEMI_AQUATIC); fully aquatic species (e.g. Diplocaulus,
+        // Crassigyrinus) were suffocating whenever they beached, so widen this to canSwim().
+        return canSwim();
+    }
+
+    @Override
     public boolean canDrownInFluidType(FluidType type) {
-        return type != NeoForgeMod.WATER_TYPE.value() && super.canDrownInFluidType(type);
+        // Modded "water" (e.g. Streams' flowing water) is tagged FluidTags.WATER for swimming/behavior
+        // purposes but is a distinct FluidType instance, so the identity check against
+        // NeoForgeMod.WATER_TYPE alone misses it and these entities would fall through to
+        // super.canDrownInFluidType(type), which drowns them by default.
+        if (type == NeoForgeMod.WATER_TYPE.value() || isEyeInFluid(FluidTags.WATER)) {
+            return false;
+        }
+        return super.canDrownInFluidType(type);
     }
 
     @Override

@@ -1,0 +1,243 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "particle": "fossil:block/culture_vat/culture_vat_top",
+    "0": "fossil:block/culture_vat/culture_vat_bottom_side",
+    "1": "fossil:block/culture_vat/culture_vat_bottom",
+    "2": "fossil:block/culture_vat/culture_vat_side",
+    "3": "fossil:block/culture_vat/culture_vat_top",
+    "4": "fossil:block/blank",
+    "5": "fossil:block/culture_vat/culture_vat_side_glass",
+    "6": "fossil:block/culture_vat/culture_vat_top_glass",
+    "7": "fossil:block/culture_vat/culture_vat_top_blob"
+  },
+  "elements": [
+    {
+      "name": "bottom",
+      "from": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "to": [
+        16.0,
+        2.0,
+        16.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#0",
+          "uv": [
+            0.0,
+            14.0,
+            16.0,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#0",
+          "uv": [
+            0.0,
+            14.0,
+            16.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#0",
+          "uv": [
+            0.0,
+            14.0,
+            16.0,
+            16.0
+          ]
+        },
+        "west": {
+          "texture": "#0",
+          "uv": [
+            0.0,
+            14.0,
+            16.0,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#1",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#1",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "top",
+      "from": [
+        0.0,
+        2.0,
+        0.0
+      ],
+      "to": [
+        16.0,
+        16.0,
+        16.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#2",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            14.0
+          ]
+        },
+        "east": {
+          "texture": "#2",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            14.0
+          ]
+        },
+        "south": {
+          "texture": "#2",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            14.0
+          ]
+        },
+        "west": {
+          "texture": "#2",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            14.0
+          ]
+        },
+        "up": {
+          "texture": "#3",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#4",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "top_blob",
+      "from": [
+        0.0,
+        2.0,
+        0.0
+      ],
+      "to": [
+        16.0,
+        16.0,
+        16.0
+      ],
+      "faces": {
+        "up": {
+          "texture": "#7",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "top_glass",
+      "from": [
+        0.0,
+        2.0,
+        0.0
+      ],
+      "to": [
+        16.0,
+        16.0,
+        16.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#5",
+          "tintindex": 0,
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            14.0
+          ]
+        },
+        "east": {
+          "texture": "#5",
+          "tintindex": 0,
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            14.0
+          ]
+        },
+        "south": {
+          "texture": "#5",
+          "tintindex": 0,
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            14.0
+          ]
+        },
+        "west": {
+          "texture": "#5",
+          "tintindex": 0,
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            14.0
+          ]
+        },
+        "up": {
+          "texture": "#6",
+          "tintindex": 0,
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        }
+      }
+    }
+  ]
+}

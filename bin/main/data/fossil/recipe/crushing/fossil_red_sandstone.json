@@ -1,0 +1,41 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "fossil:fossil_red_sandstone"
+    }
+  ],
+  "processing_time": 250,
+  "results": [
+    {
+      "chance": 0.2,
+      "id": "fossil:fossil_bio"
+    },
+    {
+      "chance": 0.1,
+      "id": "fossil:fossil_plant"
+    },
+    {
+      "chance": 0.1,
+      "id": "fossil:relic_scrap"
+    },
+    {
+      "chance": 0.35,
+      "id": "minecraft:bone"
+    },
+    {
+      "chance": 0.125,
+      "id": "fossil:skull"
+    },
+    {
+      "chance": 0.125,
+      "id": "minecraft:red_sandstone"
+    }
+  ]
+}

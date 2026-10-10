@@ -1,6 +1,20 @@
 {
   "parent": "fossil:fossil/dino_eggs",
   "criteria": {
+    "alanqa": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "fossil:alanqa"
+            }
+          }
+        ]
+      },
+      "trigger": "fossil:incubate_egg"
+    },
     "alligator_gar": {
       "conditions": {
         "entity": [
@@ -57,6 +71,34 @@
       },
       "trigger": "fossil:incubate_egg"
     },
+    "aquilops": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "fossil:aquilops"
+            }
+          }
+        ]
+      },
+      "trigger": "fossil:incubate_egg"
+    },
+    "archelon": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "fossil:archelon"
+            }
+          }
+        ]
+      },
+      "trigger": "fossil:incubate_egg"
+    },
     "arthropleura": {
       "conditions": {
         "entity": [
@@ -79,6 +121,20 @@
             "entity": "this",
             "predicate": {
               "type": "fossil:brachiosaurus"
+            }
+          }
+        ]
+      },
+      "trigger": "fossil:incubate_egg"
+    },
+    "caiuajara": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "fossil:caiuajara"
             }
           }
         ]
@@ -295,6 +351,20 @@
       },
       "trigger": "fossil:incubate_egg"
     },
+    "dsungaripterus": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "fossil:dsungaripterus"
+            }
+          }
+        ]
+      },
+      "trigger": "fossil:incubate_egg"
+    },
     "edaphosaurus": {
       "conditions": {
         "entity": [
@@ -303,6 +373,20 @@
             "entity": "this",
             "predicate": {
               "type": "fossil:edaphosaurus"
+            }
+          }
+        ]
+      },
+      "trigger": "fossil:incubate_egg"
+    },
+    "eolambia": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "fossil:eolambia"
             }
           }
         ]
@@ -331,6 +415,34 @@
             "entity": "this",
             "predicate": {
               "type": "fossil:gastornis"
+            }
+          }
+        ]
+      },
+      "trigger": "fossil:incubate_egg"
+    },
+    "giganotosaurus": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "fossil:giganotosaurus"
+            }
+          }
+        ]
+      },
+      "trigger": "fossil:incubate_egg"
+    },
+    "guanlong": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "fossil:guanlong"
             }
           }
         ]
@@ -373,6 +485,20 @@
             "entity": "this",
             "predicate": {
               "type": "fossil:kelenken"
+            }
+          }
+        ]
+      },
+      "trigger": "fossil:incubate_egg"
+    },
+    "kronosaurus": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "fossil:kronosaurus"
             }
           }
         ]
@@ -457,6 +583,34 @@
             "entity": "this",
             "predicate": {
               "type": "fossil:meganeura"
+            }
+          }
+        ]
+      },
+      "trigger": "fossil:incubate_egg"
+    },
+    "microvenator": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "fossil:microvenator"
+            }
+          }
+        ]
+      },
+      "trigger": "fossil:incubate_egg"
+    },
+    "moros": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "fossil:moros"
             }
           }
         ]
@@ -659,6 +813,20 @@
       },
       "trigger": "fossil:incubate_egg"
     },
+    "sauroposeidon": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "fossil:sauroposeidon"
+            }
+          }
+        ]
+      },
+      "trigger": "fossil:incubate_egg"
+    },
     "scotoharpes": {
       "conditions": {
         "entity": [
@@ -812,6 +980,20 @@
         ]
       },
       "trigger": "fossil:incubate_egg"
+    },
+    "zephyrosaurus": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "fossil:zephyrosaurus"
+            }
+          }
+        ]
+      },
+      "trigger": "fossil:incubate_egg"
     }
   },
   "display": {
@@ -829,6 +1011,9 @@
   },
   "requirements": [
     [
+      "alanqa"
+    ],
+    [
       "alligator_gar"
     ],
     [
@@ -841,10 +1026,19 @@
       "aquilolamna"
     ],
     [
+      "aquilops"
+    ],
+    [
+      "archelon"
+    ],
+    [
       "arthropleura"
     ],
     [
       "brachiosaurus"
+    ],
+    [
+      "caiuajara"
     ],
     [
       "ceratosaurus"
@@ -892,13 +1086,25 @@
       "dryosaurus"
     ],
     [
+      "dsungaripterus"
+    ],
+    [
       "edaphosaurus"
+    ],
+    [
+      "eolambia"
     ],
     [
       "gallimimus"
     ],
     [
       "gastornis"
+    ],
+    [
+      "giganotosaurus"
+    ],
+    [
+      "guanlong"
     ],
     [
       "henodus"
@@ -908,6 +1114,9 @@
     ],
     [
       "kelenken"
+    ],
+    [
+      "kronosaurus"
     ],
     [
       "liopleurodon"
@@ -926,6 +1135,12 @@
     ],
     [
       "meganeura"
+    ],
+    [
+      "microvenator"
+    ],
+    [
+      "moros"
     ],
     [
       "mosasaurus"
@@ -970,6 +1185,9 @@
       "sarcosuchus"
     ],
     [
+      "sauroposeidon"
+    ],
+    [
       "scotoharpes"
     ],
     [
@@ -1001,6 +1219,9 @@
     ],
     [
       "walliserops"
+    ],
+    [
+      "zephyrosaurus"
     ]
   ],
   "rewards": {

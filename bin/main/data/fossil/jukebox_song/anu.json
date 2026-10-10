@@ -1,0 +1,8 @@
+{
+  "sound_event": "fossil:music_anu",
+  "description": {
+    "translate": "item.fossil.music_disc_anu.desc"
+  },
+  "length_in_seconds": 221,
+  "comparator_output": 1
+}

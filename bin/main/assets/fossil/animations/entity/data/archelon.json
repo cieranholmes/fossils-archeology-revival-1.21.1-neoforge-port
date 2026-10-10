@@ -1,0 +1,10 @@
+{
+  "animations": {
+    "animation.archelon.walk": {
+      "blocks_per_second": 0.56
+    },
+    "animation.archelon.run": {
+      "blocks_per_second": 3.0
+    }
+  }
+}

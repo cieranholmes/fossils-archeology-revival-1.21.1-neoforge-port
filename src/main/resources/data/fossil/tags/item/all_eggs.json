@@ -2,6 +2,7 @@
   "values": [
     "#fossil:dino_eggs",
     "#fossil:fish_eggs",
-    "#fossil:bird_eggs"
+    "#fossil:bird_eggs",
+    "minecraft:egg"
   ]
 }

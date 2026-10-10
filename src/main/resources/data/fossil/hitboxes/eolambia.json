@@ -1,0 +1,66 @@
+{
+  "elements": [
+    {
+      "name": "body",
+      "pos": [0, 0, 5.5],
+      "width": 17.4,
+      "height": 26.8,
+      "ref": "body_hitbox"
+    },
+    {
+      "name": "body2",
+      "pos": [0, 0, -11.5],
+      "width": 17.4,
+      "height": 26.8,
+      "ref": "body2_hitbox"
+    },
+    {
+      "name": "tail1",
+      "pos": [0, 14.5, -27],
+      "width": 13.5,
+      "height": 10.5,
+      "ref": "tail1_hitbox"
+    },
+    {
+      "name": "tail2",
+      "pos": [0, 12.5, -38],
+      "width": 9,
+      "height": 8,
+      "ref": "tail2_hitbox"
+    },
+    {
+      "name": "neck1",
+      "pos": [0, 25, 13],
+      "width": 11,
+      "height": 13,
+      "ref": "neck1_hitbox"
+    },
+    {
+      "name": "neck2",
+      "pos": [0, 38, 18],
+      "width": 9,
+      "height": 11,
+      "ref": "neck2_hitbox"
+    },
+    {
+      "name": "neck3",
+      "pos": [0, 50, 22],
+      "width": 7.5,
+      "height": 10,
+      "ref": "neck3_hitbox"
+    },
+    {
+      "name": "head",
+      "pos": [0, 59, 26],
+      "width": 7,
+      "height": 8,
+      "ref": "head_hitbox"
+    },
+    {
+      "name": "rider_pos",
+      "pos": [0, 25.75, 1],
+      "ref": "rider_pos",
+      "is_anchor": true
+    }
+  ]
+}

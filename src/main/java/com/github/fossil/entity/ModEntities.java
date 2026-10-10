@@ -3,6 +3,7 @@ package com.github.fossil.entity;
 import com.github.fossil.FossilsAndArcheologyRevival;
 import com.github.fossil.entity.prehistoric.Allosaurus;
 import com.github.fossil.entity.prehistoric.Ankylosaurus;
+import com.github.fossil.entity.prehistoric.Aquilops;
 import com.github.fossil.entity.prehistoric.Arthropleura;
 import com.github.fossil.entity.prehistoric.Brachiosaurus;
 import com.github.fossil.entity.prehistoric.Ceratosaurus;
@@ -16,12 +17,17 @@ import com.github.fossil.entity.prehistoric.Dodo;
 import com.github.fossil.entity.prehistoric.Dryosaurus;
 import com.github.fossil.entity.prehistoric.Edaphosaurus;
 import com.github.fossil.entity.prehistoric.Elasmotherium;
+import com.github.fossil.entity.prehistoric.Eolambia;
 import com.github.fossil.entity.prehistoric.Gallimimus;
 import com.github.fossil.entity.prehistoric.Gastornis;
+import com.github.fossil.entity.prehistoric.Giganotosaurus;
+import com.github.fossil.entity.prehistoric.Guanlong;
 import com.github.fossil.entity.prehistoric.Kelenken;
 import com.github.fossil.entity.prehistoric.Mammoth;
 import com.github.fossil.entity.prehistoric.Megalania;
 import com.github.fossil.entity.prehistoric.Megaloceros;
+import com.github.fossil.entity.prehistoric.Microvenator;
+import com.github.fossil.entity.prehistoric.Moros;
 import com.github.fossil.entity.prehistoric.Ornitholestes;
 import com.github.fossil.entity.prehistoric.Pachycephalosaurus;
 import com.github.fossil.entity.prehistoric.Pachyrhinosaurus;
@@ -31,6 +37,7 @@ import com.github.fossil.entity.prehistoric.Platybelodon;
 import com.github.fossil.entity.prehistoric.Postosuchus;
 import com.github.fossil.entity.prehistoric.Protoceratops;
 import com.github.fossil.entity.prehistoric.Psittacosaurus;
+import com.github.fossil.entity.prehistoric.Sauroposeidon;
 import com.github.fossil.entity.prehistoric.Smilodon;
 import com.github.fossil.entity.prehistoric.Stegosaurus;
 import com.github.fossil.entity.prehistoric.Therizinosaurus;
@@ -38,6 +45,7 @@ import com.github.fossil.entity.prehistoric.Titanis;
 import com.github.fossil.entity.prehistoric.Triceratops;
 import com.github.fossil.entity.prehistoric.Tyrannosaurus;
 import com.github.fossil.entity.prehistoric.Velociraptor;
+import com.github.fossil.entity.prehistoric.Zephyrosaurus;
 import com.github.fossil.entity.prehistoric.base.DinosaurEgg;
 import com.github.fossil.entity.prehistoric.base.Prehistoric;
 import com.github.fossil.entity.prehistoric.base.PrehistoricFish;
@@ -46,16 +54,21 @@ import com.github.fossil.entity.prehistoric.fish.AlligatorGar;
 import com.github.fossil.entity.prehistoric.fish.Coelacanth;
 import com.github.fossil.entity.prehistoric.fish.Nautilus;
 import com.github.fossil.entity.prehistoric.fish.Sturgeon;
+import com.github.fossil.entity.prehistoric.flying.Alanqa;
+import com.github.fossil.entity.prehistoric.flying.Caiuajara;
 import com.github.fossil.entity.prehistoric.flying.Confuciusornis;
 import com.github.fossil.entity.prehistoric.flying.Dimorphodon;
+import com.github.fossil.entity.prehistoric.flying.Dsungaripterus;
 import com.github.fossil.entity.prehistoric.flying.Pteranodon;
 import com.github.fossil.entity.prehistoric.flying.Quetzalcoatlus;
 import com.github.fossil.entity.prehistoric.swimming.Aquilolamna;
+import com.github.fossil.entity.prehistoric.swimming.Archelon;
 import com.github.fossil.entity.prehistoric.swimming.Crassigyrinus;
 import com.github.fossil.entity.prehistoric.swimming.Dicranurus;
 import com.github.fossil.entity.prehistoric.swimming.Diplocaulus;
 import com.github.fossil.entity.prehistoric.swimming.Henodus;
 import com.github.fossil.entity.prehistoric.swimming.Ichthyosaurus;
+import com.github.fossil.entity.prehistoric.swimming.Kronosaurus;
 import com.github.fossil.entity.prehistoric.swimming.Liopleurodon;
 import com.github.fossil.entity.prehistoric.swimming.Lonchodomas;
 import com.github.fossil.entity.prehistoric.swimming.Megalodon;
@@ -163,6 +176,20 @@ public class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<Lonchodomas>> LONCHODOMAS = registerDino("lonchodomas", Lonchodomas::new, 0.8f, 0.3f);
     public static final DeferredHolder<EntityType<?>, EntityType<Scotoharpes>> SCOTOHARPES = registerDino("scotoharpes", Scotoharpes::new, 0.8f, 0.3f);
     public static final DeferredHolder<EntityType<?>, EntityType<Walliserops>> WALLISEROPS = registerDino("walliserops", Walliserops::new, 0.8f, 0.3f);
+    // Ported from the Expanded Fossils addon for 1.20.1
+    public static final DeferredHolder<EntityType<?>, EntityType<Alanqa>> ALANQA = registerDino("alanqa", Alanqa::new, 1, 1.2f);
+    public static final DeferredHolder<EntityType<?>, EntityType<Aquilops>> AQUILOPS = registerDino("aquilops", Aquilops::new, 1, 1.2f);
+    public static final DeferredHolder<EntityType<?>, EntityType<Archelon>> ARCHELON = registerAquatic("archelon", Archelon::new, 1, 1.2f);
+    public static final DeferredHolder<EntityType<?>, EntityType<Caiuajara>> CAIUAJARA = registerDino("caiuajara", Caiuajara::new, 1, 1.2f);
+    public static final DeferredHolder<EntityType<?>, EntityType<Dsungaripterus>> DSUNGARIPTERUS = registerDino("dsungaripterus", Dsungaripterus::new, 1, 1.2f);
+    public static final DeferredHolder<EntityType<?>, EntityType<Eolambia>> EOLAMBIA = registerDino("eolambia", Eolambia::new, 1, 1.2f);
+    public static final DeferredHolder<EntityType<?>, EntityType<Giganotosaurus>> GIGANOTOSAURUS = registerDino("giganotosaurus", Giganotosaurus::new, 1.8f, 1.32f);
+    public static final DeferredHolder<EntityType<?>, EntityType<Guanlong>> GUANLONG = registerDino("guanlong", Guanlong::new, 1, 1.2f);
+    public static final DeferredHolder<EntityType<?>, EntityType<Kronosaurus>> KRONOSAURUS = registerAquatic("kronosaurus", Kronosaurus::new, 2, 1.2f);
+    public static final DeferredHolder<EntityType<?>, EntityType<Microvenator>> MICROVENATOR = registerDino("microvenator", Microvenator::new, 1, 1.2f);
+    public static final DeferredHolder<EntityType<?>, EntityType<Moros>> MOROS = registerDino("moros", Moros::new, 1, 1.2f);
+    public static final DeferredHolder<EntityType<?>, EntityType<Sauroposeidon>> SAUROPOSEIDON = registerDino("sauroposeidon", Sauroposeidon::new, 2, 3);
+    public static final DeferredHolder<EntityType<?>, EntityType<Zephyrosaurus>> ZEPHYROSAURUS = registerDino("zephyrosaurus", Zephyrosaurus::new, 1, 1.2f);
 
     public static final DeferredHolder<EntityType<?>, EntityType<DinosaurEgg>> DINOSAUR_EGG = ENTITIES.register(
             "dinosaur_egg", () -> EntityType.Builder.of(DinosaurEgg::new, MobCategory.CREATURE).sized(0.5F, 0.6F).build("dinosaur_egg"));
@@ -231,6 +258,9 @@ public class ModEntities {
         event.put(DIMORPHODON.get(), PrehistoricFlying.createAttributes().build());
         event.put(PTERANODON.get(), PrehistoricFlying.createAttributes().build());
         event.put(QUETZALCOATLUS.get(), PrehistoricFlying.createAttributes().build());
+        event.put(ALANQA.get(), PrehistoricFlying.createAttributes().build());
+        event.put(CAIUAJARA.get(), PrehistoricFlying.createAttributes().build());
+        event.put(DSUNGARIPTERUS.get(), PrehistoricFlying.createAttributes().build());
         event.put(MOSASAURUS.get(), Mosasaurus.createAttributes().build());
         event.put(QUAGGA.get(), AbstractChestedHorse.createBaseChestedHorseAttributes().build());
         event.put(LASER_POINT.get(), LaserPointEntity.createAttributes().build());
@@ -250,7 +280,8 @@ public class ModEntities {
                 ORNITHOLESTES, PACHYCEPHALOSAURUS, PACHYRHINOSAURUS, PARASAUROLOPHUS, PHORUSRHACOS, PLATYBELODON,
                 PLESIOSAURUS, POSTOSUCHUS, PROTOCERATOPS, PSITTACOSAURUS, SARCOSUCHUS,
                 SMILODON, SPINOSAURUS, STEGOSAURUS, THERIZINOSAURUS, TIKTAALIK, TITANIS, TRICERATOPS, TYRANNOSAURUS, VELOCIRAPTOR,
-                DICRANURUS, LONCHODOMAS, SCOTOHARPES, WALLISEROPS
+                DICRANURUS, LONCHODOMAS, SCOTOHARPES, WALLISEROPS,
+                AQUILOPS, ARCHELON, EOLAMBIA, GIGANOTOSAURUS, GUANLONG, KRONOSAURUS, MICROVENATOR, MOROS, SAUROPOSEIDON, ZEPHYROSAURUS
         )) {
             event.put(holder.get(), Prehistoric.createAttributes().build());
         }

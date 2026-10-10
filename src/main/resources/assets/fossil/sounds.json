@@ -1262,6 +1262,105 @@
     ],
     "subtitle": "subtitle.fossil.velociraptor_hurt"
   },
+  "archelon_ambient": {
+    "category": "neutral",
+    "sounds": [
+      "fossil:prehistoric/archelon_ambient1",
+      "fossil:prehistoric/archelon_ambient2"
+    ],
+    "subtitle": "subtitle.fossil.archelon_ambient"
+  },
+  "archelon_hurt": {
+    "category": "neutral",
+    "sounds": [
+      "fossil:prehistoric/archelon_hurt1",
+      "fossil:prehistoric/archelon_hurt2"
+    ],
+    "subtitle": "subtitle.fossil.archelon_hurt"
+  },
+  "archelon_death": {
+    "category": "neutral",
+    "sounds": [
+      "fossil:prehistoric/archelon_death"
+    ],
+    "subtitle": "subtitle.fossil.archelon_death"
+  },
+  "dsungaripterus_ambient": {
+    "category": "neutral",
+    "sounds": [
+      "fossil:prehistoric/dsungaripterus_ambient1",
+      "fossil:prehistoric/dsungaripterus_ambient2",
+      "fossil:prehistoric/dsungaripterus_ambient3",
+      "fossil:prehistoric/dsungaripterus_ambient4"
+    ],
+    "subtitle": "subtitle.fossil.dsungaripterus_ambient"
+  },
+  "dsungaripterus_hurt": {
+    "category": "neutral",
+    "sounds": [
+      "fossil:prehistoric/dsungaripterus_hurt1",
+      "fossil:prehistoric/dsungaripterus_hurt2",
+      "fossil:prehistoric/dsungaripterus_hurt3"
+    ],
+    "subtitle": "subtitle.fossil.dsungaripterus_hurt"
+  },
+  "dsungaripterus_death": {
+    "category": "neutral",
+    "sounds": [
+      "fossil:prehistoric/dsungaripterus_death"
+    ],
+    "subtitle": "subtitle.fossil.dsungaripterus_death"
+  },
+  "giganotosaurus_ambient": {
+    "category": "neutral",
+    "sounds": [
+      "fossil:prehistoric/giganotosaurus_ambient1",
+      "fossil:prehistoric/giganotosaurus_ambient2",
+      "fossil:prehistoric/giganotosaurus_ambient3"
+    ],
+    "subtitle": "subtitle.fossil.giganotosaurus_ambient"
+  },
+  "giganotosaurus_hurt": {
+    "category": "neutral",
+    "sounds": [
+      "fossil:prehistoric/giganotosaurus_hurt1",
+      "fossil:prehistoric/giganotosaurus_hurt2"
+    ],
+    "subtitle": "subtitle.fossil.giganotosaurus_hurt"
+  },
+  "giganotosaurus_death": {
+    "category": "neutral",
+    "sounds": [
+      "fossil:prehistoric/giganotosaurus_death"
+    ],
+    "subtitle": "subtitle.fossil.giganotosaurus_death"
+  },
+  "sauroposeidon_ambient": {
+    "category": "neutral",
+    "sounds": [
+      "fossil:prehistoric/sauroposeidon_ambient1",
+      "fossil:prehistoric/sauroposeidon_ambient2",
+      "fossil:prehistoric/sauroposeidon_ambient3",
+      "fossil:prehistoric/sauroposeidon_ambient4",
+      "fossil:prehistoric/sauroposeidon_ambient5",
+      "fossil:prehistoric/sauroposeidon_ambient6"
+    ],
+    "subtitle": "subtitle.fossil.sauroposeidon_ambient"
+  },
+  "sauroposeidon_hurt": {
+    "category": "neutral",
+    "sounds": [
+      "fossil:prehistoric/sauroposeidon_hurt1"
+    ],
+    "subtitle": "subtitle.fossil.sauroposeidon_hurt"
+  },
+  "sauroposeidon_death": {
+    "category": "neutral",
+    "sounds": [
+      "fossil:prehistoric/sauroposeidon_death"
+    ],
+    "subtitle": "subtitle.fossil.sauroposeidon_death"
+  },
   "whip": {
     "sounds": [
       "fossil:whip"

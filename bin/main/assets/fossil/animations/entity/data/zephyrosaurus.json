@@ -1,0 +1,10 @@
+{
+  "animations": {
+    "animation.zephyrosaurus.walk": {
+      "blocks_per_second": 1.2
+    },
+    "animation.zephyrosaurus.run": {
+      "blocks_per_second": 3.0
+    }
+  }
+}

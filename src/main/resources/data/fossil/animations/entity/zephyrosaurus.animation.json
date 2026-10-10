@@ -1,0 +1,60 @@
+{
+"format_version": "1.8.0",
+"animations": {
+"animation.zephyrosaurus.idle": {
+"loop": true,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.zephyrosaurus.walk": {
+"loop": true,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.zephyrosaurus.run": {
+"loop": true,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.zephyrosaurus.eat": {
+"loop": false,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.zephyrosaurus.attack": {
+"loop": false,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.zephyrosaurus.sleep": {
+"loop": true,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.zephyrosaurus.sit": {
+"loop": false,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.zephyrosaurus.swim": {
+"loop": true,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.zephyrosaurus.swim_fast": {
+"loop": true,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.zephyrosaurus.fly": {
+"loop": true,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.zephyrosaurus.take_off": {
+"loop": false,
+"animation_length": 1.0,
+"bones": {}
+}
+}
+}

@@ -1,0 +1,8 @@
+// 1.21.1	2026-09-06T11:44:24.5466002	fossil's processing recipes: crushing
+56437221a3adeccf0aaf15c76bc95d97e2ac519c data/fossil/recipe/crushing/fossil_calcite.json
+e4524f98b674ec9a595fe1f2fb45c04a7b98856a data/fossil/recipe/crushing/fossil_deepslate.json
+05d4e10fa12a2f2505703251952a2b97f54441a9 data/fossil/recipe/crushing/fossil_dripstone.json
+025cd19c142da071abd1652e4bb6ac3d1849d60a data/fossil/recipe/crushing/fossil_red_sandstone.json
+b5d281532b7fe62fc8ee5a4123e2acb4818c8df9 data/fossil/recipe/crushing/fossil_sandstone.json
+acb4fb6fa18a2c1574e8b8eab60d51661be6a483 data/fossil/recipe/crushing/fossil_stone.json
+2901299c86d652106a73e8ddde8515abb69dc026 data/fossil/recipe/crushing/fossil_tuff.json

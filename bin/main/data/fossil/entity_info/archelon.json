@@ -1,0 +1,33 @@
+{
+"ai": {
+"activity": "DIURNAL",
+"attacking": "BASIC",
+"climbing": "NONE",
+"moving": "SEMI_AQUATIC",
+"response": "WATER_CALM",
+"taming": "IMPRINTING"
+},
+"attributes": {
+"damageBase": 3.0,
+"damageMax": 12.0,
+"healthBase": 12.0,
+"healthMax": 26.0,
+"speedBase": 0.08,
+"speedMax": 0.16,
+"armorBase": 2.0,
+"armorMax": 6.0,
+"knockBackResistanceBase": 0.2,
+"knockBackResistanceMax": 0.7,
+"swimSpeedBase": 0.08,
+"swimSpeedMax": 0.16
+},
+"adultAgeDays": 10,
+"teenAgeDays": 4,
+"breaksBlocks": false,
+"canBeRidden": true,
+"diet": "PISCIVORE",
+"maxHunger": 125,
+"maxPopulation": 5,
+"scaleBase": 0.74,
+"scaleMax": 1.35
+}

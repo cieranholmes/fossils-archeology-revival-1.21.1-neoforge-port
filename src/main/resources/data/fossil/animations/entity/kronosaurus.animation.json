@@ -1,0 +1,60 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.kronosaurus.idle": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.kronosaurus.walk": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.kronosaurus.run": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.kronosaurus.eat": {
+      "loop": false,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.kronosaurus.attack": {
+      "loop": false,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.kronosaurus.sleep": {
+      "loop": false,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.kronosaurus.sit": {
+      "loop": false,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.kronosaurus.swim": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.kronosaurus.swim_fast": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.kronosaurus.fly": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.kronosaurus.take_off": {
+      "loop": false,
+      "animation_length": 1.0,
+      "bones": {}
+    }
+  }
+}

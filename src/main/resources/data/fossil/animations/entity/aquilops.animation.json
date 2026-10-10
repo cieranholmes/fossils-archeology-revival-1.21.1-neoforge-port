@@ -1,0 +1,60 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.aquilops.idle": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.aquilops.walk": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.aquilops.run": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.aquilops.eat": {
+      "loop": false,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.aquilops.attack": {
+      "loop": false,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.aquilops.sleep": {
+      "loop": false,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.aquilops.sit": {
+      "loop": false,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.aquilops.swim": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.aquilops.swim_fast": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.aquilops.fly": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.aquilops.take_off": {
+      "loop": false,
+      "animation_length": 1.0,
+      "bones": {}
+    }
+  }
+}

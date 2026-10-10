@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "dyed=false": {
+      "model": "fossil:block/culture_vat_undyed"
+    },
+    "dyed=true": {
+      "model": "fossil:block/culture_vat"
+    }
+  }
+}

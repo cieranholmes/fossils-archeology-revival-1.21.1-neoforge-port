@@ -1,0 +1,14 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "streamsreflowing"
+    }
+  ],
+  "type": "neoforge:remove_spawns",
+  "biomes": "streamsreflowing:stream",
+  "entity_types": [
+    "fossil:sturgeon",
+    "fossil:alligator_gar"
+  ]
+}

@@ -26,7 +26,6 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -59,7 +58,7 @@ public abstract class PrehistoricFish extends AbstractFish implements Prehistori
     }
 
     public static boolean canSpawn(EntityType<? extends PrehistoricFish> entityType, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource rand) {
-        return pos.getY() < level.getSeaLevel() && level.getFluidState(pos.below()).is(FluidTags.WATER) && level.getBlockState(pos.above()).is(Blocks.WATER);
+        return pos.getY() < level.getSeaLevel() && level.getFluidState(pos).is(FluidTags.WATER) && level.getFluidState(pos.above()).is(FluidTags.WATER);
     }
 
     @Override

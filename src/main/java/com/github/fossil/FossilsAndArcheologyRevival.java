@@ -9,6 +9,8 @@ import com.github.fossil.client.particle.ModParticles;
 import com.github.fossil.compat.alexsmobs.AlexsMobsCompat;
 import com.github.fossil.compat.farmers.FarmersDelightAddonCompat;
 import com.github.fossil.compat.farmers.FarmersDelightCompat;
+import com.github.fossil.compat.fintastic.FintasticCompat;
+import com.github.fossil.compat.rainbowreef.RainbowReefCompat;
 import com.github.fossil.data.DataGenerators;
 import com.github.fossil.entity.ModEntities;
 import com.github.fossil.food.FossilFoodMappings;
@@ -113,6 +115,12 @@ public class FossilsAndArcheologyRevival {
                 FarmersDelightCompat.registerFoodMappings();
             }
             FarmersDelightAddonCompat.register();
+            if (ModList.get().isLoaded("fintastic")) {
+                FintasticCompat.register();
+            }
+            if (ModList.get().isLoaded("rainbow_reef")) {
+                RainbowReefCompat.register();
+            }
         });
         NeoForge.EVENT_BUS.addListener((ServerStartingEvent event) -> FarmersDelightCompat.removeConflictingRecipes(event.getServer()));
     }

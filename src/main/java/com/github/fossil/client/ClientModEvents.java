@@ -360,6 +360,20 @@ public class ClientModEvents {
         registerDino(event, ModEntities.TRICERATOPS, "triceratops", RenderType::entityCutout);
         registerDino(event, ModEntities.TYRANNOSAURUS, "tyrannosaurus", RenderType::entityCutout);
         registerDino(event, ModEntities.VELOCIRAPTOR, "velociraptor", RenderType::entityCutout);
+        // Ported from the Expanded Fossils addon for 1.20.1
+        registerDino(event, ModEntities.ALANQA, "alanqa");
+        registerDino(event, ModEntities.AQUILOPS, "aquilops");
+        registerDino(event, ModEntities.ARCHELON, "archelon");
+        registerDino(event, ModEntities.CAIUAJARA, "caiuajara");
+        registerDino(event, ModEntities.DSUNGARIPTERUS, "dsungaripterus");
+        registerDino(event, ModEntities.EOLAMBIA, "eolambia");
+        registerDino(event, ModEntities.GIGANOTOSAURUS, "giganotosaurus");
+        registerDino(event, ModEntities.GUANLONG, "guanlong");
+        registerDino(event, ModEntities.KRONOSAURUS, "kronosaurus");
+        registerDino(event, ModEntities.MICROVENATOR, "microvenator");
+        registerDino(event, ModEntities.MOROS, "moros");
+        registerDino(event, ModEntities.SAUROPOSEIDON, "sauroposeidon");
+        registerDino(event, ModEntities.ZEPHYROSAURUS, "zephyrosaurus");
         registerTrilobite(event, ModEntities.DICRANURUS);
         registerTrilobite(event, ModEntities.LONCHODOMAS);
         registerTrilobite(event, ModEntities.SCOTOHARPES);

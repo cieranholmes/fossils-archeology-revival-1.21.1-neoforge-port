@@ -25,13 +25,13 @@ public class ModEnchantmentProvider {
         HolderGetter<Enchantment> enchantments = context.lookup(Registries.ENCHANTMENT);
 
         context.register(ModEnchantments.ARCHEOLOGY, Enchantment.enchantment(
-                        Enchantment.definition(items.getOrThrow(ItemTags.MINING_LOOT_ENCHANTABLE), 1, 3,
+                        Enchantment.definition(items.getOrThrow(ItemTags.PICKAXES), 1, 3,
                                 Enchantment.dynamicCost(1, 10), Enchantment.dynamicCost(51, 10), 8, EquipmentSlotGroup.MAINHAND))
                 .exclusiveWith(HolderSet.direct(enchantments.getOrThrow(Enchantments.SILK_TOUCH), enchantments.getOrThrow(ModEnchantments.PALEONTOLOGY)))
                 .build(ModEnchantments.ARCHEOLOGY.location()));
 
         context.register(ModEnchantments.PALEONTOLOGY, Enchantment.enchantment(
-                        Enchantment.definition(items.getOrThrow(ItemTags.MINING_LOOT_ENCHANTABLE), 1, 3,
+                        Enchantment.definition(items.getOrThrow(ItemTags.PICKAXES), 1, 3,
                                 Enchantment.dynamicCost(1, 10), Enchantment.dynamicCost(51, 10), 8, EquipmentSlotGroup.MAINHAND))
                 .exclusiveWith(HolderSet.direct(enchantments.getOrThrow(Enchantments.SILK_TOUCH), enchantments.getOrThrow(ModEnchantments.ARCHEOLOGY)))
                 .build(ModEnchantments.PALEONTOLOGY.location()));

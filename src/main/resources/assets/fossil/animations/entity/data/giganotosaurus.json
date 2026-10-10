@@ -1,0 +1,10 @@
+{
+  "animations": {
+    "animation.giganotosaurus.walk": {
+      "blocks_per_second": 1.2
+    },
+    "animation.giganotosaurus.run": {
+      "blocks_per_second": 3.0
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "level_display": "modernfoundry:default",
+  "modules": [
+    {
+      "type": "modernfoundry:constant_enchantment",
+      "level": 1,
+      "name": "fossil:paleontology"
+    },
+    {
+      "type": "modernfoundry:requirements",
+      "requirement": {
+        "type": "hilt:and",
+        "predicates": [
+          {
+            "type": "hilt:inverted",
+            "inverted_type": "modernfoundry:has_modifier",
+            "check": "all",
+            "modifier": {
+              "type": "modernfoundry:single",
+              "modifier": "modernfoundry:silky"
+            }
+          },
+          {
+            "type": "hilt:inverted",
+            "inverted_type": "modernfoundry:has_modifier",
+            "check": "all",
+            "modifier": {
+              "type": "modernfoundry:single",
+              "modifier": "fossil:archeology"
+            }
+          }
+        ]
+      },
+      "translation_key": "modifier.fossil.paleontology.requirements"
+    }
+  ],
+  "tooltip_display": "always"
+}

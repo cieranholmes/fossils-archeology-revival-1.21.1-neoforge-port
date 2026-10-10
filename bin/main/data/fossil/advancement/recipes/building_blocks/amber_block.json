@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_amber_chunk": {
+      "conditions": {
+        "items": [
+          {
+            "items": "fossil:amber_chunk"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "fossil:amber_block"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_amber_chunk"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "fossil:amber_block"
+    ]
+  }
+}

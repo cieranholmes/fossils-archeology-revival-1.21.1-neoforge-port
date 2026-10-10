@@ -1,0 +1,10 @@
+{
+  "animations": {
+    "animation.microvenator.walk": {
+      "blocks_per_second": 1.2
+    },
+    "animation.microvenator.run": {
+      "blocks_per_second": 3.0
+    }
+  }
+}

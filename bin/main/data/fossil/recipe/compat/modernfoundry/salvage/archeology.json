@@ -1,0 +1,17 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "modernfoundry"
+    }
+  ],
+  "type": "modernfoundry:modifier_salvage",
+  "id": "fossil:compat/modernfoundry/salvage/archeology",
+  "modifier": "fossil:archeology",
+  "slots": {
+    "abilities": 1
+  },
+  "tools": {
+    "tag": "modernfoundry:modifiable/harvest/stone"
+  }
+}

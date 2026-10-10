@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "fossil:all_eggs"
+    },
+    {
+      "item": "minecraft:wheat"
+    },
+    {
+      "item": "fossil:failuresaurus_flesh"
+    },
+    {
+      "item": "minecraft:milk_bucket"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "fossil:bio_goo"
+  }
+}

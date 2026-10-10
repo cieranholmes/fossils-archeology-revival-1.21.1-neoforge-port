@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_meat_sauroposeidon": {
+      "conditions": {
+        "items": [
+          {
+            "items": "fossil:meat_sauroposeidon"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "fossil:cooked_sauroposeidon_from_smoking"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_meat_sauroposeidon"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "fossil:cooked_sauroposeidon_from_smoking"
+    ]
+  }
+}

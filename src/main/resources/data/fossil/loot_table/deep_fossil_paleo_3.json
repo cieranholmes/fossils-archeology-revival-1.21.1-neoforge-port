@@ -28,7 +28,7 @@
             {
               "type": "minecraft:item",
               "name": "fossil:fossil_shale",
-              "weight": 540
+              "weight": 370
             },
             {
               "type": "minecraft:item",
@@ -44,6 +44,46 @@
               "type": "minecraft:item",
               "name": "fossil:fossil_plant",
               "weight": 200
+            },
+            {
+              "type": "minecraft:dynamic",
+              "name": "fossil:bones_leg",
+              "weight": 40
+            },
+            {
+              "type": "minecraft:dynamic",
+              "name": "fossil:bones_arm",
+              "weight": 40
+            },
+            {
+              "type": "minecraft:dynamic",
+              "name": "fossil:bones_foot",
+              "weight": 32
+            },
+            {
+              "type": "minecraft:dynamic",
+              "name": "fossil:bones_skull",
+              "weight": 32
+            },
+            {
+              "type": "minecraft:dynamic",
+              "name": "fossil:bones_ribcage",
+              "weight": 36
+            },
+            {
+              "type": "minecraft:dynamic",
+              "name": "fossil:bones_vertebrae",
+              "weight": 32
+            },
+            {
+              "type": "minecraft:dynamic",
+              "name": "fossil:bones_unique",
+              "weight": 32
+            },
+            {
+              "type": "minecraft:dynamic",
+              "name": "fossil:bones_tail",
+              "weight": 32
             }
           ]
         }

@@ -1,0 +1,10 @@
+{
+  "animations": {
+    "animation.kronosaurus.walk": {
+      "blocks_per_second": 1.2
+    },
+    "animation.kronosaurus.run": {
+      "blocks_per_second": 3.0
+    }
+  }
+}

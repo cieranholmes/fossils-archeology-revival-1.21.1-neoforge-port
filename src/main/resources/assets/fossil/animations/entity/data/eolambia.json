@@ -1,0 +1,10 @@
+{
+  "animations": {
+    "animation.eolambia.walk": {
+      "blocks_per_second": 1.2
+    },
+    "animation.eolambia.run": {
+      "blocks_per_second": 3.0
+    }
+  }
+}

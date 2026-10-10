@@ -1,0 +1,10 @@
+{
+  "animations": {
+    "animation.dsungaripterus.walk": {
+      "blocks_per_second": 1.2
+    },
+    "animation.dsungaripterus.run": {
+      "blocks_per_second": 3.0
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "fossil:fossil_tuff"
+    }
+  ],
+  "processing_time": 250,
+  "results": [
+    {
+      "chance": 0.25,
+      "id": "fossil:fossil_shale"
+    },
+    {
+      "chance": 0.05,
+      "id": "fossil:fossil_plant"
+    },
+    {
+      "chance": 0.05,
+      "id": "fossil:relic_scrap"
+    },
+    {
+      "chance": 0.35,
+      "id": "minecraft:bone"
+    },
+    {
+      "chance": 0.125,
+      "id": "fossil:skull"
+    },
+    {
+      "chance": 0.175,
+      "id": "minecraft:tuff"
+    }
+  ]
+}

@@ -50,6 +50,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.WoodType;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 
@@ -187,10 +188,14 @@ public class ModRecipeProvider extends RecipeProvider {
             ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SIFTER.get()).define('I', Blocks.IRON_BARS).define('S', Items.STRING).define('P', ItemTags.PLANKS).pattern("SPS").pattern("PIP").pattern("PSP").unlockedBy("has_planks", has(ItemTags.PLANKS)).save(recipeOutput);
             ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, WORKTABLE.get()).define('L', Items.LEATHER).define('C', Blocks.CRAFTING_TABLE).pattern("L").pattern("C").unlockedBy("has_crafting_table", has(Blocks.CRAFTING_TABLE)).save(recipeOutput);
             ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, DRUM.get()).define('L', Items.LEATHER).define('R', Items.REDSTONE).define('P', ItemTags.PLANKS).pattern("LLL").pattern("PRP").pattern("PPP").unlockedBy("has_crafting_table", has(Blocks.CRAFTING_TABLE)).save(recipeOutput);
+            ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, CULTURE_VAT.get()).define('G', Tags.Items.GLASS_BLOCKS).define('S', Tags.Items.SLIME_BALLS).define('W', Items.WATER_BUCKET).define('I', Items.IRON_INGOT).pattern("GSG").pattern("GWG").pattern("III").unlockedBy("has_iron_ingot", has(Items.IRON_INGOT)).save(recipeOutput);
+            ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, FEEDER.get()).define('I', Items.IRON_INGOT).define('G', Tags.Items.GLASS_BLOCKS).define('B', Items.STONE_BUTTON).define('W', Items.BUCKET).define('S', Blocks.STONE).pattern("IGI").pattern("BWS").pattern("SSS").unlockedBy("has_iron_ingot", has(Items.IRON_INGOT)).save(recipeOutput);
 
             ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, DINOPEDIA.get()).requires(Items.BOOK).requires(ModItemTags.FOSSILS).unlockedBy("has_bio_fossil", has(BIO_FOSSIL.get())).save(recipeOutput);
 
             ShapelessRecipeBuilder.shapeless(RecipeCategory.FOOD, RAW_CHICKEN_SOUP.get()).requires(Items.BUCKET).requires(Items.CHICKEN).unlockedBy("has_chicken", has(Items.CHICKEN)).save(recipeOutput);
+            ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, BIO_GOO.get()).requires(ModItemTags.ALL_EGGS).requires(Items.WHEAT).requires(Items.ROTTEN_FLESH).requires(Items.MILK_BUCKET).unlockedBy("has_rotten_flesh", has(Items.ROTTEN_FLESH)).save(recipeOutput, FossilsAndArcheologyRevival.MODID + ":bio_goo_from_rotten_flesh");
+            ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, BIO_GOO.get(), 4).requires(ModItemTags.ALL_EGGS).requires(Items.WHEAT).requires(FAILURESAURUS_FLESH.get()).requires(Items.MILK_BUCKET).unlockedBy("has_failuresaurus_flesh", has(FAILURESAURUS_FLESH.get())).save(recipeOutput, FossilsAndArcheologyRevival.MODID + ":bio_goo_from_failuresaurus_flesh");
             ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, SKULL_STICK.get()).requires(Items.STICK).requires(SKULL_BLOCK.get()).unlockedBy("has_skull_block", has(SKULL_BLOCK.get())).save(recipeOutput);
             ShapelessRecipeBuilder.shapeless(RecipeCategory.COMBAT, TOOTH_DAGGER.get()).requires(Items.STICK).requires(PrehistoricEntityInfo.TYRANNOSAURUS.uniqueBoneItem).unlockedBy("has_tooth", has(PrehistoricEntityInfo.TYRANNOSAURUS.uniqueBoneItem)).save(recipeOutput);
             ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, WHIP.get()).define('S', Items.STRING).define('T', Items.STICK).pattern("  S").pattern(" TS").pattern("T S").unlockedBy("has_dinopedia", has(DINOPEDIA.get())).save(recipeOutput);

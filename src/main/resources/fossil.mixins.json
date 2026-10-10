@@ -12,7 +12,9 @@
     "OcelotMixin",
     "NaturalSpawnerMixin",
     "ChunkStatusMixin",
+    "NoiseBasedChunkGeneratorMixin",
     "JigsawPlacementMixin",
+    "StructureTemplatePoolAccessor",
     "PickupHandlerMixin"
   ],
   "client": [

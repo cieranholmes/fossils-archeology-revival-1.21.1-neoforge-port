@@ -1,0 +1,60 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.sauroposeidon.idle": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.sauroposeidon.walk": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.sauroposeidon.run": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.sauroposeidon.eat": {
+      "loop": false,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.sauroposeidon.attack": {
+      "loop": false,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.sauroposeidon.sleep": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.sauroposeidon.sit": {
+      "loop": false,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.sauroposeidon.swim": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.sauroposeidon.swim_fast": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.sauroposeidon.fly": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.sauroposeidon.take_off": {
+      "loop": false,
+      "animation_length": 1.0,
+      "bones": {}
+    }
+  }
+}

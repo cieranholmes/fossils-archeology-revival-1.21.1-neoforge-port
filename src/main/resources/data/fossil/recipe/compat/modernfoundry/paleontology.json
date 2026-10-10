@@ -1,0 +1,26 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "modernfoundry"
+    }
+  ],
+  "type": "modernfoundry:incremental_modifier",
+  "id": "fossil:compat/modernfoundry/paleontology",
+  "allow_crystal": true,
+  "amount_per_item": 1,
+  "input": {
+    "item": "fossil:fossil_bio"
+  },
+  "level": {
+    "max": 3
+  },
+  "needed_per_level": 16,
+  "result": "fossil:paleontology",
+  "slots": {
+    "abilities": 1
+  },
+  "tools": {
+    "tag": "modernfoundry:modifiable/harvest/stone"
+  }
+}

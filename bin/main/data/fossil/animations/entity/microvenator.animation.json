@@ -1,0 +1,60 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.microvenator.idle": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.microvenator.walk": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.microvenator.run": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.microvenator.eat": {
+      "loop": false,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.microvenator.attack": {
+      "loop": false,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.microvenator.sleep": {
+      "loop": false,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.microvenator.sit": {
+      "loop": false,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.microvenator.swim": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.microvenator.swim_fast": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.microvenator.fly": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.microvenator.take_off": {
+      "loop": false,
+      "animation_length": 1.0,
+      "bones": {}
+    }
+  }
+}

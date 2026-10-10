@@ -1,0 +1,75 @@
+{
+"format_version": "1.8.0",
+"animations": {
+"animation.eolambia.attack": {
+"loop": false,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.eolambia.drink": {
+"loop": false,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.eolambia.eat": {
+"loop": false,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.eolambia.jump": {
+"loop": false,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.eolambia.fall": {
+"loop": true,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.eolambia.idle": {
+"loop": true,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.eolambia.run": {
+"loop": true,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.eolambia.sit": {
+"loop": true,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.eolambia.sleep": {
+"loop": true,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.eolambia.speak": {
+"loop": false,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.eolambia.swim": {
+"loop": true,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.eolambia.walk": {
+"loop": true,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.eolambia.stand": {
+"loop": true,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.eolambia.stand_up": {
+"loop": false,
+"animation_length": 1.0,
+"bones": {}
+}
+}
+}

@@ -1,0 +1,26 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "modernfoundry"
+    }
+  ],
+  "type": "modernfoundry:incremental_modifier",
+  "id": "fossil:compat/modernfoundry/archeology",
+  "allow_crystal": true,
+  "amount_per_item": 1,
+  "input": {
+    "item": "fossil:relic_scrap"
+  },
+  "level": {
+    "max": 3
+  },
+  "needed_per_level": 16,
+  "result": "fossil:archeology",
+  "slots": {
+    "abilities": 1
+  },
+  "tools": {
+    "tag": "modernfoundry:modifiable/harvest/stone"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "fossil:ore_placement",
+  "ore_fossil_block_upper": "fossil:ore_fossil_block_no_sandstone_upper",
+  "ore_fossil_block_middle": "fossil:ore_fossil_block_middle",
+  "ore_fossil_block_deep": "fossil:ore_fossil_block_deep",
+  "ore_volcanic_rock": "fossil:ore_volcanic_rock",
+  "ore_permafrost_block": "fossil:ore_permafrost_block",
+  "ore_amber": "fossil:ore_amber",
+  "ore_amber_buried": "fossil:ore_amber_buried"
+}

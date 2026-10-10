@@ -24,6 +24,7 @@ public class Config {
     private static final ModConfigSpec.BooleanValue FEATHERED_DILO;
     private static final ModConfigSpec.BooleanValue FEATHERED_CERATO;
     private static final ModConfigSpec.BooleanValue FEATHERED_DRYO;
+    private static final ModConfigSpec.BooleanValue FEATHERED_ZEPHYRO;
     private static final ModConfigSpec.BooleanValue HEALING_DINOS;
     private static final ModConfigSpec.BooleanValue ENABLE_HUNGER;
     private static final ModConfigSpec.BooleanValue ENABLE_STARVATION;
@@ -71,6 +72,7 @@ public class Config {
         FEATHERED_DILO = COMMON_BUILDER.comment("True if Dilophosaurus should be feathered").define("featheredDilo", false);
         FEATHERED_CERATO = COMMON_BUILDER.comment("True if Ceratosaurus should be feathered").define("featheredCerato", false);
         FEATHERED_DRYO = COMMON_BUILDER.comment("True if Dryosaurus should be feathered").define("featheredDryo", false);
+        FEATHERED_ZEPHYRO = COMMON_BUILDER.comment("True if Zephyrosaurus should be feathered").define("featheredZephyro", true);
         HEALING_DINOS = COMMON_BUILDER.comment("True if Dinosaurs can be healed by hand feeding it food").define("healingDinos", true);
         ENABLE_HUNGER = COMMON_BUILDER.comment("True if Dinosaurs have hunger").define("enableHunger", true);
         ENABLE_STARVATION = COMMON_BUILDER.comment("True if Dinosaurs can die of hunger").define("enableStarvation", false);
@@ -122,6 +124,7 @@ public class Config {
     public static boolean featheredDilo;
     public static boolean featheredCerato;
     public static boolean featheredDryo;
+    public static boolean featheredZephyro;
     public static boolean healingDinos;
     public static boolean enableHunger;
     public static boolean enableStarvation;
@@ -167,6 +170,7 @@ public class Config {
             featheredDilo = FEATHERED_DILO.get();
             featheredCerato = FEATHERED_CERATO.get();
             featheredDryo = FEATHERED_DRYO.get();
+            featheredZephyro = FEATHERED_ZEPHYRO.get();
             healingDinos = HEALING_DINOS.get();
             enableHunger = ENABLE_HUNGER.get();
             enableStarvation = ENABLE_STARVATION.get();
@@ -212,6 +216,7 @@ public class Config {
             case "featheredDilo" -> featheredDilo;
             case "featheredCerato" -> featheredCerato;
             case "featheredDryo" -> featheredDryo;
+            case "featheredZephyro" -> featheredZephyro;
             case "healingDinos" -> healingDinos;
             case "enableHunger" -> enableHunger;
             case "enableStarvation" -> enableStarvation;

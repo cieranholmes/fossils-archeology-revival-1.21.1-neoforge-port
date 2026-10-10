@@ -1,0 +1,11 @@
+{
+  "textureName": "feathered",
+  "hasBabyTexture": true,
+  "hasGenderTextures": true,
+  "conditions": [
+    {
+      "type": "config",
+      "configKey": "featheredZephyro"
+    }
+  ]
+}

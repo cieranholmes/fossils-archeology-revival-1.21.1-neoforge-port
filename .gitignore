@@ -35,3 +35,7 @@ run/
 # macOS
 .DS_Store
 src/generated/
+
+# Local-only jars for mods with no public NeoForge 1.21.1 build (e.g. Rainbow Reef's private port) -
+# not redistributable, so kept out of source control; see build.gradle's Rainbow Reef compat comment.
+libs/

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_meat_aquilops": {
+      "conditions": {
+        "items": [
+          {
+            "items": "fossil:meat_aquilops"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "fossil:cooked_aquilops_from_campfire_cooking"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_meat_aquilops"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "fossil:cooked_aquilops_from_campfire_cooking"
+    ]
+  }
+}

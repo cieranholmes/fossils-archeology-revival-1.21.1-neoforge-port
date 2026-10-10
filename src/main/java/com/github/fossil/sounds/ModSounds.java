@@ -43,6 +43,9 @@ public class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> ANKYLOSAURUS_AMBIENT = registerSound("ankylosaurus_ambient");
     public static final DeferredHolder<SoundEvent, SoundEvent> ANKYLOSAURUS_HURT = registerSound("ankylosaurus_hurt");
     public static final DeferredHolder<SoundEvent, SoundEvent> ANKYLOSAURUS_DEATH = registerSound("ankylosaurus_death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ARCHELON_AMBIENT = registerSound("archelon_ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ARCHELON_HURT = registerSound("archelon_hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ARCHELON_DEATH = registerSound("archelon_death");
     public static final DeferredHolder<SoundEvent, SoundEvent> ARTHROPLEURA_AMBIENT = registerSound("arthropleura_ambient");
     public static final DeferredHolder<SoundEvent, SoundEvent> ARTHROPLEURA_HURT = registerSound("arthropleura_hurt");
     public static final DeferredHolder<SoundEvent, SoundEvent> ARTHROPLEURA_DEATH = registerSound("arthropleura_death");
@@ -78,6 +81,9 @@ public class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> DRYOSAURUS_AMBIENT = registerSound("dryosaurus_ambient");
     public static final DeferredHolder<SoundEvent, SoundEvent> DRYOSAURUS_HURT = registerSound("dryosaurus_hurt");
     public static final DeferredHolder<SoundEvent, SoundEvent> DRYOSAURUS_DEATH = registerSound("dryosaurus_death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> DSUNGARIPTERUS_AMBIENT = registerSound("dsungaripterus_ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> DSUNGARIPTERUS_HURT = registerSound("dsungaripterus_hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> DSUNGARIPTERUS_DEATH = registerSound("dsungaripterus_death");
     public static final DeferredHolder<SoundEvent, SoundEvent> EDAPHOSAURUS_AMBIENT = registerSound("edaphosaurus_ambient");
     public static final DeferredHolder<SoundEvent, SoundEvent> EDAPHOSAURUS_HURT = registerSound("edaphosaurus_hurt");
     public static final DeferredHolder<SoundEvent, SoundEvent> EDAPHOSAURUS_DEATH = registerSound("edaphosaurus_death");
@@ -87,6 +93,9 @@ public class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> GALLIMIMUS_AMBIENT = registerSound("gallimimus_ambient");
     public static final DeferredHolder<SoundEvent, SoundEvent> GALLIMIMUS_HURT = registerSound("gallimimus_hurt");
     public static final DeferredHolder<SoundEvent, SoundEvent> GALLIMIMUS_DEATH = registerSound("gallimimus_death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GIGANOTOSAURUS_AMBIENT = registerSound("giganotosaurus_ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GIGANOTOSAURUS_HURT = registerSound("giganotosaurus_hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GIGANOTOSAURUS_DEATH = registerSound("giganotosaurus_death");
     public static final DeferredHolder<SoundEvent, SoundEvent> HENODUS_AMBIENT = registerSound("henodus_ambient");
     public static final DeferredHolder<SoundEvent, SoundEvent> HENODUS_HURT = registerSound("henodus_hurt");
     public static final DeferredHolder<SoundEvent, SoundEvent> HENODUS_DEATH = registerSound("henodus_death");
@@ -147,6 +156,9 @@ public class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> SARCOSUCHUS_AMBIENT = registerSound("sarcosuchus_ambient");
     public static final DeferredHolder<SoundEvent, SoundEvent> SARCOSUCHUS_HURT = registerSound("sarcosuchus_hurt");
     public static final DeferredHolder<SoundEvent, SoundEvent> SARCOSUCHUS_DEATH = registerSound("sarcosuchus_death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SAUROPOSEIDON_AMBIENT = registerSound("sauroposeidon_ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SAUROPOSEIDON_HURT = registerSound("sauroposeidon_hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SAUROPOSEIDON_DEATH = registerSound("sauroposeidon_death");
     public static final DeferredHolder<SoundEvent, SoundEvent> SMILODON_AMBIENT = registerSound("smilodon_ambient");
     public static final DeferredHolder<SoundEvent, SoundEvent> SMILODON_HURT = registerSound("smilodon_hurt");
     public static final DeferredHolder<SoundEvent, SoundEvent> SMILODON_DEATH = registerSound("smilodon_death");

@@ -1,0 +1,70 @@
+{
+"format_version": "1.8.0",
+"animations": {
+"animation.caiuajara.attack": {
+"loop": false,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.caiuajara.call": {
+"loop": false,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.caiuajara.drink": {
+"loop": false,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.caiuajara.eat": {
+"loop": false,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.caiuajara.dive": {
+"loop": false,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.caiuajara.fly": {
+"loop": true,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.caiuajara.idle": {
+"loop": true,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.caiuajara.sit": {
+"loop": true,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.caiuajara.sleep": {
+"loop": true,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.caiuajara.speak": {
+"loop": false,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.caiuajara.swim": {
+"loop": true,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.caiuajara.take_off": {
+"loop": false,
+"animation_length": 1.0,
+"bones": {}
+},
+"animation.caiuajara.walk": {
+"loop": true,
+"animation_length": 1.0,
+"bones": {}
+}
+}
+}

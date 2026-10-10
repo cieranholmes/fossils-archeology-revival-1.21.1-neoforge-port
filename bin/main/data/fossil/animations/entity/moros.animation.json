@@ -1,0 +1,60 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.moros.idle": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.moros.walk": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.moros.run": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.moros.eat": {
+      "loop": false,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.moros.attack": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.moros.sleep": {
+      "loop": false,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.moros.sit": {
+      "loop": false,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.moros.swim": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.moros.swim_fast": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.moros.fly": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.moros.take_off": {
+      "loop": false,
+      "animation_length": 1.0,
+      "bones": {}
+    }
+  }
+}

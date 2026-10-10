@@ -1,0 +1,39 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.github.fossil.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "AbstractFishMixin",
+    "ServerEntityMixin",
+    "WalkNodeEvaluatorMixin",
+    "MobMixin",
+    "CatMixin",
+    "OcelotMixin",
+    "NaturalSpawnerMixin",
+    "ChunkStatusMixin",
+    "NoiseBasedChunkGeneratorMixin",
+    "JigsawPlacementMixin",
+    "StructureTemplatePoolAccessor",
+    "PickupHandlerMixin"
+  ],
+  "client": [
+    "ParticleAccessor",
+    "TerrainParticleMixin",
+    "TitleScreenMixin",
+    "PlayerInfoMixin",
+    "DebugLevelRendererMixin",
+    "DebugMinecraftMixin",
+    "DebugMouseHandlerMixin",
+    "CameraMixin",
+    "AnimatableManagerAccessor",
+    "AnimationControllerAccessor",
+    "AnimationProcessorAccessor",
+    "AnimationControllerMixin",
+    "AnimationProcessorMixin",
+    "GeoEntityRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

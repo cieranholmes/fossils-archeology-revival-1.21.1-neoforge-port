@@ -44,12 +44,12 @@ public class ModGenericLootTables implements LootTableSubProvider {
         var archList3 = scarab(16).broken(13).skullBlock(144).mobFossil(BIO_FOSSIL, 50).plant(20).relic(820).bone(0).
                 group(3, 3, 3, 3, 3, 3, 3, 3);
 
-        var paleList1 = scarab(1).broken(5).skullBlock(55).mobFossil(BIO_FOSSIL, 375).plant(145).relic(20).bone(440)
-                .group(9, 9, 6, 6, 6, 6, 6, 6);
-        var paleList2 = scarab(1).broken(5).skullBlock(30).mobFossil(BIO_FOSSIL, 470).plant(175).relic(0).bone(326)
-                .group(13, 13, 10, 10, 12, 10, 10, 10);
-        var paleList3 = scarab(1).broken(5).skullBlock(36).mobFossil(BIO_FOSSIL, 510).plant(205).relic(0).bone(210)
-                .group(18, 18, 15, 15, 17, 15, 15, 15);
+        var paleList1 = scarab(1).broken(5).skullBlock(55).mobFossil(BIO_FOSSIL, 260).plant(145).relic(20).bone(440)
+                .group(18, 18, 12, 12, 12, 12, 12, 12);
+        var paleList2 = scarab(1).broken(5).skullBlock(30).mobFossil(BIO_FOSSIL, 320).plant(175).relic(0).bone(326)
+                .group(26, 26, 20, 20, 24, 20, 20, 20);
+        var paleList3 = scarab(1).broken(5).skullBlock(36).mobFossil(BIO_FOSSIL, 350).plant(205).relic(0).bone(210)
+                .group(40, 40, 32, 32, 36, 32, 32, 32);
 
         map.put(lootTableKey("regular_fossil"), basic(defaultList));
         map.put(lootTableKey("regular_fossil_arch_1"), basic(archList1));
@@ -68,12 +68,12 @@ public class ModGenericLootTables implements LootTableSubProvider {
         archList3 = scarab(16).broken(13).skullBlock(110).mobFossil(SHALE_FOSSIL, 120).plant(0).relic(820).bone(0).
                 group();
 
-        paleList1 = scarab(1).broken(5).skullBlock(55).mobFossil(SHALE_FOSSIL, 405).plant(115).relic(20).bone(440)
-                .group();
-        paleList2 = scarab(1).broken(5).skullBlock(30).mobFossil(SHALE_FOSSIL, 480).plant(175).relic(0).bone(326)
-                .group();
-        paleList3 = scarab(1).broken(5).skullBlock(36).mobFossil(SHALE_FOSSIL, 540).plant(200).relic(0).bone(210)
-                .group();
+        paleList1 = scarab(1).broken(5).skullBlock(55).mobFossil(SHALE_FOSSIL, 280).plant(115).relic(20).bone(440)
+                .group(18, 18, 12, 12, 12, 12, 12, 12);
+        paleList2 = scarab(1).broken(5).skullBlock(30).mobFossil(SHALE_FOSSIL, 330).plant(175).relic(0).bone(326)
+                .group(26, 26, 20, 20, 24, 20, 20, 20);
+        paleList3 = scarab(1).broken(5).skullBlock(36).mobFossil(SHALE_FOSSIL, 370).plant(200).relic(0).bone(210)
+                .group(40, 40, 32, 32, 36, 32, 32, 32);
         map.put(lootTableKey("deep_fossil"), basic(defaultList));
         map.put(lootTableKey("deep_fossil_arch_1"), basic(archList1));
         map.put(lootTableKey("deep_fossil_arch_2"), basic(archList2));
